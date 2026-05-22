@@ -5869,7 +5869,7 @@
 
             <div class="user-name-line" id="userBadgeName">Học sinh</div>
 
-            <div class="user-meta-line" id="userBadgeMeta">Lớp: ... | Mục tiêu: ...</div>
+            <div class="user-meta-line" id="userBadgeMeta">Lớp: ...</div>
 
           </div>
 
@@ -6309,14 +6309,6 @@
 
           <div class="form-group">
 
-            <label class="form-label" for="signupTarget">Điểm mục tiêu HSA (30 - 150)</label>
-
-            <input type="number" id="signupTarget" class="form-input" min="30" max="150" value="100" required>
-
-          </div>
-
-          <div class="form-group">
-
             <label class="form-label" for="signupPass">Mật khẩu</label>
 
             <input type="password" id="signupPass" class="form-input" placeholder="Tạo mật khẩu đăng nhập..." required
@@ -6662,8 +6654,6 @@
                 <th>Tên đăng nhập</th>
 
                 <th>Lớp / Trường</th>
-
-                <th style="width: 110px; text-align: center;">Mục tiêu</th>
 
                 <th>Tiến độ các chuyên đề</th>
 
@@ -7140,9 +7130,7 @@
 
               <div style="font-weight: 700; font-size: 0.95rem;" id="modalStudentName">Họ tên: ...</div>
 
-              <div style="font-size: 0.8rem; color: var(--text-secondary);" id="modalStudentMeta">Lớp: ... | Mục tiêu:
-
-                ...</div>
+              <div style="font-size: 0.8rem; color: var(--text-secondary);" id="modalStudentMeta">Lớp: ...</div>
 
             </div>
 
@@ -15185,7 +15173,7 @@
               username: s.username,
               name: s.fullname,
               className: 'Học viên',
-              targetScore: '120',
+              targetScore: '',
               role: s.role
             }));
             localStorage.setItem('hsa_users_db', JSON.stringify(usersDb));
@@ -16603,8 +16591,6 @@
 
       const classEl = document.getElementById('signupClass');
 
-      const targetEl = document.getElementById('signupTarget');
-
       const passEl = document.getElementById('signupPass');
 
       const username = userEl.value.trim().toLowerCase();
@@ -16613,11 +16599,9 @@
 
       const className = classEl.value.trim();
 
-      const targetScore = targetEl.value.trim();
-
       const password = passEl.value.trim();
 
-      if (!username || !name || !className || !targetScore || !password) return;
+      if (!username || !name || !className || !password) return;
 
       const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
 
@@ -16655,7 +16639,7 @@
 
         className,
 
-        targetScore,
+        targetScore: '',
 
         password,
 
@@ -16678,8 +16662,6 @@
       nameEl.value = '';
 
       classEl.value = '';
-
-      targetEl.value = '100';
 
       passEl.value = '';
 
@@ -16803,7 +16785,7 @@
 
         } else {
 
-          document.getElementById('userBadgeMeta').textContent = `Lớp: ${currentUser.className} | Mục tiêu: ${currentUser.targetScore}`;
+          document.getElementById('userBadgeMeta').textContent = `Lớp: ${currentUser.className}`;
 
           if (studentView && studentView.classList.contains('active')) {
 
@@ -16883,7 +16865,7 @@
           username: s.username,
           name: s.fullname,
           className: 'Học viên',
-          targetScore: '120',
+          targetScore: '',
           role: s.role
         }));
         localStorage.setItem('hsa_users_db', JSON.stringify(usersDb));
@@ -17958,7 +17940,7 @@
 
       if (filteredUsers.length === 0) {
 
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-secondary);">🔍 Không tìm thấy học sinh nào phù hợp.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 2rem; color: var(--text-secondary);">🔍 Không tìm thấy học sinh nào phù hợp.</td></tr>`;
 
         return;
 
@@ -18097,8 +18079,6 @@
         <td style="font-family: monospace; font-size: 0.85rem; color: var(--text-secondary);">${user.username}</td>
 
         <td style="font-weight: 600;">${user.className}</td>
-
-        <td style="text-align: center; font-weight: 700; color: var(--accent-color);">${user.targetScore}</td>
 
         <td>${progressBadgesHtml}</td>
 
@@ -18284,7 +18264,7 @@
 
       document.getElementById('modalStudentName').textContent = `Họ tên: ${user.name}`;
 
-      document.getElementById('modalStudentMeta').textContent = `Lớp: ${user.className} | Mục tiêu: ${user.targetScore}`;
+      document.getElementById('modalStudentMeta').textContent = `Lớp: ${user.className}`;
 
       // Load progress databases in parallel
 
@@ -19871,8 +19851,6 @@
 
         "Lớp / Trường",
 
-        "Điểm mục tiêu HSA",
-
         "Tiến độ HSA (%)",
 
         "Tiến độ TSA (%)",
@@ -19972,8 +19950,6 @@
           user.username,
 
           user.className,
-
-          user.targetScore,
 
           `${hsaPct}%`,
 
