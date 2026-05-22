@@ -1,0 +1,50 @@
+Line 14731: 
+Line 14732:       const row = document.getElementById(rowElementId);
+Line 14733: 
+Line 14734:       let state = (currentSuperView === 'tsa') ? tsaProgressState : progressState;
+Line 14735: 
+Line 14736:       if (checkbox.checked) {
+Line 14737: 
+Line 14738:         state[uniqueId] = true;
+Line 14739: 
+Line 14740:         if (row) row.classList.add('row-completed');
+Line 14741: 
+Line 14742:       } else {
+Line 14743: 
+Line 14744:         state[uniqueId] = false;
+Line 14745: 
+Line 14746:         if (row) row.classList.remove('row-completed');
+Line 14747: 
+Line 14748:       }
+Line 14749: 
+Line 14750:       saveProgress();
+Line 14751: 
+Line 14752:     };
+Line 14753: 
+Line 14754:     // Switch Active Excel Tab Sheet (student)
+Line 14755: 
+Line 14756:     window.switchTab = function (subjectId) {
+Line 14757: 
+Line 14758:       if (currentSuperView === 'tsa') {
+Line 14759: 
+Line 14760:         currentTsaSubject = subjectId;
+Line 14761: 
+Line 14762:       } else {
+Line 14763: 
+Line 14764:         currentSubject = subjectId;
+Line 14765: 
+Line 14766:       }
+Line 14767: 
+Line 14768:       // Update active tab styling
+Line 14769: 
+Line 14770:       const tabs = document.querySelectorAll('.excel-tab');
+Line 14771: 
+Line 14772:       tabs.forEach(tab => {
+Line 14773: 
+Line 14774:         if (tab.getAttribute('data-sub') === subjectId) {
+Line 14775: 
+Line 14776:           tab.classList.add('active');
+Line 14777: 
+Line 14778:         } else {
+Line 14779: 
+Line 14780:           tab.classList.remove('active');

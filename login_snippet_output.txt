@@ -1,0 +1,100 @@
+Line 15581: 
+Line 15582:         loginForm.style.display = 'none';
+Line 15583: 
+Line 15584:         signupForm.style.display = 'block';
+Line 15585: 
+Line 15586:       }
+Line 15587: 
+Line 15588:     };
+Line 15589: 
+Line 15590:     // Auth: submit login
+Line 15591: 
+Line 15592:     window.submitLogin = function (e) {
+Line 15593: 
+Line 15594:       e.preventDefault();
+Line 15595: 
+Line 15596:       const userEl = document.getElementById('loginUser');
+Line 15597: 
+Line 15598:       const passEl = document.getElementById('loginPass');
+Line 15599: 
+Line 15600:       const username = userEl.value.trim();
+Line 15601: 
+Line 15602:       const password = passEl.value.trim();
+Line 15603: 
+Line 15604:       if (!username || !password) return;
+Line 15605: 
+Line 15606:       // Check Admin
+Line 15607: 
+Line 15608:       if (username.toLowerCase() === 'admin' && password === 'admin2026') {
+Line 15609: 
+Line 15610:         const adminUser = {
+Line 15611: 
+Line 15612:           username: 'admin',
+Line 15613: 
+Line 15614:           name: 'Quản trị viên',
+Line 15615: 
+Line 15616:           className: 'Hệ thống',
+Line 15617: 
+Line 15618:           targetScore: '150',
+Line 15619: 
+Line 15620:           role: 'admin'
+Line 15621: 
+Line 15622:         };
+Line 15623: 
+Line 15624:         localStorage.setItem('hsa_current_user', JSON.stringify(adminUser));
+Line 15625: 
+Line 15626:         userEl.value = '';
+Line 15627: 
+Line 15628:         passEl.value = '';
+Line 15629: 
+Line 15630:         if (typeof closeAuthModal === 'function') closeAuthModal();
+Line 15631: 
+Line 15632:         // Hide home and activate admin
+Line 15633: 
+Line 15634:         const homeView = document.getElementById('homeView');
+Line 15635: 
+Line 15636:         const adminView = document.getElementById('adminView');
+Line 15637: 
+Line 15638:         const coursesView = document.getElementById('coursesView');
+Line 15639: 
+Line 15640:         if (homeView) homeView.classList.remove('active');
+Line 15641: 
+Line 15642:         if (coursesView) coursesView.classList.remove('active');
+Line 15643: 
+Line 15644:         if (adminView) adminView.classList.add('active');
+Line 15645: 
+Line 15646:         checkSession();
+Line 15647: 
+Line 15648:         return;
+Line 15649: 
+Line 15650:       }
+Line 15651: 
+Line 15652:       // Check Student
+Line 15653: 
+Line 15654:       const student = usersDb.find(u => u.username.toLowerCase() === username.toLowerCase());
+Line 15655: 
+Line 15656:       if (student && student.password === password) {
+Line 15657: 
+Line 15658:         localStorage.setItem('hsa_current_user', JSON.stringify(student));
+Line 15659: 
+Line 15660:         userEl.value = '';
+Line 15661: 
+Line 15662:         passEl.value = '';
+Line 15663: 
+Line 15664:         if (typeof closeAuthModal === 'function') closeAuthModal();
+Line 15665: 
+Line 15666:         // Hide home and activate student view
+Line 15667: 
+Line 15668:         const homeView = document.getElementById('homeView');
+Line 15669: 
+Line 15670:         const studentView = document.getElementById('studentView');
+Line 15671: 
+Line 15672:         const coursesView = document.getElementById('coursesView');
+Line 15673: 
+Line 15674:         if (homeView) homeView.classList.remove('active');
+Line 15675: 
+Line 15676:         if (coursesView) coursesView.classList.remove('active');
+Line 15677: 
+Line 15678:         if (studentView) studentView.classList.add('active');
+Line 15679: 
+Line 15680:         checkSession();

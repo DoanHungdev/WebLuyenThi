@@ -1,0 +1,19 @@
+Tables: [('users',), ('sqlite_sequence',), ('courses',), ('curriculums',), ('student_progress',)]
+
+Users:
+(1, 'admin', 'admin2026', 'Doãn Hưng', 'admin')
+(2, 'student1', '123456', 'Nguyễn Văn A', 'student')
+(3, 'student2', '123456', 'Trần Thị B', 'student')
+
+Curriculums:
+('literature', 12539)
+('english', 13227)
+('physics', 8842)
+('chemistry', 11637)
+('biology', 9533)
+
+Courses:
+(1, 'Khóa Chuyên Sâu HSA - Đánh giá năng lực ĐHQGHN', 'HSA', 'Thầy Doãn Hưng & Đội ngũ LAB', '1.600.000đ')
+(2, 'Bứt Phá Điểm Số TSA - Đánh giá tư duy ĐHBKHN', 'TSA', 'Cô Mai Phương & Thầy Hưng', '1.200.000đ')
+(3, 'Combo 80+ HSA & TSA Toàn Diện 2026', 'Combo', 'Tập thể Giáo viên LAB Academy', '2.800.000đ')
+(4, 'Chuyên đề Ngữ Văn chinh phục Đọc hiểu HSA', 'HSA', 'Cô Doãn Quỳnh', '600.000đ')

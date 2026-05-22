@@ -1,0 +1,168 @@
+Line 5573:               <div class="category-tab active" id="cat-tsa" onclick="selectCourseCategory('tsa')">
+--- Context for line 5573 ---
+  5568: 
+  5569:             <div class="category-tabs-list">
+  5570: 
+  5571:               <!-- TSA Tab -->
+  5572: 
+  5573:               <div class="category-tab active" id="cat-tsa" onclick="selectCourseCategory('tsa')">
+  5574: 
+  5575:                 <div class="tab-badge">TSA</div>
+  5576: 
+  5577:                 <div class="tab-info">
+  5578: 
+  5579:                   <div class="tab-name">Đánh giá tư duy</div>
+  5580: 
+  5581:                   <div class="tab-sub">Hethonglab</div>
+  5582: 
+  5583:                 </div>
+  5584: 
+  5585:               </div>
+  5586: 
+  5587:               <!-- HSA Tab -->
+  5588: 
+  5589:               <div class="category-tab" id="cat-hsa" onclick="selectCourseCategory('hsa')">
+  5590: 
+  5591:                 <div class="tab-badge">HSA</div>
+  5592: 
+========================================
+Line 5589:               <div class="category-tab" id="cat-hsa" onclick="selectCourseCategory('hsa')">
+--- Context for line 5589 ---
+  5584: 
+  5585:               </div>
+  5586: 
+  5587:               <!-- HSA Tab -->
+  5588: 
+  5589:               <div class="category-tab" id="cat-hsa" onclick="selectCourseCategory('hsa')">
+  5590: 
+  5591:                 <div class="tab-badge">HSA</div>
+  5592: 
+  5593:                 <div class="tab-info">
+  5594: 
+  5595:                   <div class="tab-name">Đánh giá năng lực</div>
+  5596: 
+  5597:                   <div class="tab-sub">Hethonglab</div>
+  5598: 
+  5599:                 </div>
+  5600: 
+  5601:               </div>
+  5602: 
+  5603:               <!-- THPT Tab -->
+  5604: 
+  5605:               <div class="category-tab" id="cat-thpt" onclick="selectCourseCategory('thpt')">
+  5606: 
+  5607:                 <div class="tab-badge">THPT</div>
+  5608: 
+========================================
+Line 5605:               <div class="category-tab" id="cat-thpt" onclick="selectCourseCategory('thpt')">
+--- Context for line 5605 ---
+  5600: 
+  5601:               </div>
+  5602: 
+  5603:               <!-- THPT Tab -->
+  5604: 
+  5605:               <div class="category-tab" id="cat-thpt" onclick="selectCourseCategory('thpt')">
+  5606: 
+  5607:                 <div class="tab-badge">THPT</div>
+  5608: 
+  5609:                 <div class="tab-info">
+  5610: 
+  5611:                   <div class="tab-name">Trung học phổ thông quốc gia</div>
+  5612: 
+  5613:                   <div class="tab-sub">Hethonglab</div>
+  5614: 
+  5615:                 </div>
+  5616: 
+  5617:               </div>
+  5618: 
+  5619:             </div>
+  5620: 
+  5621:           </div>
+  5622: 
+  5623:           <!-- Right Content Panel -->
+  5624: 
+========================================
+Line 6618:     window.selectCourseCategory = function(categoryId) {
+--- Context for line 6618 ---
+  6613: 
+  6614:       }
+  6615: 
+  6616:     };
+  6617: 
+  6618:     window.selectCourseCategory = function(categoryId) {
+  6619: 
+  6620:       // 1. Update active tab states
+  6621: 
+  6622:       const tabs = ['tsa', 'hsa', 'thpt'];
+  6623: 
+  6624:       tabs.forEach(tab => {
+  6625: 
+  6626:         const tabEl = document.getElementById(`cat-${tab}`);
+  6627: 
+  6628:         if (tabEl) {
+  6629: 
+  6630:           if (tab === categoryId) {
+  6631: 
+  6632:             tabEl.classList.add('active');
+  6633: 
+  6634:           } else {
+  6635: 
+  6636:             tabEl.classList.remove('active');
+  6637: 
+========================================
+Line 14386:       // Render default course catalog category
+--- Context for line 14386 ---
+  14381: 
+  14382:         localStorage.setItem('hsa_users_db', JSON.stringify(usersDb));
+  14383: 
+  14384:       }
+  14385: 
+  14386:       // Render default course catalog category
+  14387: 
+  14388:       selectCourseCategory('tsa');
+  14389: 
+  14390:     }
+  14391: 
+  14392:     // Load progress for current student
+  14393: 
+  14394:     function loadProgress() {
+  14395: 
+  14396:       if (!currentUser || currentUser.role === 'admin') return;
+  14397: 
+  14398:       // HSA progress
+  14399: 
+  14400:       const HSA_KEY = `hsa_progress_${currentUser.username}`;
+  14401: 
+  14402:       const savedHsa = localStorage.getItem(HSA_KEY);
+  14403: 
+  14404:       try { progressState = savedHsa ? JSON.parse(savedHsa) : {}; } catch (e) { progressState = {}; }
+  14405: 
+========================================
+Line 14388:       selectCourseCategory('tsa');
+--- Context for line 14388 ---
+  14383: 
+  14384:       }
+  14385: 
+  14386:       // Render default course catalog category
+  14387: 
+  14388:       selectCourseCategory('tsa');
+  14389: 
+  14390:     }
+  14391: 
+  14392:     // Load progress for current student
+  14393: 
+  14394:     function loadProgress() {
+  14395: 
+  14396:       if (!currentUser || currentUser.role === 'admin') return;
+  14397: 
+  14398:       // HSA progress
+  14399: 
+  14400:       const HSA_KEY = `hsa_progress_${currentUser.username}`;
+  14401: 
+  14402:       const savedHsa = localStorage.getItem(HSA_KEY);
+  14403: 
+  14404:       try { progressState = savedHsa ? JSON.parse(savedHsa) : {}; } catch (e) { progressState = {}; }
+  14405: 
+  14406:       // TSA progress
+  14407: 
+========================================

@@ -1,0 +1,58 @@
+Students index: 93833
+Curriculum index: 95900
+Reports index: 98485
+
+--- Snippet before adminTabContent_curriculum ---
+>
+
+                <th>Tiến độ các chuyên đề</th>
+
+                <th style="width: 250px; text-align: center;">Hành động</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody id="adminStudentsTableBody">
+
+              <!-- Populated by JS -->
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+      <!-- Admin Content: Master Curriculum Editor -->
+
+      <div id="adminTabContent_curriculum" class="admin-tab-content" style="display: none;">
+
+        <!-- Edit
+
+--- Snippet before adminTabContent_reports ---
+ddNewTopicRow()">➕ Thêm bài học mới</button>
+
+              <button class="btn-sm btn-success" style="font-size: 0.85rem; padding: 0.55rem 1.25rem;"
+
+                onclick="saveCurriculumChanges()">
+
+                💾 LƯU THAY ĐỔI GIÁO ÁN GỐC
+
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Admin Content: Reports & Exporter -->
+
+      <div id="adminTabContent_reports" class="admin-tab-content" style="display: none;">
+
+        <div class="
+

@@ -1,0 +1,183 @@
+function initSystem() {
+
+      // Explicitly hide studentDetailModal and youtubePlayerModal on load
+
+      const studentDetailModal = document.getElementById('studentDetailModal');
+
+      if (studentDetailModal) studentDetailModal.style.display = 'none';
+
+      const youtubePlayerModal = document.getElementById('youtubePlayerModal');
+
+      if (youtubePlayerModal) youtubePlayerModal.style.display = 'none';
+
+      // 1. Load active curriculum (HSA) with auto-migration check for old/missing data
+
+      let savedCurriculum = localStorage.getItem('hsa_master_curriculum');
+
+      if (savedCurriculum) {
+
+        try {
+
+          const parsed = JSON.parse(savedCurriculum);
+
+          // If it contains old chapters, or is missing english, force upgrade
+
+          if (
+
+            (parsed.math && parsed.math.chapters && parsed.math.chapters['Hàm Số & Đồ Thị']) ||
+
+            (parsed.literature && parsed.literature.chapters && parsed.literature.chapters['Đọc & Suy luận cơ bản']) ||
+
+            (!parsed.english)
+
+          ) {
+
+            localStorage.removeItem('hsa_master_curriculum');
+
+            savedCurriculum = null;
+
+          }
+
+        } catch (e) {
+
+          savedCurriculum = null;
+
+        }
+
+      }
+
+      if (savedCurriculum) {
+
+        try {
+
+          activeCurriculum = JSON.parse(savedCurriculum);
+
+        } catch (e) {
+
+          activeCurriculum = JSON.parse(JSON.stringify(roadmapData));
+
+        }
+
+      } else {
+
+        activeCurriculum = JSON.parse(JSON.stringify(roadmapData));
+
+        localStorage.setItem('hsa_master_curriculum', JSON.stringify(activeCurriculum));
+
+      }
+
+      // 2. Load active TSA curriculum with auto-migration check for old mock data
+
+      let savedTsaCurriculum = localStorage.getItem('tsa_master_curriculum');
+
+      if (savedTsaCurriculum) {
+
+        try {
+
+          const parsed = JSON.parse(savedTsaCurriculum);
+
+          // If it contains old mock chapters, force overwrite with the authentic new teacher TSA roadmap
+
+          if (parsed.tsa_math && parsed.tsa_math.chapters && parsed.tsa_math.chapters['Đại số và Giải tích']) {
+
+            localStorage.removeItem('tsa_master_curriculum');
+
+            savedTsaCurriculum = null;
+
+          }
+
+        } catch (e) {
+
+          savedTsaCurriculum = null;
+
+        }
+
+      }
+
+      if (savedTsaCurriculum) {
+
+        try {
+
+          activeTsaCurriculum = JSON.parse(savedTsaCurriculum);
+
+        } catch (e) {
+
+          activeTsaCurriculum = JSON.parse(JSON.stringify(tsaRoadmapData));
+
+        }
+
+      } else {
+
+        activeTsaCurriculum = JSON.parse(JSON.stringify(tsaRoadmapData));
+
+        localStorage.setItem('tsa_master_curriculum', JSON.stringify(activeTsaCurriculum));
+
+      }
+
+      // 3. Load exams practice list
+
+      const savedExamsList = localStorage.getItem('exams_practice_list');
+
+      if (savedExamsList) {
+
+        try {
+
+          examsPracticeList = JSON.parse(savedExamsList);
+
+        } catch (e) {
+
+          examsPracticeList = JSON.parse(JSON.stringify(defaultExamsList));
+
+        }
+
+      } else {
+
+        examsPracticeList = JSON.parse(JSON.stringify(defaultExamsList));
+
+        localStorage.setItem('exams_practice_list', JSON.stringify(examsPracticeList));
+
+      }
+
+      // 4. Load users database
+
+      const savedUsers = localStorage.getItem('hsa_users_db');
+
+      if (savedUsers) {
+
+        try {
+
+          usersDb = JSON.parse(savedUsers);
+
+        } catch (e) {
+
+          usersDb = [];
+
+        }
+
+      } else {
+
+        usersDb = [];
+
+        localStorage.setItem('hsa_users_db', JSON.stringify(usersDb));
+
+      }
+
+      // Render default course catalog category
+
+      selectCourseCategory('tsa');
+
+    }
+
+    // Load progress for current student
+
+    function loadProgress() {
+
+      if (!currentUser || currentUser.role === 'admin') return;
+
+      // HSA progress
+
+      const HSA_KEY = `hsa_progress_${currentUser.username}`;
+
+      const savedHsa = localStorage.getItem(HSA_KEY);
+
+      try { progressState = s

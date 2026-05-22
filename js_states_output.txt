@@ -1,0 +1,1570 @@
+Pattern 'function\s+login\s*\(' matches: 0
+Pattern 'window\.login\s*=' matches: 0
+Pattern 'function\s+logout\s*\(' matches: 0
+Pattern 'window\.logout\s*=' matches: 0
+Pattern 'function\s+renderAdminStudents\s*\(' matches: 0
+Pattern 'function\s+saveCurriculumChanges\s*\(' matches: 0
+Pattern 'function\s+updateLessonProgress\s*\(' matches: 0
+Pattern 'function\s+toggleLessonStatus\s*\(' matches: 0
+Pattern 'localStorage\.getItem' matches: 22
+--- Context (Position: 291763): ---
+odal');
+
+      if (youtubePlayerModal) youtubePlayerModal.style.display = 'none';
+
+      // 1. Load active curriculum (HSA) with auto-migration check for old/missing data
+
+      let savedCurriculum = localStorage.getItem('hsa_master_curriculum');
+
+      if (savedCurriculum) {
+
+        try {
+
+          const parsed = JSON.parse(savedCurriculum);
+
+          // If it contains old chapters, or is missing english, force upgrade
+
+          if (
+
+            (parsed.math && parsed.math.chapters && parsed.math.chapters['Hàm Số & Đồ Thị']) ||
+
+            (parsed.literature && parsed.literature.chapters && parsed.literature.chapters['Đọc & Suy luận cơ bản']) ||
+
+            (!parsed.english)
+
+          ) {
+
+            localStorage.removeItem('hsa_master_curriculum');
+
+            savedCurriculum = null;
+
+          }
+
+=========================================
+
+--- Context (Position: 292970): ---
+torage.setItem('hsa_master_curriculum', JSON.stringify(activeCurriculum));
+
+      }
+
+      // 2. Load active TSA curriculum with auto-migration check for old mock data
+
+      let savedTsaCurriculum = localStorage.getItem('tsa_master_curriculum');
+
+      if (savedTsaCurriculum) {
+
+        try {
+
+          const parsed = JSON.parse(savedTsaCurriculum);
+
+          // If it contains old mock chapters, force overwrite with the authentic new teacher TSA roadmap
+
+          if (parsed.tsa_math && parsed.tsa_math.chapters && parsed.tsa_math.chapters['Đại số và Giải tích']) {
+
+            localStorage.removeItem('tsa_master_curriculum');
+
+            savedTsaCurriculum = null;
+
+          }
+
+        } catch (e) {
+
+          savedTsaCurriculum = null;
+
+        }
+
+      }
+
+      if (savedTsaCurriculum) {
+
+        try {
+
+ 
+=========================================
+
+--- Context (Position: 294025): ---
+N.stringify(tsaRoadmapData));
+
+        localStorage.setItem('tsa_master_curriculum', JSON.stringify(activeTsaCurriculum));
+
+      }
+
+      // 3. Load exams practice list
+
+      const savedExamsList = localStorage.getItem('exams_practice_list');
+
+      if (savedExamsList) {
+
+        try {
+
+          examsPracticeList = JSON.parse(savedExamsList);
+
+        } catch (e) {
+
+          examsPracticeList = JSON.parse(JSON.stringify(defaultExamsList));
+
+        }
+
+      } else {
+
+        examsPracticeList = JSON.parse(JSON.stringify(defaultExamsList));
+
+        localStorage.setItem('exams_practice_list', JSON.stringify(examsPracticeList));
+
+      }
+
+      // 4. Load users database
+
+      const savedUsers = localStorage.getItem('hsa_users_db');
+
+      if (savedUsers) {
+
+        try {
+
+          usersDb = JSON.parse(sav
+=========================================
+
+--- Context (Position: 294532): ---
+N.parse(JSON.stringify(defaultExamsList));
+
+        localStorage.setItem('exams_practice_list', JSON.stringify(examsPracticeList));
+
+      }
+
+      // 4. Load users database
+
+      const savedUsers = localStorage.getItem('hsa_users_db');
+
+      if (savedUsers) {
+
+        try {
+
+          usersDb = JSON.parse(savedUsers);
+
+        } catch (e) {
+
+          usersDb = [];
+
+        }
+
+      } else {
+
+        usersDb = [];
+
+        localStorage.setItem('hsa_users_db', JSON.stringify(usersDb));
+
+      }
+
+      // Render default course catalog category
+
+      selectCourseCategory('tsa');
+
+    }
+
+    // Load progress for current student
+
+    function loadProgress() {
+
+      if (!currentUser || currentUser.role === 'admin') return;
+
+      // HSA progress
+
+      const HSA_KEY = `hsa_progress_${currentUser.username}`;
+
+ 
+=========================================
+
+--- Context (Position: 295174): ---
+unction loadProgress() {
+
+      if (!currentUser || currentUser.role === 'admin') return;
+
+      // HSA progress
+
+      const HSA_KEY = `hsa_progress_${currentUser.username}`;
+
+      const savedHsa = localStorage.getItem(HSA_KEY);
+
+      try { progressState = savedHsa ? JSON.parse(savedHsa) : {}; } catch (e) { progressState = {}; }
+
+      // TSA progress
+
+      const TSA_KEY = `tsa_progress_${currentUser.username}`;
+
+      const savedTsa = localStorage.getItem(TSA_KEY);
+
+      try { tsaProgressState = savedTsa ? JSON.parse(savedTsa) : {}; } catch (e) { tsaProgressState = {}; }
+
+      // Exams progress
+
+      const EXAMS_KEY = `exams_progress_${currentUser.username}`;
+
+      const savedExams = localStorage.getItem(EXAMS_KEY);
+
+      try { examsProgressState = savedExams ? JSON.parse(savedExams) : {}; } catch (
+=========================================
+
+--- Context (Position: 295418): ---
+progressState = savedHsa ? JSON.parse(savedHsa) : {}; } catch (e) { progressState = {}; }
+
+      // TSA progress
+
+      const TSA_KEY = `tsa_progress_${currentUser.username}`;
+
+      const savedTsa = localStorage.getItem(TSA_KEY);
+
+      try { tsaProgressState = savedTsa ? JSON.parse(savedTsa) : {}; } catch (e) { tsaProgressState = {}; }
+
+      // Exams progress
+
+      const EXAMS_KEY = `exams_progress_${currentUser.username}`;
+
+      const savedExams = localStorage.getItem(EXAMS_KEY);
+
+      try { examsProgressState = savedExams ? JSON.parse(savedExams) : {}; } catch (e) { examsProgressState = {}; }
+
+    }
+
+    // Save progress for current student
+
+    function saveProgress() {
+
+      if (!currentUser || currentUser.role === 'admin') return;
+
+      const HSA_KEY = `hsa_progress_${currentUser.username}`;
+
+   
+=========================================
+
+--- Context (Position: 295676): ---
+te = savedTsa ? JSON.parse(savedTsa) : {}; } catch (e) { tsaProgressState = {}; }
+
+      // Exams progress
+
+      const EXAMS_KEY = `exams_progress_${currentUser.username}`;
+
+      const savedExams = localStorage.getItem(EXAMS_KEY);
+
+      try { examsProgressState = savedExams ? JSON.parse(savedExams) : {}; } catch (e) { examsProgressState = {}; }
+
+    }
+
+    // Save progress for current student
+
+    function saveProgress() {
+
+      if (!currentUser || currentUser.role === 'admin') return;
+
+      const HSA_KEY = `hsa_progress_${currentUser.username}`;
+
+      localStorage.setItem(HSA_KEY, JSON.stringify(progressState));
+
+      const TSA_KEY = `tsa_progress_${currentUser.username}`;
+
+      localStorage.setItem(TSA_KEY, JSON.stringify(tsaProgressState));
+
+      const EXAMS_KEY = `exams_progress_${currentUser.use
+=========================================
+
+--- Context (Position: 328262): ---
+.remove('active');
+
+      if (coursesView) coursesView.classList.remove('active');
+
+      checkSession();
+
+    };
+
+    // Session Control Check
+
+    function checkSession() {
+
+      const savedUser = localStorage.getItem('hsa_current_user');
+
+      const userProfilePanel = document.getElementById('userProfilePanel');
+
+      const guestAuthBtn = document.getElementById('guestAuthBtn');
+
+      const homeView = document.getElementById('homeView');
+
+      const studentView = document.getElementById('studentView');
+
+      const adminView = document.getElementById('adminView');
+
+      if (savedUser) {
+
+        try {
+
+          currentUser = JSON.parse(savedUser);
+
+        } catch (e) {
+
+          currentUser = null;
+
+        }
+
+      } else {
+
+        currentUser = null;
+
+      }
+
+      const coursesView = document
+=========================================
+
+--- Context (Position: 335038): ---
+length;
+
+        });
+
+      });
+
+      return total;
+
+    }
+
+    // Calculate detailed student progress statistics (HSA default)
+
+    function getStudentProgressStats(username) {
+
+      const saved = localStorage.getItem(`hsa_progress_${username}`);
+
+      let state = {};
+
+      try { state = saved ? JSON.parse(saved) : {}; } catch (e) { state = {}; }
+
+      let total = 0;
+
+      let completed = 0;
+
+      const subjectStats = {};
+
+      Object.keys(activeCurriculum).forEach(subId => {
+
+        const subject = activeCurriculum[subId];
+
+        let subTotal = 0;
+
+        let subCompleted = 0;
+
+        Object.keys(subject.chapters).forEach(chapterName => {
+
+          const topics = subject.chapters[chapterName];
+
+          topics.forEach((topic, idx) => {
+
+            const uniqueId = `${subId}-${chapterName}-${
+=========================================
+
+--- Context (Position: 337380): ---
+ing: 2rem; color: var(--text-secondary);">🔍 Không tìm thấy học sinh nào phù hợp.</td></tr>`;
+
+        return;
+
+      }
+
+      filteredUsers.forEach(user => {
+
+        // HSA
+
+        const hsaSaved = localStorage.getItem(`hsa_progress_${user.username}`);
+
+        let hsaState = {};
+
+        try { hsaState = hsaSaved ? JSON.parse(hsaSaved) : {}; } catch (e) { }
+
+        let hsaTotal = 0, hsaCompleted = 0;
+
+        Object.keys(activeCurriculum).forEach(subId => {
+
+          const subject = activeCurriculum[subId];
+
+          Object.keys(subject.chapters).forEach(chapterName => {
+
+            hsaTotal += subject.chapters[chapterName].length;
+
+            subject.chapters[chapterName].forEach((topic, idx) => {
+
+              if (hsaState[`${subId}-${chapterName}-${idx}`]) hsaCompleted++;
+
+            });
+
+       
+=========================================
+
+--- Context (Position: 338150): ---
+{idx}`]) hsaCompleted++;
+
+            });
+
+          });
+
+        });
+
+        const hsaPct = hsaTotal > 0 ? Math.round((hsaCompleted / hsaTotal) * 100) : 0;
+
+        // TSA
+
+        const tsaSaved = localStorage.getItem(`tsa_progress_${user.username}`);
+
+        let tsaState = {};
+
+        try { tsaState = tsaSaved ? JSON.parse(tsaSaved) : {}; } catch (e) { }
+
+        let tsaTotal = 0, tsaCompleted = 0;
+
+        Object.keys(activeTsaCurriculum).forEach(subId => {
+
+          const subject = activeTsaCurriculum[subId];
+
+          Object.keys(subject.chapters).forEach(chapterName => {
+
+            tsaTotal += subject.chapters[chapterName].length;
+
+            subject.chapters[chapterName].forEach((topic, idx) => {
+
+              if (tsaState[`${subId}-${chapterName}-${idx}`]) tsaCompleted++;
+
+            });
+
+ 
+=========================================
+
+--- Context (Position: 338930): ---
+}`]) tsaCompleted++;
+
+            });
+
+          });
+
+        });
+
+        const tsaPct = tsaTotal > 0 ? Math.round((tsaCompleted / tsaTotal) * 100) : 0;
+
+        // Exams
+
+        const examsSaved = localStorage.getItem(`exams_progress_${user.username}`);
+
+        let examsState = {};
+
+        try { examsState = examsSaved ? JSON.parse(examsSaved) : {}; } catch (e) { }
+
+        let examsTotal = examsPracticeList.length;
+
+        let examsCompleted = 0;
+
+        examsPracticeList.forEach(exam => {
+
+          if (examsState[exam.id] && examsState[exam.id].completed) examsCompleted++;
+
+        });
+
+        let progressBadgesHtml = '<div class="student-subject-progress" style="display: flex; gap: 0.5rem; justify-content: center; align-items: center; flex-wrap: wrap;">';
+
+        progressBadgesHtml += `
+
+        
+=========================================
+
+--- Context (Position: 343502): ---
+t.getElementById('adminStatStudentsCount').textContent = usersDb.length;
+
+      let hsaPctSum = 0;
+
+      let tsaPctSum = 0;
+
+      usersDb.forEach(user => {
+
+        // HSA
+
+        const hsaSaved = localStorage.getItem(`hsa_progress_${user.username}`);
+
+        let hsaState = {};
+
+        try { hsaState = hsaSaved ? JSON.parse(hsaSaved) : {}; } catch (e) { }
+
+        let hsaTotal = 0, hsaCompleted = 0;
+
+        Object.keys(activeCurriculum).forEach(subId => {
+
+          const subject = activeCurriculum[subId];
+
+          Object.keys(subject.chapters).forEach(chapterName => {
+
+            hsaTotal += subject.chapters[chapterName].length;
+
+            subject.chapters[chapterName].forEach((topic, idx) => {
+
+              if (hsaState[`${subId}-${chapterName}-${idx}`]) hsaCompleted++;
+
+            });
+
+       
+=========================================
+
+--- Context (Position: 344258): ---
+chapterName}-${idx}`]) hsaCompleted++;
+
+            });
+
+          });
+
+        });
+
+        hsaPctSum += hsaTotal > 0 ? (hsaCompleted / hsaTotal) * 100 : 0;
+
+        // TSA
+
+        const tsaSaved = localStorage.getItem(`tsa_progress_${user.username}`);
+
+        let tsaState = {};
+
+        try { tsaState = tsaSaved ? JSON.parse(tsaSaved) : {}; } catch (e) { }
+
+        let tsaTotal = 0, tsaCompleted = 0;
+
+        Object.keys(activeTsaCurriculum).forEach(subId => {
+
+          const subject = activeTsaCurriculum[subId];
+
+          Object.keys(subject.chapters).forEach(chapterName => {
+
+            tsaTotal += subject.chapters[chapterName].length;
+
+            subject.chapters[chapterName].forEach((topic, idx) => {
+
+              if (tsaState[`${subId}-${chapterName}-${idx}`]) tsaCompleted++;
+
+            });
+
+ 
+=========================================
+
+--- Context (Position: 346378): ---
+ame}`;
+
+      document.getElementById('modalStudentMeta').textContent = `Lớp: ${user.className} | Mục tiêu: ${user.targetScore}`;
+
+      // Load progress databases in parallel
+
+      const savedHsa = localStorage.getItem(`hsa_progress_${username}`);
+
+      try { modalProgressState = savedHsa ? JSON.parse(savedHsa) : {}; } catch (e) { modalProgressState = {}; }
+
+      const savedTsa = localStorage.getItem(`tsa_progress_${username}`);
+
+      try { modalTsaProgressState = savedTsa ? JSON.parse(savedTsa) : {}; } catch (e) { modalTsaProgressState = {}; }
+
+      const savedExams = localStorage.getItem(`exams_progress_${username}`);
+
+      try { modalExamsProgressState = savedExams ? JSON.parse(savedExams) : {}; } catch (e) { modalExamsProgressState = {}; }
+
+      document.getElementById('studentDetailModal').style.
+=========================================
+
+--- Context (Position: 346565): ---
+t savedHsa = localStorage.getItem(`hsa_progress_${username}`);
+
+      try { modalProgressState = savedHsa ? JSON.parse(savedHsa) : {}; } catch (e) { modalProgressState = {}; }
+
+      const savedTsa = localStorage.getItem(`tsa_progress_${username}`);
+
+      try { modalTsaProgressState = savedTsa ? JSON.parse(savedTsa) : {}; } catch (e) { modalTsaProgressState = {}; }
+
+      const savedExams = localStorage.getItem(`exams_progress_${username}`);
+
+      try { modalExamsProgressState = savedExams ? JSON.parse(savedExams) : {}; } catch (e) { modalExamsProgressState = {}; }
+
+      document.getElementById('studentDetailModal').style.display = 'flex';
+
+      modalSuperView = 'hsa';
+
+      modalCurrentSubject = 'math';
+
+      modalCurrentTsaSubject = 'tsa_math';
+
+      switchModalSuperView('hsa');
+
+    };
+
+    // Switc
+=========================================
+
+--- Context (Position: 346760): ---
+sa = localStorage.getItem(`tsa_progress_${username}`);
+
+      try { modalTsaProgressState = savedTsa ? JSON.parse(savedTsa) : {}; } catch (e) { modalTsaProgressState = {}; }
+
+      const savedExams = localStorage.getItem(`exams_progress_${username}`);
+
+      try { modalExamsProgressState = savedExams ? JSON.parse(savedExams) : {}; } catch (e) { modalExamsProgressState = {}; }
+
+      document.getElementById('studentDetailModal').style.display = 'flex';
+
+      modalSuperView = 'hsa';
+
+      modalCurrentSubject = 'math';
+
+      modalCurrentTsaSubject = 'tsa_math';
+
+      switchModalSuperView('hsa');
+
+    };
+
+    // Switch Modal Super View (HSA | TSA | Exams)
+
+    window.switchModalSuperView = function (view) {
+
+      modalSuperView = view;
+
+      const btnHsa = document.getElementById('modalSuperTabHsa');
+
+     
+=========================================
+
+--- Context (Position: 386114): ---
+
+      ];
+
+      csvContent += headers.map(h => `"${h.replace(/"/g, '""')}"`).join(",") + "\r\n";
+
+      // Add student rows
+
+      usersDb.forEach(user => {
+
+        // HSA
+
+        const hsaSaved = localStorage.getItem(`hsa_progress_${user.username}`);
+
+        let hsaState = {};
+
+        try { hsaState = hsaSaved ? JSON.parse(hsaSaved) : {}; } catch (e) { }
+
+        let hsaTotal = 0, hsaCompleted = 0;
+
+        Object.keys(activeCurriculum).forEach(subId => {
+
+          const subject = activeCurriculum[subId];
+
+          Object.keys(subject.chapters).forEach(chapterName => {
+
+            hsaTotal += subject.chapters[chapterName].length;
+
+            subject.chapters[chapterName].forEach((topic, idx) => {
+
+              if (hsaState[`${subId}-${chapterName}-${idx}`]) hsaCompleted++;
+
+            });
+
+       
+=========================================
+
+--- Context (Position: 386884): ---
+{idx}`]) hsaCompleted++;
+
+            });
+
+          });
+
+        });
+
+        const hsaPct = hsaTotal > 0 ? Math.round((hsaCompleted / hsaTotal) * 100) : 0;
+
+        // TSA
+
+        const tsaSaved = localStorage.getItem(`tsa_progress_${user.username}`);
+
+        let tsaState = {};
+
+        try { tsaState = tsaSaved ? JSON.parse(tsaSaved) : {}; } catch (e) { }
+
+        let tsaTotal = 0, tsaCompleted = 0;
+
+        Object.keys(activeTsaCurriculum).forEach(subId => {
+
+          const subject = activeTsaCurriculum[subId];
+
+          Object.keys(subject.chapters).forEach(chapterName => {
+
+            tsaTotal += subject.chapters[chapterName].length;
+
+            subject.chapters[chapterName].forEach((topic, idx) => {
+
+              if (tsaState[`${subId}-${chapterName}-${idx}`]) tsaCompleted++;
+
+            });
+
+ 
+=========================================
+
+--- Context (Position: 387664): ---
+}`]) tsaCompleted++;
+
+            });
+
+          });
+
+        });
+
+        const tsaPct = tsaTotal > 0 ? Math.round((tsaCompleted / tsaTotal) * 100) : 0;
+
+        // Exams
+
+        const examsSaved = localStorage.getItem(`exams_progress_${user.username}`);
+
+        let examsState = {};
+
+        try { examsState = examsSaved ? JSON.parse(examsSaved) : {}; } catch (e) { }
+
+        let examsTotal = examsPracticeList.length;
+
+        let examsCompleted = 0;
+
+        examsPracticeList.forEach(exam => {
+
+          if (examsState[exam.id] && examsState[exam.id].completed) examsCompleted++;
+
+        });
+
+        const row = [
+
+          user.name,
+
+          user.username,
+
+          user.className,
+
+          user.targetScore,
+
+          `${hsaPct}%`,
+
+          `${tsaPct}%`,
+
+          `${examsCompleted}/${examsTot
+=========================================
+
+--- Context (Position: 397119): ---
+    icon.textContent = '▲';
+
+          } else {
+
+            icon.textContent = '▼';
+
+          }
+
+        }
+
+      }
+
+    };
+
+    window.enterCourse = function(courseType) {
+
+      const savedUser = localStorage.getItem('hsa_current_user');
+
+      if (!savedUser) {
+
+        openAuthModal();
+
+        return;
+
+      }
+
+      currentSuperView = courseType;
+
+      const homeView = document.getElementById('homeView');
+
+      const studentView = document.getElementById('studentView');
+
+      const adminView = document.getElementById('adminView');
+
+      const coursesView = document.getElementById('coursesView');
+
+      if (homeView) homeView.classList.remove('active');
+
+      if (studentView) studentView.classList.add('active');
+
+      if (adminView) adminView.classList.remove('active');
+
+      if (coursesView) co
+=========================================
+
+--- Context (Position: 399265): ---
+xtContent = 'Giao diện Tối';
+
+          localStorage.setItem('hsa_theme_2026', 'dark');
+
+        }
+
+      });
+
+    }
+
+    // Load theme preference (default to dark if not set)
+
+    const savedTheme = localStorage.getItem('hsa_theme_2026') || 'dark';
+
+    htmlEl.setAttribute('data-theme', savedTheme);
+
+    if (savedTheme === 'dark') {
+
+      const themeIcon = document.getElementById('themeIcon');
+
+      const themeText = document.getElementById('themeText');
+
+      if (themeIcon) themeIcon.textContent = '🌙';
+
+      if (themeText) themeText.textContent = 'Giao diện Tối';
+
+    } else {
+
+      const themeIcon = document.getElementById('themeIcon');
+
+      const themeText = document.getElementById('themeText');
+
+      if (themeIcon) themeIcon.textContent = '☀️';
+
+      if (themeText) themeText.textContent = 'Giao 
+=========================================
+
+Pattern 'localStorage\.setItem' matches: 18
+--- Context (Position: 292764): ---
+
+
+        } catch (e) {
+
+          activeCurriculum = JSON.parse(JSON.stringify(roadmapData));
+
+        }
+
+      } else {
+
+        activeCurriculum = JSON.parse(JSON.stringify(roadmapData));
+
+        localStorage.setItem('hsa_master_curriculum', JSON.stringify(activeCurriculum));
+
+      }
+
+      // 2. Load active TSA curriculum with auto-migration check for old mock data
+
+      let savedTsaCurriculum = localStorage.getItem('tsa_master_curriculum');
+
+      if (savedTsaCurriculum) {
+
+        try {
+
+          const parsed = JSON.parse(savedTsaCurriculum);
+
+          // If it contains old mock chapters, force overwrite with the authentic new teacher TSA roadmap
+
+          if (parsed.tsa_math && parsed.tsa_math.chapters && parsed.tsa_math.chapters['Đại số và Giải tích']) {
+
+            localStorage.removeItem('tsa
+=========================================
+
+--- Context (Position: 293864): ---
+catch (e) {
+
+          activeTsaCurriculum = JSON.parse(JSON.stringify(tsaRoadmapData));
+
+        }
+
+      } else {
+
+        activeTsaCurriculum = JSON.parse(JSON.stringify(tsaRoadmapData));
+
+        localStorage.setItem('tsa_master_curriculum', JSON.stringify(activeTsaCurriculum));
+
+      }
+
+      // 3. Load exams practice list
+
+      const savedExamsList = localStorage.getItem('exams_practice_list');
+
+      if (savedExamsList) {
+
+        try {
+
+          examsPracticeList = JSON.parse(savedExamsList);
+
+        } catch (e) {
+
+          examsPracticeList = JSON.parse(JSON.stringify(defaultExamsList));
+
+        }
+
+      } else {
+
+        examsPracticeList = JSON.parse(JSON.stringify(defaultExamsList));
+
+        localStorage.setItem('exams_practice_list', JSON.stringify(examsPracticeList));
+
+      }
+
+      // 4
+=========================================
+
+--- Context (Position: 294384): ---
+catch (e) {
+
+          examsPracticeList = JSON.parse(JSON.stringify(defaultExamsList));
+
+        }
+
+      } else {
+
+        examsPracticeList = JSON.parse(JSON.stringify(defaultExamsList));
+
+        localStorage.setItem('exams_practice_list', JSON.stringify(examsPracticeList));
+
+      }
+
+      // 4. Load users database
+
+      const savedUsers = localStorage.getItem('hsa_users_db');
+
+      if (savedUsers) {
+
+        try {
+
+          usersDb = JSON.parse(savedUsers);
+
+        } catch (e) {
+
+          usersDb = [];
+
+        }
+
+      } else {
+
+        usersDb = [];
+
+        localStorage.setItem('hsa_users_db', JSON.stringify(usersDb));
+
+      }
+
+      // Render default course catalog category
+
+      selectCourseCategory('tsa');
+
+    }
+
+    // Load progress for current student
+
+    function loadProgress() {
+
+    
+=========================================
+
+--- Context (Position: 294762): ---
+s_db');
+
+      if (savedUsers) {
+
+        try {
+
+          usersDb = JSON.parse(savedUsers);
+
+        } catch (e) {
+
+          usersDb = [];
+
+        }
+
+      } else {
+
+        usersDb = [];
+
+        localStorage.setItem('hsa_users_db', JSON.stringify(usersDb));
+
+      }
+
+      // Render default course catalog category
+
+      selectCourseCategory('tsa');
+
+    }
+
+    // Load progress for current student
+
+    function loadProgress() {
+
+      if (!currentUser || currentUser.role === 'admin') return;
+
+      // HSA progress
+
+      const HSA_KEY = `hsa_progress_${currentUser.username}`;
+
+      const savedHsa = localStorage.getItem(HSA_KEY);
+
+      try { progressState = savedHsa ? JSON.parse(savedHsa) : {}; } catch (e) { progressState = {}; }
+
+      // TSA progress
+
+      const TSA_KEY = `tsa_progress_${currentUser.
+=========================================
+
+--- Context (Position: 296041): ---
+Save progress for current student
+
+    function saveProgress() {
+
+      if (!currentUser || currentUser.role === 'admin') return;
+
+      const HSA_KEY = `hsa_progress_${currentUser.username}`;
+
+      localStorage.setItem(HSA_KEY, JSON.stringify(progressState));
+
+      const TSA_KEY = `tsa_progress_${currentUser.username}`;
+
+      localStorage.setItem(TSA_KEY, JSON.stringify(tsaProgressState));
+
+      const EXAMS_KEY = `exams_progress_${currentUser.username}`;
+
+      localStorage.setItem(EXAMS_KEY, JSON.stringify(examsProgressState));
+
+      updateDashboardStats();
+
+    }
+
+    // Clear student progress
+
+    window.clearProgress = function () {
+
+      if (confirm("Bạn có chắc chắn muốn xóa toàn bộ tiến độ học tập và luyện đề của mình không? Hành động này không thể hoàn tác.")) {
+
+        progressState = {};
+
+  
+=========================================
+
+--- Context (Position: 296173): ---
+     const HSA_KEY = `hsa_progress_${currentUser.username}`;
+
+      localStorage.setItem(HSA_KEY, JSON.stringify(progressState));
+
+      const TSA_KEY = `tsa_progress_${currentUser.username}`;
+
+      localStorage.setItem(TSA_KEY, JSON.stringify(tsaProgressState));
+
+      const EXAMS_KEY = `exams_progress_${currentUser.username}`;
+
+      localStorage.setItem(EXAMS_KEY, JSON.stringify(examsProgressState));
+
+      updateDashboardStats();
+
+    }
+
+    // Clear student progress
+
+    window.clearProgress = function () {
+
+      if (confirm("Bạn có chắc chắn muốn xóa toàn bộ tiến độ học tập và luyện đề của mình không? Hành động này không thể hoàn tác.")) {
+
+        progressState = {};
+
+        tsaProgressState = {};
+
+        examsProgressState = {};
+
+        saveProgress();
+
+        // Uncheck all checkboxes on screen
+=========================================
+
+--- Context (Position: 296312): ---
+nst TSA_KEY = `tsa_progress_${currentUser.username}`;
+
+      localStorage.setItem(TSA_KEY, JSON.stringify(tsaProgressState));
+
+      const EXAMS_KEY = `exams_progress_${currentUser.username}`;
+
+      localStorage.setItem(EXAMS_KEY, JSON.stringify(examsProgressState));
+
+      updateDashboardStats();
+
+    }
+
+    // Clear student progress
+
+    window.clearProgress = function () {
+
+      if (confirm("Bạn có chắc chắn muốn xóa toàn bộ tiến độ học tập và luyện đề của mình không? Hành động này không thể hoàn tác.")) {
+
+        progressState = {};
+
+        tsaProgressState = {};
+
+        examsProgressState = {};
+
+        saveProgress();
+
+        // Uncheck all checkboxes on screen
+
+        const checkboxes = document.querySelectorAll('.excel-checkbox input');
+
+        checkboxes.forEach(cb => cb.checked = false);
+
+  
+=========================================
+
+--- Context (Position: 323378): ---
+     const adminUser = {
+
+          username: 'admin',
+
+          name: 'Quản trị viên',
+
+          className: 'Hệ thống',
+
+          targetScore: '150',
+
+          role: 'admin'
+
+        };
+
+        localStorage.setItem('hsa_current_user', JSON.stringify(adminUser));
+
+        userEl.value = '';
+
+        passEl.value = '';
+
+        if (typeof closeAuthModal === 'function') closeAuthModal();
+
+        // Hide home and activate admin
+
+        const homeView = document.getElementById('homeView');
+
+        const adminView = document.getElementById('adminView');
+
+        const coursesView = document.getElementById('coursesView');
+
+        if (homeView) homeView.classList.remove('active');
+
+        if (coursesView) coursesView.classList.remove('active');
+
+        if (adminView) adminView.classList.add('active');
+
+  
+=========================================
+
+--- Context (Position: 324229): ---
+return;
+
+      }
+
+      // Check Student
+
+      const student = usersDb.find(u => u.username.toLowerCase() === username.toLowerCase());
+
+      if (student && student.password === password) {
+
+        localStorage.setItem('hsa_current_user', JSON.stringify(student));
+
+        userEl.value = '';
+
+        passEl.value = '';
+
+        if (typeof closeAuthModal === 'function') closeAuthModal();
+
+        // Hide home and activate student view
+
+        const homeView = document.getElementById('homeView');
+
+        const studentView = document.getElementById('studentView');
+
+        const coursesView = document.getElementById('coursesView');
+
+        if (homeView) homeView.classList.remove('active');
+
+        if (coursesView) coursesView.classList.remove('active');
+
+        if (studentView) studentView.classList.add('
+=========================================
+
+--- Context (Position: 326453): ---
+      }
+
+      const newUser = {
+
+        username,
+
+        name,
+
+        className,
+
+        targetScore,
+
+        password,
+
+        role: 'student'
+
+      };
+
+      usersDb.push(newUser);
+
+      localStorage.setItem('hsa_users_db', JSON.stringify(usersDb));
+
+      // Auto login
+
+      localStorage.setItem('hsa_current_user', JSON.stringify(newUser));
+
+      // Reset forms
+
+      userEl.value = '';
+
+      nameEl.value = '';
+
+      classEl.value = '';
+
+      targetEl.value = '100';
+
+      passEl.value = '';
+
+      switchAuthTab('login');
+
+      if (typeof closeAuthModal === 'function') closeAuthModal();
+
+      // Hide home and activate student view
+
+      const homeView = document.getElementById('homeView');
+
+      const studentView = document.getElementById('studentView');
+
+      const coursesView = docum
+=========================================
+
+--- Context (Position: 326544): ---
+     targetScore,
+
+        password,
+
+        role: 'student'
+
+      };
+
+      usersDb.push(newUser);
+
+      localStorage.setItem('hsa_users_db', JSON.stringify(usersDb));
+
+      // Auto login
+
+      localStorage.setItem('hsa_current_user', JSON.stringify(newUser));
+
+      // Reset forms
+
+      userEl.value = '';
+
+      nameEl.value = '';
+
+      classEl.value = '';
+
+      targetEl.value = '100';
+
+      passEl.value = '';
+
+      switchAuthTab('login');
+
+      if (typeof closeAuthModal === 'function') closeAuthModal();
+
+      // Hide home and activate student view
+
+      const homeView = document.getElementById('homeView');
+
+      const studentView = document.getElementById('studentView');
+
+      const coursesView = document.getElementById('coursesView');
+
+      if (homeView) homeView.classList.remove('active')
+=========================================
+
+--- Context (Position: 342843): ---
+ame) {
+
+      if (confirm(`Bạn có chắc chắn muốn xóa tài khoản "${username}" không? Tiến độ học tập sẽ bị xóa vĩnh viễn.`)) {
+
+        usersDb = usersDb.filter(u => u.username !== username);
+
+        localStorage.setItem('hsa_users_db', JSON.stringify(usersDb));
+
+        localStorage.removeItem(`hsa_progress_${username}`);
+
+        localStorage.removeItem(`tsa_progress_${username}`);
+
+        localStorage.removeItem(`exams_progress_${username}`);
+
+        alert("Đã xóa tài khoản thành công!");
+
+        renderAdminStudents();
+
+        renderAdminStats();
+
+      }
+
+    };
+
+    // Render Admin stats panel
+
+    function renderAdminStats() {
+
+      document.getElementById('adminStatStudentsCount').textContent = usersDb.length;
+
+      let hsaPctSum = 0;
+
+      let tsaPctSum = 0;
+
+      usersDb.forEach(user => {
+
+  
+=========================================
+
+--- Context (Position: 371966): ---
+med]) {
+
+        alert("Chương này đã tồn tại!");
+
+        return;
+
+      }
+
+      curr[subId].chapters[trimmed] = [
+
+        ["Bài học đầu tiên", "Mô tả trọng tâm thi...", "Medium"]
+
+      ];
+
+      localStorage.setItem(storageKey, JSON.stringify(curr));
+
+      alert(`Đã thêm chương "${trimmed}" thành công!`);
+
+      loadEditorChapters();
+
+      // Select it
+
+      selectEditorChapter(trimmed);
+
+    };
+
+    window.deleteCurrentChapter = function () {
+
+      const subId = document.getElementById('editorSubjectSelect').value;
+
+      if (!subId || !editingChapter) return;
+
+      if (confirm(`Bạn có chắc chắn muốn xóa toàn bộ chương "${editingChapter}" cùng mọi bài học bên trong không?`)) {
+
+        const curr = (currentEditorTarget === 'tsa') ? activeTsaCurriculum : activeCurriculum;
+
+        const storageKey =
+=========================================
+
+--- Context (Position: 372735): ---
+lum : activeCurriculum;
+
+        const storageKey = (currentEditorTarget === 'tsa') ? 'tsa_master_curriculum' : 'hsa_master_curriculum';
+
+        delete curr[subId].chapters[editingChapter];
+
+        localStorage.setItem(storageKey, JSON.stringify(curr));
+
+        alert(`Đã xóa chương "${editingChapter}" thành công!`);
+
+        loadEditorChapters();
+
+      }
+
+    };
+
+    window.addNewTopicRow = function () {
+
+      const container = document.getElementById('editorTopicList');
+
+      if (!container) return;
+
+      if (currentEditorTarget === 'exams') {
+
+        if (container.innerHTML.includes('Chưa có đề thi')) {
+
+          container.innerHTML = '';
+
+        }
+
+        const row = document.createElement('div');
+
+        row.className = 'editor-topic-row';
+
+        row.style.borderLeft = '4px solid var(--accen
+=========================================
+
+--- Context (Position: 383029): ---
+iculum';
+
+      if (!curr[editingSubject]) {
+
+        alert("Không tìm thấy môn học đang sửa!");
+
+        return;
+
+      }
+
+      curr[editingSubject].chapters[editingChapter] = updatedTopics;
+
+      localStorage.setItem(storageKey, JSON.stringify(curr));
+
+      alert(`Đã lưu thành công giáo án gốc chương "${editingChapter}"!`);
+
+      if (currentSuperView === currentEditorTarget) {
+
+        if (currentSuperView === 'tsa') {
+
+          renderSheet();
+
+        } else if (currentSuperView === 'hsa') {
+
+          renderSheet();
+
+        }
+
+      }
+
+      updateDashboardStats();
+
+      renderAdminStats();
+
+    };
+
+    // Save changes to mock exams database
+
+    window.saveExamsChanges = function () {
+
+      const rows = document.querySelectorAll('.editor-topic-row');
+
+      const updatedExams = [];
+
+      for (le
+=========================================
+
+--- Context (Position: 385098): ---
+ind(oldEx => oldEx.title === newEx.title && oldEx.type === newEx.type);
+
+        if (matched) {
+
+          newEx.id = matched.id;
+
+        }
+
+      });
+
+      examsPracticeList = updatedExams;
+
+      localStorage.setItem('exams_practice_list', JSON.stringify(examsPracticeList));
+
+      alert("Đã lưu thành công kho đề thi thử thực chiến!");
+
+      if (currentSuperView === 'exams') {
+
+        renderExamsSheet();
+
+      }
+
+      updateDashboardStats();
+
+      renderAdminStats();
+
+    };
+
+    // --- EXPORT CLASS PROGRESS REPORT (CSV) ---
+
+    window.exportClassProgressCSV = function () {
+
+      if (usersDb.length === 0) {
+
+        alert("Chưa có học sinh đăng ký để xuất báo cáo!");
+
+        return;
+
+      }
+
+      let csvContent = "\uFEFF"; // UTF-8 BOM
+
+      // Columns headers
+
+      const headers = [
+
+        
+=========================================
+
+--- Context (Position: 398827): ---
+lEl.setAttribute('data-theme', 'light');
+
+          document.getElementById('themeIcon').textContent = '☀️';
+
+          document.getElementById('themeText').textContent = 'Giao diện Sáng';
+
+          localStorage.setItem('hsa_theme_2026', 'light');
+
+        } else {
+
+          htmlEl.setAttribute('data-theme', 'dark');
+
+          document.getElementById('themeIcon').textContent = '🌙';
+
+          document.getElementById('themeText').textContent = 'Giao diện Tối';
+
+          localStorage.setItem('hsa_theme_2026', 'dark');
+
+        }
+
+      });
+
+    }
+
+    // Load theme preference (default to dark if not set)
+
+    const savedTheme = localStorage.getItem('hsa_theme_2026') || 'dark';
+
+    htmlEl.setAttribute('data-theme', savedTheme);
+
+    if (savedTheme === 'dark') {
+
+      const themeIcon = document.getElementBy
+=========================================
+
+--- Context (Position: 399105): ---
+htmlEl.setAttribute('data-theme', 'dark');
+
+          document.getElementById('themeIcon').textContent = '🌙';
+
+          document.getElementById('themeText').textContent = 'Giao diện Tối';
+
+          localStorage.setItem('hsa_theme_2026', 'dark');
+
+        }
+
+      });
+
+    }
+
+    // Load theme preference (default to dark if not set)
+
+    const savedTheme = localStorage.getItem('hsa_theme_2026') || 'dark';
+
+    htmlEl.setAttribute('data-theme', savedTheme);
+
+    if (savedTheme === 'dark') {
+
+      const themeIcon = document.getElementById('themeIcon');
+
+      const themeText = document.getElementById('themeText');
+
+      if (themeIcon) themeIcon.textContent = '🌙';
+
+      if (themeText) themeText.textContent = 'Giao diện Tối';
+
+    } else {
+
+      const themeIcon = document.getElementById('themeIcon');
+
+      
+=========================================
+

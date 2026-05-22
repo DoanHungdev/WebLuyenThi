@@ -1,0 +1,88 @@
+Line 6474:     const courseCategories = {
+--- Context for line 6474 ---
+  6469: 
+  6470:   <script>
+  6471: 
+  6472:     // Course categories dataset for the landing page catalog
+  6473: 
+  6474:     const courseCategories = {
+  6475: 
+  6476:       tsa: {
+  6477: 
+  6478:         title: "KHÓA HỌC ĐÁNH GIÁ TƯ DUY",
+  6479: 
+  6480:         countText: "0 khóa học có sẵn",
+  6481: 
+  6482:         courses: []
+  6483: 
+  6484:       },
+  6485: 
+  6486:       hsa: {
+  6487: 
+  6488:         title: "KHÓA HỌC ĐÁNH GIÁ NĂNG LỰC",
+  6489: 
+  6490:         countText: "4 khóa học có sẵn",
+  6491: 
+  6492:         courses: [
+  6493: 
+  6494:           {
+  6495: 
+  6496:             title: "TƯ DUY ĐỊNH LƯỢNG 2K9",
+  6497: 
+  6498:             teacher: "Lê Tuấn Anh - Trần Hoàng Anh",
+  6499: 
+  6500:             icon: "📊",
+  6501: 
+  6502:             bannerColor: null,
+  6503: 
+  6504:             link: "#"
+  6505: 
+  6506:           },
+  6507: 
+  6508:           {
+  6509: 
+  6510:             title: "TƯ DUY ĐỊNH TÍNH 2K9",
+  6511: 
+  6512:             teacher: "LAB",
+  6513: 
+  6514:             icon: "✍️",
+  6515: 
+  6516:             bannerColor: null,
+  6517: 
+  6518:             link: "#"
+  6519: 
+  6520:           },
+  6521: 
+  6522:           {
+  6523: 
+  6524:             title: "KHOA HỌC TỰ NHIÊN HSA",
+  6525: 
+  6526:             teacher: "LAB",
+  6527: 
+  6528:             icon: "🧬",
+  6529: 
+  6530:             bannerColor: "linear-gradient(135deg, #3498db 0%, #85c1e9 100%)",
+  6531: 
+  6532:             bannerTitle: "KHOA HỌC HSA",
+  6533: 
+  6534:             link: "#"
+  6535: 
+  6536:           },
+  6537: 
+  6538:           {
+  6539: 
+  6540:             title: "KHOA HỌC XÃ HỘI HSA",
+  6541: 
+  6542:             teacher: "LAB",
+  6543: 
+  6544:             icon: "⚖️",
+  6545: 
+  6546:             bannerColor: "linear-gradient(135deg, #e67e22 0%, #f39c12 100%)",
+  6547: 
+  6548:             bannerTitle: "LỊCH SỬ - ĐỊA LÍ",
+  6549: 
+  6550:             link: "#"
+  6551: 
+  6552:           }
+  6553: 
+========================================

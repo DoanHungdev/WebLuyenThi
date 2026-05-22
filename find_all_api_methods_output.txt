@@ -1,0 +1,691 @@
+=== SEARCHING FOR: submitLogin ===
+Line 15592:     window.submitLogin = function (e) {
+
+--- Context for submitLogin (lines 15582 to 15692) ---
+15582:         loginForm.style.display = 'none';
+15583: 
+15584:         signupForm.style.display = 'block';
+15585: 
+15586:       }
+15587: 
+15588:     };
+15589: 
+15590:     // Auth: submit login
+15591: 
+15592:     window.submitLogin = function (e) {
+15593: 
+15594:       e.preventDefault();
+15595: 
+15596:       const userEl = document.getElementById('loginUser');
+15597: 
+15598:       const passEl = document.getElementById('loginPass');
+15599: 
+15600:       const username = userEl.value.trim();
+15601: 
+15602:       const password = passEl.value.trim();
+15603: 
+15604:       if (!username || !password) return;
+15605: 
+15606:       // Check Admin
+15607: 
+15608:       if (username.toLowerCase() === 'admin' && password === 'admin2026') {
+15609: 
+15610:         const adminUser = {
+15611: 
+15612:           username: 'admin',
+15613: 
+15614:           name: 'Quản trị viên',
+15615: 
+15616:           className: 'Hệ thống',
+15617: 
+15618:           targetScore: '150',
+15619: 
+15620:           role: 'admin'
+15621: 
+15622:         };
+15623: 
+15624:         localStorage.setItem('hsa_current_user', JSON.stringify(adminUser));
+15625: 
+15626:         userEl.value = '';
+15627: 
+15628:         passEl.value = '';
+15629: 
+15630:         if (typeof closeAuthModal === 'function') closeAuthModal();
+15631: 
+15632:         // Hide home and activate admin
+15633: 
+15634:         const homeView = document.getElementById('homeView');
+15635: 
+15636:         const adminView = document.getElementById('adminView');
+15637: 
+15638:         const coursesView = document.getElementById('coursesView');
+15639: 
+15640:         if (homeView) homeView.classList.remove('active');
+15641: 
+15642:         if (coursesView) coursesView.classList.remove('active');
+15643: 
+15644:         if (adminView) adminView.classList.add('active');
+15645: 
+15646:         checkSession();
+15647: 
+15648:         return;
+15649: 
+15650:       }
+15651: 
+15652:       // Check Student
+15653: 
+15654:       const student = usersDb.find(u => u.username.toLowerCase() === username.toLowerCase());
+15655: 
+15656:       if (student && student.password === password) {
+15657: 
+15658:         localStorage.setItem('hsa_current_user', JSON.stringify(student));
+15659: 
+15660:         userEl.value = '';
+15661: 
+15662:         passEl.value = '';
+15663: 
+15664:         if (typeof closeAuthModal === 'function') closeAuthModal();
+15665: 
+15666:         // Hide home and activate student view
+15667: 
+15668:         const homeView = document.getElementById('homeView');
+15669: 
+15670:         const studentView = document.getElementById('studentView');
+15671: 
+15672:         const coursesView = document.getElementById('coursesView');
+15673: 
+15674:         if (homeView) homeView.classList.remove('active');
+15675: 
+15676:         if (coursesView) coursesView.classList.remove('active');
+15677: 
+15678:         if (studentView) studentView.classList.add('active');
+15679: 
+15680:         checkSession();
+15681: 
+15682:       } else {
+15683: 
+15684:         alert("Tên đăng nhập hoặc mật khẩu không chính xác!");
+15685: 
+15686:       }
+15687: 
+15688:     };
+15689: 
+15690:     // Auth: submit sign up
+15691: 
+--------------------------------------------------
+=== SEARCHING FOR: initSystem ===
+Line 14222:     function initSystem() {
+
+--- Context for initSystem (lines 14212 to 14322) ---
+14212:     let editingSubject = '';
+14213: 
+14214:     let editingChapter = '';
+14215: 
+14216:     let currentEditorTarget = 'hsa'; // 'hsa' | 'tsa' | 'exams'
+14217: 
+14218:     // Initialize Curriculum & User Database
+14219: 
+14220:     // Initialize Curriculum & User Database
+14221: 
+14222:     function initSystem() {
+14223: 
+14224:       // Explicitly hide studentDetailModal and youtubePlayerModal on load
+14225: 
+14226:       const studentDetailModal = document.getElementById('studentDetailModal');
+14227: 
+14228:       if (studentDetailModal) studentDetailModal.style.display = 'none';
+14229: 
+14230:       const youtubePlayerModal = document.getElementById('youtubePlayerModal');
+14231: 
+14232:       if (youtubePlayerModal) youtubePlayerModal.style.display = 'none';
+14233: 
+14234:       // 1. Load active curriculum (HSA) with auto-migration check for old/missing data
+14235: 
+14236:       let savedCurriculum = localStorage.getItem('hsa_master_curriculum');
+14237: 
+14238:       if (savedCurriculum) {
+14239: 
+14240:         try {
+14241: 
+14242:           const parsed = JSON.parse(savedCurriculum);
+14243: 
+14244:           // If it contains old chapters, or is missing english, force upgrade
+14245: 
+14246:           if (
+14247: 
+14248:             (parsed.math && parsed.math.chapters && parsed.math.chapters['Hàm Số & Đồ Thị']) ||
+14249: 
+14250:             (parsed.literature && parsed.literature.chapters && parsed.literature.chapters['Đọc & Suy luận cơ bản']) ||
+14251: 
+14252:             (!parsed.english)
+14253: 
+14254:           ) {
+14255: 
+14256:             localStorage.removeItem('hsa_master_curriculum');
+14257: 
+14258:             savedCurriculum = null;
+14259: 
+14260:           }
+14261: 
+14262:         } catch (e) {
+14263: 
+14264:           savedCurriculum = null;
+14265: 
+14266:         }
+14267: 
+14268:       }
+14269: 
+14270:       if (savedCurriculum) {
+14271: 
+14272:         try {
+14273: 
+14274:           activeCurriculum = JSON.parse(savedCurriculum);
+14275: 
+14276:         } catch (e) {
+14277: 
+14278:           activeCurriculum = JSON.parse(JSON.stringify(roadmapData));
+14279: 
+14280:         }
+14281: 
+14282:       } else {
+14283: 
+14284:         activeCurriculum = JSON.parse(JSON.stringify(roadmapData));
+14285: 
+14286:         localStorage.setItem('hsa_master_curriculum', JSON.stringify(activeCurriculum));
+14287: 
+14288:       }
+14289: 
+14290:       // 2. Load active TSA curriculum with auto-migration check for old mock data
+14291: 
+14292:       let savedTsaCurriculum = localStorage.getItem('tsa_master_curriculum');
+14293: 
+14294:       if (savedTsaCurriculum) {
+14295: 
+14296:         try {
+14297: 
+14298:           const parsed = JSON.parse(savedTsaCurriculum);
+14299: 
+14300:           // If it contains old mock chapters, force overwrite with the authentic new teacher TSA roadmap
+14301: 
+14302:           if (parsed.tsa_math && parsed.tsa_math.chapters && parsed.tsa_math.chapters['Đại số và Giải tích']) {
+14303: 
+14304:             localStorage.removeItem('tsa_master_curriculum');
+14305: 
+14306:             savedTsaCurriculum = null;
+14307: 
+14308:           }
+14309: 
+14310:         } catch (e) {
+14311: 
+14312:           savedTsaCurriculum = null;
+14313: 
+14314:         }
+14315: 
+14316:       }
+14317: 
+14318:       if (savedTsaCurriculum) {
+14319: 
+14320:         try {
+14321: 
+--------------------------------------------------
+=== SEARCHING FOR: loadProgress ===
+Line 14394:     function loadProgress() {
+
+--- Context for loadProgress (lines 14384 to 14494) ---
+14384:       }
+14385: 
+14386:       // Render default course catalog category
+14387: 
+14388:       selectCourseCategory('tsa');
+14389: 
+14390:     }
+14391: 
+14392:     // Load progress for current student
+14393: 
+14394:     function loadProgress() {
+14395: 
+14396:       if (!currentUser || currentUser.role === 'admin') return;
+14397: 
+14398:       // HSA progress
+14399: 
+14400:       const HSA_KEY = `hsa_progress_${currentUser.username}`;
+14401: 
+14402:       const savedHsa = localStorage.getItem(HSA_KEY);
+14403: 
+14404:       try { progressState = savedHsa ? JSON.parse(savedHsa) : {}; } catch (e) { progressState = {}; }
+14405: 
+14406:       // TSA progress
+14407: 
+14408:       const TSA_KEY = `tsa_progress_${currentUser.username}`;
+14409: 
+14410:       const savedTsa = localStorage.getItem(TSA_KEY);
+14411: 
+14412:       try { tsaProgressState = savedTsa ? JSON.parse(savedTsa) : {}; } catch (e) { tsaProgressState = {}; }
+14413: 
+14414:       // Exams progress
+14415: 
+14416:       const EXAMS_KEY = `exams_progress_${currentUser.username}`;
+14417: 
+14418:       const savedExams = localStorage.getItem(EXAMS_KEY);
+14419: 
+14420:       try { examsProgressState = savedExams ? JSON.parse(savedExams) : {}; } catch (e) { examsProgressState = {}; }
+14421: 
+14422:     }
+14423: 
+14424:     // Save progress for current student
+14425: 
+14426:     function saveProgress() {
+14427: 
+14428:       if (!currentUser || currentUser.role === 'admin') return;
+14429: 
+14430:       const HSA_KEY = `hsa_progress_${currentUser.username}`;
+14431: 
+14432:       localStorage.setItem(HSA_KEY, JSON.stringify(progressState));
+14433: 
+14434:       const TSA_KEY = `tsa_progress_${currentUser.username}`;
+14435: 
+14436:       localStorage.setItem(TSA_KEY, JSON.stringify(tsaProgressState));
+14437: 
+14438:       const EXAMS_KEY = `exams_progress_${currentUser.username}`;
+14439: 
+14440:       localStorage.setItem(EXAMS_KEY, JSON.stringify(examsProgressState));
+14441: 
+14442:       updateDashboardStats();
+14443: 
+14444:     }
+14445: 
+14446:     // Clear student progress
+14447: 
+14448:     window.clearProgress = function () {
+14449: 
+14450:       if (confirm("Bạn có chắc chắn muốn xóa toàn bộ tiến độ học tập và luyện đề của mình không? Hành động này không thể hoàn tác.")) {
+14451: 
+14452:         progressState = {};
+14453: 
+14454:         tsaProgressState = {};
+14455: 
+14456:         examsProgressState = {};
+14457: 
+14458:         saveProgress();
+14459: 
+14460:         // Uncheck all checkboxes on screen
+14461: 
+14462:         const checkboxes = document.querySelectorAll('.excel-checkbox input');
+14463: 
+14464:         checkboxes.forEach(cb => cb.checked = false);
+14465: 
+14466:         const rows = document.querySelectorAll('#sheetBody tr');
+14467: 
+14468:         rows.forEach(row => row.classList.remove('row-completed'));
+14469: 
+14470:         // Clear inputs for exams
+14471: 
+14472:         const inputs = document.querySelectorAll('.excel-score-input');
+14473: 
+14474:         inputs.forEach(inp => inp.value = '');
+14475: 
+14476:         const datePickers = document.querySelectorAll('.excel-date-input');
+14477: 
+14478:         datePickers.forEach(dp => dp.value = '');
+14479: 
+14480:         updateDashboardStats();
+14481: 
+14482:         if (currentSuperView === 'exams') {
+14483: 
+14484:           renderExamsSheet();
+14485: 
+14486:         } else {
+14487: 
+14488:           renderSheet();
+14489: 
+14490:         }
+14491: 
+14492:       }
+14493: 
+--------------------------------------------------
+=== SEARCHING FOR: saveProgress ===
+Line 14426:     function saveProgress() {
+
+--- Context for saveProgress (lines 14416 to 14526) ---
+14416:       const EXAMS_KEY = `exams_progress_${currentUser.username}`;
+14417: 
+14418:       const savedExams = localStorage.getItem(EXAMS_KEY);
+14419: 
+14420:       try { examsProgressState = savedExams ? JSON.parse(savedExams) : {}; } catch (e) { examsProgressState = {}; }
+14421: 
+14422:     }
+14423: 
+14424:     // Save progress for current student
+14425: 
+14426:     function saveProgress() {
+14427: 
+14428:       if (!currentUser || currentUser.role === 'admin') return;
+14429: 
+14430:       const HSA_KEY = `hsa_progress_${currentUser.username}`;
+14431: 
+14432:       localStorage.setItem(HSA_KEY, JSON.stringify(progressState));
+14433: 
+14434:       const TSA_KEY = `tsa_progress_${currentUser.username}`;
+14435: 
+14436:       localStorage.setItem(TSA_KEY, JSON.stringify(tsaProgressState));
+14437: 
+14438:       const EXAMS_KEY = `exams_progress_${currentUser.username}`;
+14439: 
+14440:       localStorage.setItem(EXAMS_KEY, JSON.stringify(examsProgressState));
+14441: 
+14442:       updateDashboardStats();
+14443: 
+14444:     }
+14445: 
+14446:     // Clear student progress
+14447: 
+14448:     window.clearProgress = function () {
+14449: 
+14450:       if (confirm("Bạn có chắc chắn muốn xóa toàn bộ tiến độ học tập và luyện đề của mình không? Hành động này không thể hoàn tác.")) {
+14451: 
+14452:         progressState = {};
+14453: 
+14454:         tsaProgressState = {};
+14455: 
+14456:         examsProgressState = {};
+14457: 
+14458:         saveProgress();
+14459: 
+14460:         // Uncheck all checkboxes on screen
+14461: 
+14462:         const checkboxes = document.querySelectorAll('.excel-checkbox input');
+14463: 
+14464:         checkboxes.forEach(cb => cb.checked = false);
+14465: 
+14466:         const rows = document.querySelectorAll('#sheetBody tr');
+14467: 
+14468:         rows.forEach(row => row.classList.remove('row-completed'));
+14469: 
+14470:         // Clear inputs for exams
+14471: 
+14472:         const inputs = document.querySelectorAll('.excel-score-input');
+14473: 
+14474:         inputs.forEach(inp => inp.value = '');
+14475: 
+14476:         const datePickers = document.querySelectorAll('.excel-date-input');
+14477: 
+14478:         datePickers.forEach(dp => dp.value = '');
+14479: 
+14480:         updateDashboardStats();
+14481: 
+14482:         if (currentSuperView === 'exams') {
+14483: 
+14484:           renderExamsSheet();
+14485: 
+14486:         } else {
+14487: 
+14488:           renderSheet();
+14489: 
+14490:         }
+14491: 
+14492:       }
+14493: 
+14494:     };
+14495: 
+14496:     // Calculate and update stats on cards (student dashboard)
+14497: 
+14498:     function updateDashboardStats() {
+14499: 
+14500:       const subjectsGrid = document.getElementById('subjectsStatsGrid');
+14501: 
+14502:       if (!subjectsGrid) return;
+14503: 
+14504:       subjectsGrid.innerHTML = '';
+14505: 
+14506:       if (currentSuperView === 'hsa') {
+14507: 
+14508:         let totalLessons = 0;
+14509: 
+14510:         let completedLessons = 0;
+14511: 
+14512:         Object.keys(activeCurriculum).forEach(subId => {
+14513: 
+14514:           const subject = activeCurriculum[subId];
+14515: 
+14516:           let subTotal = 0;
+14517: 
+14518:           let subCompleted = 0;
+14519: 
+14520:           Object.keys(subject.chapters).forEach(chapterName => {
+14521: 
+14522:             const topics = subject.chapters[chapterName];
+14523: 
+14524:             topics.forEach((topic, idx) => {
+14525: 
+--------------------------------------------------
+=== SEARCHING FOR: renderAdminStudents ===
+Line 16155:     window.renderAdminStudents = function () {
+
+--- Context for renderAdminStudents (lines 16145 to 16255) ---
+16145:         pct: total > 0 ? Math.round((completed / total) * 100) : 0,
+16146: 
+16147:         subjectStats
+16148: 
+16149:       };
+16150: 
+16151:     }
+16152: 
+16153:     // Render Students Grid List (Admin view)
+16154: 
+16155:     window.renderAdminStudents = function () {
+16156: 
+16157:       const tbody = document.getElementById('adminStudentsTableBody');
+16158: 
+16159:       if (!tbody) return;
+16160: 
+16161:       tbody.innerHTML = '';
+16162: 
+16163:       const searchVal = document.getElementById('adminSearchStudents').value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+16164: 
+16165:       const filteredUsers = usersDb.filter(user => {
+16166: 
+16167:         const nameNorm = user.name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+16168: 
+16169:         const userNorm = user.username.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+16170: 
+16171:         const classNorm = user.className.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+16172: 
+16173:         return nameNorm.includes(searchVal) || userNorm.includes(searchVal) || classNorm.includes(searchVal);
+16174: 
+16175:       });
+16176: 
+16177:       if (filteredUsers.length === 0) {
+16178: 
+16179:         tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-secondary);">🔍 Không tìm thấy học sinh nào phù hợp.</td></tr>`;
+16180: 
+16181:         return;
+16182: 
+16183:       }
+16184: 
+16185:       filteredUsers.forEach(user => {
+16186: 
+16187:         // HSA
+16188: 
+16189:         const hsaSaved = localStorage.getItem(`hsa_progress_${user.username}`);
+16190: 
+16191:         let hsaState = {};
+16192: 
+16193:         try { hsaState = hsaSaved ? JSON.parse(hsaSaved) : {}; } catch (e) { }
+16194: 
+16195:         let hsaTotal = 0, hsaCompleted = 0;
+16196: 
+16197:         Object.keys(activeCurriculum).forEach(subId => {
+16198: 
+16199:           const subject = activeCurriculum[subId];
+16200: 
+16201:           Object.keys(subject.chapters).forEach(chapterName => {
+16202: 
+16203:             hsaTotal += subject.chapters[chapterName].length;
+16204: 
+16205:             subject.chapters[chapterName].forEach((topic, idx) => {
+16206: 
+16207:               if (hsaState[`${subId}-${chapterName}-${idx}`]) hsaCompleted++;
+16208: 
+16209:             });
+16210: 
+16211:           });
+16212: 
+16213:         });
+16214: 
+16215:         const hsaPct = hsaTotal > 0 ? Math.round((hsaCompleted / hsaTotal) * 100) : 0;
+16216: 
+16217:         // TSA
+16218: 
+16219:         const tsaSaved = localStorage.getItem(`tsa_progress_${user.username}`);
+16220: 
+16221:         let tsaState = {};
+16222: 
+16223:         try { tsaState = tsaSaved ? JSON.parse(tsaSaved) : {}; } catch (e) { }
+16224: 
+16225:         let tsaTotal = 0, tsaCompleted = 0;
+16226: 
+16227:         Object.keys(activeTsaCurriculum).forEach(subId => {
+16228: 
+16229:           const subject = activeTsaCurriculum[subId];
+16230: 
+16231:           Object.keys(subject.chapters).forEach(chapterName => {
+16232: 
+16233:             tsaTotal += subject.chapters[chapterName].length;
+16234: 
+16235:             subject.chapters[chapterName].forEach((topic, idx) => {
+16236: 
+16237:               if (tsaState[`${subId}-${chapterName}-${idx}`]) tsaCompleted++;
+16238: 
+16239:             });
+16240: 
+16241:           });
+16242: 
+16243:         });
+16244: 
+16245:         const tsaPct = tsaTotal > 0 ? Math.round((tsaCompleted / tsaTotal) * 100) : 0;
+16246: 
+16247:         // Exams
+16248: 
+16249:         const examsSaved = localStorage.getItem(`exams_progress_${user.username}`);
+16250: 
+16251:         let examsState = {};
+16252: 
+16253:         try { examsState = examsSaved ? JSON.parse(examsSaved) : {}; } catch (e) { }
+16254: 
+--------------------------------------------------
+=== SEARCHING FOR: saveCurriculumChanges ===
+Line 17835:     window.saveCurriculumChanges = function () {
+
+--- Context for saveCurriculumChanges (lines 17825 to 17935) ---
+17825:       `;
+17826: 
+17827:         container.appendChild(row);
+17828: 
+17829:       });
+17830: 
+17831:     };
+17832: 
+17833:     // Save changes to master curriculum database for HSA/TSA
+17834: 
+17835:     window.saveCurriculumChanges = function () {
+17836: 
+17837:       if (currentEditorTarget === 'exams') {
+17838: 
+17839:         saveExamsChanges();
+17840: 
+17841:         return;
+17842: 
+17843:       }
+17844: 
+17845:       if (!editingSubject || !editingChapter) {
+17846: 
+17847:         alert("Không có chuyên đề hoặc chương nào đang được chỉnh sửa!");
+17848: 
+17849:         return;
+17850: 
+17851:       }
+17852: 
+17853:       const rows = document.querySelectorAll('#editorTopicList .editor-topic-row');
+17854: 
+17855:       const updatedTopics = [];
+17856: 
+17857:       for (let i = 0; i < rows.length; i++) {
+17858: 
+17859:         const row = rows[i];
+17860: 
+17861:         const titleInput = row.querySelector('.topic-title-input');
+17862: 
+17863:         const focusInput = row.querySelector('.topic-focus-input');
+17864: 
+17865:         const prioritySelect = row.querySelector('.topic-priority-select');
+17866: 
+17867:         const youtubeInput = row.querySelector('.topic-youtube-input');
+17868: 
+17869:         const filesList = row.querySelectorAll('.editor-file-pill');
+17870: 
+17871:         if (!titleInput || !focusInput || !prioritySelect) continue;
+17872: 
+17873:         const title = titleInput.value.trim();
+17874: 
+17875:         const focus = focusInput.value.trim();
+17876: 
+17877:         const priority = prioritySelect.value;
+17878: 
+17879:         const youtubeLink = youtubeInput ? youtubeInput.value.trim() : "";
+17880: 
+17881:         if (!title) {
+17882: 
+17883:           alert("Tên bài học không được để trống!");
+17884: 
+17885:           titleInput.focus();
+17886: 
+17887:           return;
+17888: 
+17889:         }
+17890: 
+17891:         const files = [];
+17892: 
+17893:         filesList.forEach(pill => {
+17894: 
+17895:           const name = pill.getAttribute('data-name');
+17896: 
+17897:           const url = pill.getAttribute('data-url');
+17898: 
+17899:           if (name && url) {
+17900: 
+17901:             files.push({ name, url });
+17902: 
+17903:           }
+17904: 
+17905:         });
+17906: 
+17907:         updatedTopics.push([
+17908: 
+17909:           title,
+17910: 
+17911:           focus,
+17912: 
+17913:           priority,
+17914: 
+17915:           youtubeLink,
+17916: 
+17917:           files
+17918: 
+17919:         ]);
+17920: 
+17921:       }
+17922: 
+17923:       const curr = (currentEditorTarget === 'tsa') ? activeTsaCurriculum : activeCurriculum;
+17924: 
+17925:       const storageKey = (currentEditorTarget === 'tsa') ? 'tsa_master_curriculum' : 'hsa_master_curriculum';
+17926: 
+17927:       if (!curr[editingSubject]) {
+17928: 
+17929:         alert("Không tìm thấy môn học đang sửa!");
+17930: 
+17931:         return;
+17932: 
+17933:       }
+17934: 
+--------------------------------------------------
+=== SEARCHING FOR: toggleLessonStatus ===
