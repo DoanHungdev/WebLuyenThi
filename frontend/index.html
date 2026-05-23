@@ -14956,6 +14956,8 @@
         .then(res => res.json())
         .then(courses => {
           if (courses && courses.length > 0) {
+            // Cache for hash router
+            window._coursesCache = courses.map(c => ({ id: c.id, title: c.name, category: c.category }));
             mapServerCoursesToCategories(courses);
             selectCourseCategory(currentSuperView || 'lotrinh');
           }
@@ -20115,88 +20117,49 @@ Tên đăng nhập: ${username}`);
     };
 
     window.showHome = function(event) {
-
       if (event) event.preventDefault();
-
       currentSelectedCourseId = null;
       currentSelectedCourseName = '';
-
       const homeView = document.getElementById('homeView');
-
       const studentView = document.getElementById('studentView');
-
       const adminView = document.getElementById('adminView');
-
       const coursesView = document.getElementById('coursesView');
-
       if (homeView) homeView.classList.add('active');
-
       if (studentView) studentView.classList.remove('active');
-
       if (adminView) adminView.classList.remove('active');
-
       if (coursesView) coursesView.classList.remove('active');
-
-      // Restore super-nav-tabs display style
       const superNavTabs = document.querySelector('#studentView .super-nav-tabs');
-      if (superNavTabs) {
-        superNavTabs.style.display = 'flex';
-      }
-
-      // Update active nav state
-
+      if (superNavTabs) superNavTabs.style.display = 'flex';
       const navHome = document.getElementById('navHome');
-
       const navCourses = document.getElementById('navCourses');
-
       const navFaq = document.getElementById('navFaq');
-
       if (navHome) navHome.classList.add('active');
-
       if (navCourses) navCourses.classList.remove('active');
-
       if (navFaq) navFaq.classList.remove('active');
-
       window.scrollTo({ top: 0, behavior: 'smooth' });
-
+      // Hash routing
+      if (location.hash !== '#home') history.pushState(null, '', '#home');
     };
 
     window.scrollToCourses = function(event) {
-
       if (event) event.preventDefault();
-
       const homeView = document.getElementById('homeView');
-
       const studentView = document.getElementById('studentView');
-
       const adminView = document.getElementById('adminView');
-
       const coursesView = document.getElementById('coursesView');
-
       if (homeView) homeView.classList.remove('active');
-
       if (studentView) studentView.classList.remove('active');
-
       if (adminView) adminView.classList.remove('active');
-
       if (coursesView) coursesView.classList.add('active');
-
-      // Update active nav state
-
       const navHome = document.getElementById('navHome');
-
       const navCourses = document.getElementById('navCourses');
-
       const navFaq = document.getElementById('navFaq');
-
       if (navHome) navHome.classList.remove('active');
-
       if (navCourses) navCourses.classList.add('active');
-
       if (navFaq) navFaq.classList.remove('active');
-
       window.scrollTo({ top: 0, behavior: 'smooth' });
-
+      // Hash routing
+      if (location.hash !== '#courses') history.pushState(null, '', '#courses');
     };
 
     window.scrollToFaq = function(event) {
@@ -20276,18 +20239,12 @@ Tên đăng nhập: ${username}`);
     };
 
     window.enterCourse = function(courseType, courseId = null, courseName = '') {
-
       const savedUser = localStorage.getItem('hsa_current_user');
-
       if (!savedUser) {
-
         openAuthModal();
-
         return;
-
       }
 
-      // If it is a full roadmap course, we clear the specific course context so it renders the full tabs list
       if (courseId === 7 || courseId === 8 || (courseName && courseName.toLowerCase().includes('lộ trình ôn thi'))) {
         currentSelectedCourseId = null;
         currentSelectedCourseName = '';
@@ -20298,11 +20255,8 @@ Tên đăng nhập: ${username}`);
 
       currentSuperView = courseType;
 
-      // Dynamic header styling and hide the super nav switch tabs to fully isolate the roadmaps/courses!
       const superNavTabs = document.querySelector('#studentView .super-nav-tabs');
-      if (superNavTabs) {
-        superNavTabs.style.display = 'none'; // Completely hide HSA/TSA switches to ensure isolation!
-      }
+      if (superNavTabs) superNavTabs.style.display = 'none';
 
       const headerTitle = document.querySelector('#studentView header h1');
       if (headerTitle) {
@@ -20316,41 +20270,30 @@ Tên đăng nhập: ${username}`);
       }
 
       const homeView = document.getElementById('homeView');
-
       const studentView = document.getElementById('studentView');
-
       const adminView = document.getElementById('adminView');
-
       const coursesView = document.getElementById('coursesView');
 
       if (homeView) homeView.classList.remove('active');
-
       if (studentView) studentView.classList.add('active');
-
       if (adminView) adminView.classList.remove('active');
-
       if (coursesView) coursesView.classList.remove('active');
 
-      // Clear active state of landing nav links since we are inside a course
-
       const navHome = document.getElementById('navHome');
-
       const navCourses = document.getElementById('navCourses');
-
       const navFaq = document.getElementById('navFaq');
-
       if (navHome) navHome.classList.remove('active');
-
       if (navCourses) navCourses.classList.remove('active');
-
       if (navFaq) navFaq.classList.remove('active');
 
       loadProgress();
-
       switchSuperView(courseType);
-
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
+      // Hash routing: encode course info into URL hash
+      const hashId = courseId ? courseId : courseType;
+      const newHash = `#learn/${courseType}` + (courseId ? `/${courseId}` : '');
+      if (location.hash !== newHash) history.pushState(null, '', newHash);
     };
 
     // --- THEME SWITCHER & PREFERENCE ---
@@ -20417,14 +20360,58 @@ Tên đăng nhập: ${username}`);
 
     }
 
+    // --- HASH ROUTER ---
+    // Maps URL hash to correct view/course on page load and browser back/forward
+    function hashRouter() {
+      const hash = location.hash || '#home';
+      if (hash === '#courses') {
+        scrollToCourses();
+      } else if (hash.startsWith('#learn/')) {
+        // #learn/<courseType>[/<courseId>]
+        const parts = hash.replace('#learn/', '').split('/');
+        const courseType = parts[0]; // e.g. 'hsa', 'tsa', 'dvd', etc.
+        const courseId = parts[1] ? parseInt(parts[1]) : null;
+        // Try to find courseName from loaded courses cache
+        const coursesData = window._coursesCache || [];
+        const found = coursesData.find(c => c.id === courseId);
+        const courseName = found ? found.title : (courseType ? courseType.toUpperCase() : '');
+        // enterCourse will check login; if not logged in it opens auth modal
+        enterCourse(courseType, courseId || null, courseName);
+      } else if (hash === '#admin') {
+        // Admin view - only if logged in as admin
+        const savedUser = localStorage.getItem('hsa_current_user');
+        if (savedUser) {
+          try {
+            const u = JSON.parse(savedUser);
+            if (u.role === 'admin') {
+              const adminView = document.getElementById('adminView');
+              const homeView = document.getElementById('homeView');
+              const studentView = document.getElementById('studentView');
+              const coursesView = document.getElementById('coursesView');
+              if (homeView) homeView.classList.remove('active');
+              if (studentView) studentView.classList.remove('active');
+              if (adminView) adminView.classList.add('active');
+              if (coursesView) coursesView.classList.remove('active');
+              return;
+            }
+          } catch(e) {}
+        }
+        showHome();
+      } else {
+        // Default to home (#home or empty)
+        showHome();
+      }
+    }
+
+    // Listen to browser back/forward
+    window.addEventListener('popstate', hashRouter);
+
     // --- INITIALIZE & START SYSTEM ---
-
     document.addEventListener('DOMContentLoaded', () => {
-
       initSystem();
-
       checkSession();
-
+      // Run hash router after a short delay to allow data to initialize
+      setTimeout(hashRouter, 300);
     });
 
   </script>
