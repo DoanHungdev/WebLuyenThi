@@ -4151,205 +4151,189 @@
     }
 
     .courses-sidebar {
-
       display: flex;
-
       flex-direction: column;
-
-      gap: 1rem;
-
+      gap: 1.2rem;
+      background: rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      padding: 1.5rem;
+      border-radius: 24px;
+      box-shadow: 0 10px 30px rgba(128, 41, 34, 0.015);
+      transition: all 0.3s ease;
     }
 
     .courses-sidebar .sidebar-title {
-
-      font-size: 1.1rem;
-
+      font-size: 1.05rem;
       font-weight: 800;
-
       color: #802922;
-
       text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 0.5rem;
+      position: relative;
+      padding-left: 0.75rem;
+    }
 
-      letter-spacing: 0.5px;
-
-      margin-bottom: 0.25rem;
-
+    .courses-sidebar .sidebar-title::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 25%;
+      height: 50%;
+      width: 4px;
+      background: #802922;
+      border-radius: 2px;
     }
 
     .category-tabs-list {
-
       display: flex;
-
       flex-direction: column;
-
       gap: 0.8rem;
-
     }
 
     @media (max-width: 992px) {
-
-      .category-tabs-list {
-
-        flex-direction: row;
-
-        flex-wrap: wrap;
-
+      .courses-sidebar {
+        background: transparent;
+        border: none;
+        padding: 0;
+        box-shadow: none;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
       }
-
+      .category-tabs-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
     }
 
     .category-tab {
-
       display: flex;
-
       align-items: center;
-
       gap: 1rem;
-
-      padding: 0.85rem 1rem;
-
-      border-radius: 14px;
-
+      padding: 0.9rem 1.1rem;
+      border-radius: 16px;
       cursor: pointer;
-
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-      border: 1px solid transparent;
-
-      background-color: #FEEBEA;
-
-      color: #802922;
-
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
-
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid var(--glass-border);
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.01);
     }
 
     .category-tab .tab-badge {
-
-      background-color: #802922;
-
-      color: #ffffff;
-
-      width: 44px;
-
-      height: 44px;
-
-      border-radius: 50%;
-
+      background-color: rgba(128, 41, 34, 0.08);
+      color: #802922;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
       display: flex;
-
       align-items: center;
-
       justify-content: center;
-
-      font-size: 0.85rem;
-
+      font-size: 0.8rem;
       font-weight: 800;
-
       flex-shrink: 0;
-
       transition: all 0.3s ease;
-
     }
 
     .category-tab .tab-info {
-
       display: flex;
-
       flex-direction: column;
-
       align-items: flex-start;
-
     }
 
     .category-tab .tab-name {
-
       font-size: 0.95rem;
-
-      font-weight: 700;
-
+      font-weight: 800;
       line-height: 1.25;
-
       text-align: left;
-
+      transition: color 0.3s ease;
     }
 
     .category-tab .tab-sub {
-
       font-size: 0.75rem;
-
-      opacity: 0.8;
-
+      opacity: 0.7;
       margin-top: 0.15rem;
-
-      font-weight: 500;
-
+      font-weight: 600;
+      transition: opacity 0.3s ease;
     }
 
     .category-tab.active {
-
-      background-color: #802922;
-
-      color: #ffffff;
-
-      box-shadow: 0 8px 20px rgba(128, 41, 34, 0.2);
-
+      background: linear-gradient(135deg, #802922 0%, #a83f37 100%);
+      color: #ffffff !important;
+      border-color: transparent;
+      box-shadow: 0 10px 25px rgba(128, 41, 34, 0.22);
+      transform: scale(1.02);
     }
 
     .category-tab.active .tab-badge {
+      background-color: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+    }
 
-      background-color: #ffffff;
+    .category-tab.active .tab-name {
+      color: #ffffff !important;
+    }
 
-      color: #802922;
-
+    .category-tab.active .tab-sub {
+      opacity: 0.9;
+      color: rgba(255, 255, 255, 0.8);
     }
 
     .category-tab:hover:not(.active) {
+      background-color: var(--bg-primary);
+      border-color: #802922;
+      transform: translateY(-3px) scale(1.01);
+      box-shadow: 0 8px 22px rgba(128, 41, 34, 0.08);
+    }
 
-      background-color: #fdd8d5;
-
-      transform: translateY(-2px);
-
+    .category-tab:hover:not(.active) .tab-badge {
+      background-color: #802922;
+      color: #ffffff;
     }
 
     /* Dark mode categories */
+    [data-theme="dark"] .courses-sidebar {
+      background: rgba(26, 14, 13, 0.45);
+      border-color: rgba(255, 255, 255, 0.05);
+    }
+
+    [data-theme="dark"] .courses-sidebar .sidebar-title {
+      color: #ff766c;
+    }
+
+    [data-theme="dark"] .courses-sidebar .sidebar-title::before {
+      background: #ff766c;
+    }
 
     [data-theme="dark"] .category-tab {
-
-      background-color: #2b1513;
-
-      color: #fca89d;
-
+      background-color: rgba(255, 255, 255, 0.03);
+      border-color: rgba(255, 255, 255, 0.05);
     }
 
     [data-theme="dark"] .category-tab .tab-badge {
-
-      background-color: #b83227;
-
-      color: #ffffff;
-
+      background-color: rgba(255, 118, 108, 0.15);
+      color: #ff766c;
     }
 
     [data-theme="dark"] .category-tab.active {
-
-      background-color: #b83227;
-
-      color: #ffffff;
-
+      background: linear-gradient(135deg, #b83227 0%, #db4c3f 100%);
+      box-shadow: 0 10px 25px rgba(184, 50, 39, 0.3);
     }
 
     [data-theme="dark"] .category-tab.active .tab-badge {
-
-      background-color: #ffffff;
-
-      color: #b83227;
-
+      background-color: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
     }
 
     [data-theme="dark"] .category-tab:hover:not(.active) {
+      background-color: rgba(255, 255, 255, 0.06);
+      border-color: #ff766c;
+    }
 
-      background-color: #3d1c1a;
-
+    [data-theme="dark"] .category-tab:hover:not(.active) .tab-badge {
+      background-color: #ff766c;
+      color: #ffffff;
     }
 
     [data-theme="dark"] .courses-breadcrumbs .separator,
@@ -4429,75 +4413,43 @@
     }
 
     .course-new-card {
-
       background: var(--bg-primary);
-
       border: 1px solid var(--glass-border);
-
-      border-radius: 16px;
-
+      border-radius: 20px;
       overflow: hidden;
-
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
-
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.02);
       display: flex;
-
       flex-direction: column;
-
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
-
       position: relative;
-
       text-decoration: none;
-
     }
 
     .course-new-card:hover {
-
-      transform: translateY(-6px);
-
-      box-shadow: 0 15px 30px rgba(128, 41, 34, 0.08);
-
+      transform: translateY(-8px) scale(1.01);
+      box-shadow: 0 20px 40px rgba(128, 41, 34, 0.12);
       border-color: #802922;
-
     }
 
     [data-theme="dark"] .course-new-card:hover {
-
       border-color: #ff766c;
-
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
-
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
     }
 
     .course-new-card-thumbnail {
-
-      aspect-ratio: 1.33;
-
+      aspect-ratio: 1.6;
       position: relative;
-
       overflow: hidden;
-
       background-size: cover;
-
       background-position: center;
-
       display: flex;
-
       align-items: center;
-
       justify-content: center;
-
       color: #ffffff;
-
       padding: 1.5rem;
-
       text-align: center;
-
       font-weight: 800;
-
     }
 
     .course-new-card-thumbnail::after {
@@ -6109,13 +6061,13 @@
 
               <div class="category-tab active" id="cat-lotrinh" onclick="selectCourseCategory('lotrinh')">
 
-                <div class="tab-badge" style="background: linear-gradient(135deg, #8e44ad 0%, #3498db 100%); color: #fff; border: none;">LT</div>
+                <div class="tab-badge" style="background: linear-gradient(135deg, #1890ff 0%, #722ed1 100%); color: #ffffff; border: none;">LT</div>
 
                 <div class="tab-info">
 
                   <div class="tab-name">Lộ trình ôn thi đại học</div>
 
-                  <div class="tab-sub">Hethonglab</div>
+                  <div class="tab-sub">ĐGNL & ĐGTD toàn diện</div>
 
                 </div>
 
@@ -6125,13 +6077,13 @@
 
               <div class="category-tab" id="cat-tsa" onclick="selectCourseCategory('tsa')">
 
-                <div class="tab-badge">TSA</div>
+                <div class="tab-badge" style="background: linear-gradient(135deg, #722ed1 0%, #f759ab 100%); color: #ffffff; border: none;">TSA</div>
 
                 <div class="tab-info">
 
                   <div class="tab-name">Đánh giá tư duy</div>
 
-                  <div class="tab-sub">Hethonglab</div>
+                  <div class="tab-sub">Chuyên đề TSA Bách Khoa</div>
 
                 </div>
 
@@ -6141,13 +6093,13 @@
 
               <div class="category-tab" id="cat-hsa" onclick="selectCourseCategory('hsa')">
 
-                <div class="tab-badge">HSA</div>
+                <div class="tab-badge" style="background: linear-gradient(135deg, #1890ff 0%, #36cfc9 100%); color: #ffffff; border: none;">HSA</div>
 
                 <div class="tab-info">
 
                   <div class="tab-name">Đánh giá năng lực</div>
 
-                  <div class="tab-sub">Hethonglab</div>
+                  <div class="tab-sub">Chuyên đề HSA Quốc Gia</div>
 
                 </div>
 
@@ -6157,13 +6109,13 @@
 
               <div class="category-tab" id="cat-thpt" onclick="selectCourseCategory('thpt')">
 
-                <div class="tab-badge">THPT</div>
+                <div class="tab-badge" style="background: linear-gradient(135deg, #27ae60 0%, #1abc9c 100%); color: #ffffff; border: none;">THPT</div>
 
                 <div class="tab-info">
 
                   <div class="tab-name">Trung học phổ thông quốc gia</div>
 
-                  <div class="tab-sub">Hethonglab</div>
+                  <div class="tab-sub">Nền tảng lớp 10, 11, 12</div>
 
                 </div>
 
@@ -7287,12 +7239,28 @@
       serverCourses.forEach(c => {
         if (c.status === 'private') return;
         const cat = c.category.toLowerCase();
+        
+        // Auto-assign premium linear-gradient for placeholder thumbnails
+        let assignedBannerColor = c.image && c.image.startsWith('linear-gradient') ? c.image : null;
+        if (!assignedBannerColor && (!c.image || !c.image.startsWith('http'))) {
+          if (cat === 'tsa' || c.name.toLowerCase().includes('tsa')) {
+            assignedBannerColor = 'linear-gradient(135deg, #722ed1 0%, #f759ab 100%)';
+          } else if (cat === 'hsa' || c.name.toLowerCase().includes('hsa')) {
+            assignedBannerColor = 'linear-gradient(135deg, #1890ff 0%, #36cfc9 100%)';
+          } else if (cat === 'lotrinh') {
+            assignedBannerColor = 'linear-gradient(135deg, #654ea3 0%, #eaafc8 100%)';
+          } else {
+            assignedBannerColor = 'linear-gradient(135deg, #27ae60 0%, #1abc9c 100%)';
+          }
+        }
+
         const mappedCourse = {
           id: c.id,
           title: c.name,
           teacher: c.teacher,
           icon: cat === 'tsa' ? '🎯' : (cat === 'hsa' ? '📊' : (cat === 'lotrinh' ? '🗺️' : '📚')),
-          bannerColor: c.image && c.image.startsWith('linear-gradient') ? c.image : null,
+          bannerColor: assignedBannerColor,
+          bannerTitle: cat === 'lotrinh' ? (c.name.toLowerCase().includes('tsa') ? 'LỘ TRÌNH ÔN THI TSA BÁCH KHOA' : 'LỘ TRÌNH ÔN THI HSA ĐHQG') : c.name,
           imageUrl: c.image && c.image.startsWith('http') ? c.image : null,
           link: '#',
           price: c.price,
@@ -7325,16 +7293,18 @@
             id: 7,
             title: "Lộ trình ôn thi HSA",
             teacher: "SKIBIDI",
-            icon: "🗺️",
-            bannerColor: null,
+            icon: "📊",
+            bannerColor: "linear-gradient(135deg, #1890ff 0%, #36cfc9 100%)",
+            bannerTitle: "Lộ trình ôn thi HSA ĐHQG",
             link: "#"
           },
           {
             id: 8,
             title: "Lộ trình ôn thi TSA",
             teacher: "skibidi",
-            icon: "🗺️",
-            bannerColor: null,
+            icon: "🎯",
+            bannerColor: "linear-gradient(135deg, #722ed1 0%, #f759ab 100%)",
+            bannerTitle: "Lộ trình ôn thi TSA Bách Khoa",
             link: "#"
           }
         ]
