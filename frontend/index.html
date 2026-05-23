@@ -4127,233 +4127,164 @@
     }
 
     .courses-split-layout {
-
-      display: grid;
-
-      grid-template-columns: 300px 1fr;
-
-      gap: 2rem;
-
+      display: block;
+      width: 100%;
       text-align: left;
-
     }
 
-    @media (max-width: 992px) {
-
-      .courses-split-layout {
-
-        grid-template-columns: 1fr;
-
-        gap: 2rem;
-
-      }
-
-    }
-
-    .courses-sidebar {
+    /* Centered Top Category Selector Container */
+    .courses-top-selector-container {
       display: flex;
-      flex-direction: column;
-      gap: 1.2rem;
+      justify-content: center;
+      margin-bottom: 2.5rem;
+      width: 100%;
+      padding: 0 1rem;
+    }
+
+    .category-tabs-list-horizontal {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
       background: rgba(255, 255, 255, 0.45);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.7);
-      padding: 1.5rem;
-      border-radius: 24px;
-      box-shadow: 0 10px 30px rgba(128, 41, 34, 0.015);
-      transition: all 0.3s ease;
+      padding: 0.75rem;
+      border-radius: 28px;
+      box-shadow: 0 10px 30px rgba(128, 41, 34, 0.02);
+      width: 100%;
+      max-width: 1200px;
     }
 
-    .courses-sidebar .sidebar-title {
-      font-size: 1.05rem;
-      font-weight: 800;
-      color: #802922;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      margin-bottom: 0.5rem;
-      position: relative;
-      padding-left: 0.75rem;
-    }
-
-    .courses-sidebar .sidebar-title::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 25%;
-      height: 50%;
-      width: 4px;
-      background: #802922;
-      border-radius: 2px;
-    }
-
-    .category-tabs-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-    }
-
-    @media (max-width: 992px) {
-      .courses-sidebar {
-        background: transparent;
-        border: none;
-        padding: 0;
-        box-shadow: none;
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
-      }
-      .category-tabs-list {
-        flex-direction: row;
-        flex-wrap: wrap;
-      }
-    }
-
-    .category-tab {
+    /* Individual Capsule Tabs */
+    .category-tab-horizontal {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      padding: 0.9rem 1.1rem;
-      border-radius: 16px;
+      gap: 0.85rem;
+      padding: 0.75rem 1.25rem;
+      border-radius: 18px;
       cursor: pointer;
       transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-      border: 1px solid var(--glass-border);
-      background-color: var(--bg-secondary);
+      border: 1px solid transparent;
+      background-color: transparent;
       color: var(--text-primary);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.01);
+      flex: 1 1 220px;
+      max-width: 285px;
     }
 
-    .category-tab .tab-badge {
+    .category-tab-horizontal .tab-badge-horizontal {
       background-color: rgba(128, 41, 34, 0.08);
       color: #802922;
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 800;
       flex-shrink: 0;
       transition: all 0.3s ease;
     }
 
-    .category-tab .tab-info {
+    .category-tab-horizontal .tab-info-horizontal {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
+      text-align: left;
     }
 
-    .category-tab .tab-name {
-      font-size: 0.95rem;
+    .category-tab-horizontal .tab-name-horizontal {
+      font-size: 0.88rem;
       font-weight: 800;
-      line-height: 1.25;
-      text-align: left;
+      line-height: 1.2;
       transition: color 0.3s ease;
     }
 
-    .category-tab .tab-sub {
-      font-size: 0.75rem;
-      opacity: 0.7;
-      margin-top: 0.15rem;
+    .category-tab-horizontal .tab-sub-horizontal {
+      font-size: 0.7rem;
+      opacity: 0.65;
+      margin-top: 0.1rem;
       font-weight: 600;
       transition: opacity 0.3s ease;
     }
 
-    .category-tab.active {
+    /* Active Tab */
+    .category-tab-horizontal.active {
       background: linear-gradient(135deg, #802922 0%, #a83f37 100%);
       color: #ffffff !important;
       border-color: transparent;
-      box-shadow: 0 10px 25px rgba(128, 41, 34, 0.22);
-      transform: scale(1.02);
+      box-shadow: 0 8px 20px rgba(128, 41, 34, 0.2);
+      transform: translateY(-2px);
     }
 
-    .category-tab.active .tab-badge {
+    .category-tab-horizontal.active .tab-badge-horizontal {
       background-color: rgba(255, 255, 255, 0.2);
       color: #ffffff;
     }
 
-    .category-tab.active .tab-name {
+    .category-tab-horizontal.active .tab-name-horizontal {
       color: #ffffff !important;
     }
 
-    .category-tab.active .tab-sub {
+    .category-tab-horizontal.active .tab-sub-horizontal {
       opacity: 0.9;
       color: rgba(255, 255, 255, 0.8);
     }
 
-    .category-tab:hover:not(.active) {
-      background-color: var(--bg-primary);
-      border-color: #802922;
-      transform: translateY(-3px) scale(1.01);
-      box-shadow: 0 8px 22px rgba(128, 41, 34, 0.08);
+    /* Hover States */
+    .category-tab-horizontal:hover:not(.active) {
+      background-color: var(--bg-secondary);
+      border-color: var(--glass-border);
+      transform: translateY(-2px);
     }
 
-    .category-tab:hover:not(.active) .tab-badge {
+    .category-tab-horizontal:hover:not(.active) .tab-badge-horizontal {
       background-color: #802922;
       color: #ffffff;
     }
 
-    /* Dark mode categories */
-    [data-theme="dark"] .courses-sidebar {
+    /* Dark Mode Support */
+    [data-theme="dark"] .category-tabs-list-horizontal {
       background: rgba(26, 14, 13, 0.45);
       border-color: rgba(255, 255, 255, 0.05);
     }
 
-    [data-theme="dark"] .courses-sidebar .sidebar-title {
-      color: #ff766c;
+    [data-theme="dark"] .category-tab-horizontal {
+      color: var(--text-primary);
     }
 
-    [data-theme="dark"] .courses-sidebar .sidebar-title::before {
-      background: #ff766c;
-    }
-
-    [data-theme="dark"] .category-tab {
-      background-color: rgba(255, 255, 255, 0.03);
-      border-color: rgba(255, 255, 255, 0.05);
-    }
-
-    [data-theme="dark"] .category-tab .tab-badge {
+    [data-theme="dark"] .category-tab-horizontal .tab-badge-horizontal {
       background-color: rgba(255, 118, 108, 0.15);
       color: #ff766c;
     }
 
-    [data-theme="dark"] .category-tab.active {
+    [data-theme="dark"] .category-tab-horizontal.active {
       background: linear-gradient(135deg, #b83227 0%, #db4c3f 100%);
-      box-shadow: 0 10px 25px rgba(184, 50, 39, 0.3);
+      box-shadow: 0 8px 20px rgba(184, 50, 39, 0.3);
     }
 
-    [data-theme="dark"] .category-tab.active .tab-badge {
+    [data-theme="dark"] .category-tab-horizontal.active .tab-badge-horizontal {
       background-color: rgba(255, 255, 255, 0.2);
       color: #ffffff;
     }
 
-    [data-theme="dark"] .category-tab:hover:not(.active) {
+    [data-theme="dark"] .category-tab-horizontal:hover:not(.active) {
       background-color: rgba(255, 255, 255, 0.06);
       border-color: #ff766c;
     }
 
-    [data-theme="dark"] .category-tab:hover:not(.active) .tab-badge {
+    [data-theme="dark"] .category-tab-horizontal:hover:not(.active) .tab-badge-horizontal {
       background-color: #ff766c;
       color: #ffffff;
     }
 
-    [data-theme="dark"] .courses-breadcrumbs .separator,
-
-    [data-theme="dark"] .courses-breadcrumbs .active-crumb,
-
-    [data-theme="dark"] .courses-sidebar .sidebar-title {
-
-      color: #ff766c;
-
-    }
-
     .courses-panel {
-
       display: flex;
-
       flex-direction: column;
-
       gap: 1.5rem;
-
+      width: 100%;
     }
 
     .panel-header {
@@ -6045,106 +5976,57 @@
 
         </div>
 
-        <!-- Split Layout -->
-
-        <div class="courses-split-layout">
-
-          <!-- Left Sidebar -->
-
-          <div class="courses-sidebar">
-
-            <h3 class="sidebar-title">DANH MỤC</h3>
-
-            <div class="category-tabs-list">
-
-              <!-- Lộ trình Tab -->
-
-              <div class="category-tab active" id="cat-lotrinh" onclick="selectCourseCategory('lotrinh')">
-
-                <div class="tab-badge" style="background: linear-gradient(135deg, #1890ff 0%, #722ed1 100%); color: #ffffff; border: none;">LT</div>
-
-                <div class="tab-info">
-
-                  <div class="tab-name">Lộ trình ôn thi đại học</div>
-
-                  <div class="tab-sub">ĐGNL & ĐGTD toàn diện</div>
-
-                </div>
-
+        <!-- Centered Top Category Selector (Horizontal Segmented Pills) -->
+        <div class="courses-top-selector-container">
+          <div class="category-tabs-list-horizontal">
+            <!-- Lộ trình Tab -->
+            <div class="category-tab-horizontal active" id="cat-lotrinh" onclick="selectCourseCategory('lotrinh')">
+              <div class="tab-badge-horizontal" style="background: linear-gradient(135deg, #1890ff 0%, #722ed1 100%); color: #ffffff;">LT</div>
+              <div class="tab-info-horizontal">
+                <div class="tab-name-horizontal">Lộ trình ôn thi đại học</div>
+                <div class="tab-sub-horizontal">ĐGNL & ĐGTD toàn diện</div>
               </div>
-
-              <!-- TSA Tab -->
-
-              <div class="category-tab" id="cat-tsa" onclick="selectCourseCategory('tsa')">
-
-                <div class="tab-badge" style="background: linear-gradient(135deg, #722ed1 0%, #f759ab 100%); color: #ffffff; border: none;">TSA</div>
-
-                <div class="tab-info">
-
-                  <div class="tab-name">Đánh giá tư duy</div>
-
-                  <div class="tab-sub">Chuyên đề TSA Bách Khoa</div>
-
-                </div>
-
-              </div>
-
-              <!-- HSA Tab -->
-
-              <div class="category-tab" id="cat-hsa" onclick="selectCourseCategory('hsa')">
-
-                <div class="tab-badge" style="background: linear-gradient(135deg, #1890ff 0%, #36cfc9 100%); color: #ffffff; border: none;">HSA</div>
-
-                <div class="tab-info">
-
-                  <div class="tab-name">Đánh giá năng lực</div>
-
-                  <div class="tab-sub">Chuyên đề HSA Quốc Gia</div>
-
-                </div>
-
-              </div>
-
-              <!-- THPT Tab -->
-
-              <div class="category-tab" id="cat-thpt" onclick="selectCourseCategory('thpt')">
-
-                <div class="tab-badge" style="background: linear-gradient(135deg, #27ae60 0%, #1abc9c 100%); color: #ffffff; border: none;">THPT</div>
-
-                <div class="tab-info">
-
-                  <div class="tab-name">Trung học phổ thông quốc gia</div>
-
-                  <div class="tab-sub">Nền tảng lớp 10, 11, 12</div>
-
-                </div>
-
-              </div>
-
             </div>
 
+            <!-- TSA Tab -->
+            <div class="category-tab-horizontal" id="cat-tsa" onclick="selectCourseCategory('tsa')">
+              <div class="tab-badge-horizontal" style="background: linear-gradient(135deg, #722ed1 0%, #f759ab 100%); color: #ffffff;">TSA</div>
+              <div class="tab-info-horizontal">
+                <div class="tab-name-horizontal">Đánh giá tư duy</div>
+                <div class="tab-sub-horizontal">Chuyên đề TSA Bách Khoa</div>
+              </div>
+            </div>
+
+            <!-- HSA Tab -->
+            <div class="category-tab-horizontal" id="cat-hsa" onclick="selectCourseCategory('hsa')">
+              <div class="tab-badge-horizontal" style="background: linear-gradient(135deg, #1890ff 0%, #36cfc9 100%); color: #ffffff;">HSA</div>
+              <div class="tab-info-horizontal">
+                <div class="tab-name-horizontal">Đánh giá năng lực</div>
+                <div class="tab-sub-horizontal">Chuyên đề HSA Quốc Gia</div>
+              </div>
+            </div>
+
+            <!-- THPT Tab -->
+            <div class="category-tab-horizontal" id="cat-thpt" onclick="selectCourseCategory('thpt')">
+              <div class="tab-badge-horizontal" style="background: linear-gradient(135deg, #27ae60 0%, #1abc9c 100%); color: #ffffff;">THPT</div>
+              <div class="tab-info-horizontal">
+                <div class="tab-name-horizontal">Trung học phổ thông</div>
+                <div class="tab-sub-horizontal">Nền tảng lớp 10, 11, 12</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Full Width Content Panel -->
+        <div class="courses-panel">
+          <div class="panel-header" style="text-align: center; border-bottom: 1.5px solid var(--glass-border); padding-bottom: 1.2rem; margin-bottom: 2rem;">
+            <h2 class="panel-title" id="coursePanelTitle" style="font-size: 1.8rem; font-weight: 800; color: #802922;">LỘ TRÌNH ÔN THI ĐẠI HỌC</h2>
+            <div class="panel-subtitle" id="coursePanelSubtitle" style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.25rem;">2 khóa học có sẵn</div>
           </div>
 
-          <!-- Right Content Panel -->
-
-          <div class="courses-panel">
-
-            <div class="panel-header">
-
-              <h2 class="panel-title" id="coursePanelTitle">KHÓA HỌC ĐÁNH GIÁ TƯ DUY</h2>
-
-              <div class="panel-subtitle" id="coursePanelSubtitle">0 khóa học có sẵn</div>
-
-            </div>
-
-            <div class="courses-new-grid" id="coursesGridContainer">
-
-              <!-- Rendered dynamically -->
-
-            </div>
-
+          <div class="courses-new-grid" id="coursesGridContainer">
+            <!-- Rendered dynamically -->
           </div>
-
         </div>
 
       </section>
@@ -6159,7 +6041,7 @@
 
             <h4 class="footer-col-title">LIÊN HỆ</h4>
 
-            <p class="footer-col-desc">CÔNG TY CỔ PHẦN ĐẦU TƯ GIÁO DỤC LAB</p>
+            <p class="footer-col-desc">HỆ THỐNG LUYỆN THI ĐẠI HỌC SKIBIDI STUDY</p>
 
           </div>
 
@@ -7481,7 +7363,7 @@
 
               <div class="banner-inner">
 
-                <div style="font-size: 0.72rem; letter-spacing: 2px; opacity: 0.9; margin-bottom: 0.25rem; font-weight: 700;">LAB</div>
+                <div style="font-size: 0.72rem; letter-spacing: 2px; opacity: 0.9; margin-bottom: 0.25rem; font-weight: 700;">PREMIUM</div>
 
                 <div style="font-size: 0.8rem; font-style: italic; opacity: 0.8; font-weight: 400; margin-bottom: 0.1rem; text-shadow: 0 1px 2px rgba(0,0,0,0.2);">Chuyên đề</div>
 

@@ -112,7 +112,7 @@ db.serialize(() => {
       image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500',
       name: 'Khóa Chuyên Sâu HSA - Đánh giá năng lực ĐHQGHN',
       category: 'HSA',
-      teacher: 'Thầy Doãn Hưng & Đội ngũ LAB',
+      teacher: 'Thầy Doãn Hưng & Đội ngũ Chuyên gia',
       status: 'Đang mở',
       price: '1.600.000đ'
     },
@@ -128,7 +128,7 @@ db.serialize(() => {
       image: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=500',
       name: 'Combo 80+ HSA & TSA Toàn Diện 2026',
       category: 'Combo',
-      teacher: 'Tập thể Giáo viên LAB Academy',
+      teacher: 'Tập thể Giáo viên Hệ thống',
       status: 'Đang mở',
       price: '2.800.000đ'
     },
