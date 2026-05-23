@@ -118,7 +118,7 @@ app.delete('/api/courses/:id', (req, res) => {
 // Lấy danh sách học sinh kèm số bài đã hoàn thành
 app.get('/api/students', (req, res) => {
   const query = `
-    SELECT u.id, u.username, u.fullname, u.role, 
+    SELECT u.id, u.username, u.password, u.fullname, u.role, 
            COUNT(CASE WHEN sp.status_completed = 1 THEN 1 END) as completedCount
     FROM users u
     LEFT JOIN student_progress sp ON u.id = sp.student_id
@@ -176,6 +176,76 @@ app.post('/api/students/:id/progress', (req, res) => {
     }
     res.json({ success: true });
   });
+});
+
+// Admin API: Tạo mới học sinh
+app.post('/api/students', (req, res) => {
+  const { username, password, fullname } = req.body;
+  if (!username || !password || !fullname) {
+    return res.status(400).json({ error: 'Thiếu thông tin bắt buộc.' });
+  }
+  db.run(
+    'INSERT INTO users (username, password, fullname, role) VALUES (?, ?, ?, "student")',
+    [username, password, fullname],
+    function (err) {
+      if (err) {
+        console.error('DB error creating student:', err);
+        return res.status(500).json({ error: 'Không thể tạo học sinh. Tên đăng nhập có thể đã tồn tại.' });
+      }
+      res.status(201).json({ success: true, studentId: this.lastID });
+    }
+  );
+});
+
+// Admin API: Cập nhật thông tin học sinh
+app.put('/api/students/:id', (req, res) => {
+  const { id } = req.params;
+  const { username, password, fullname } = req.body;
+  if (!username || !password || !fullname) {
+    return res.status(400).json({ error: 'Thiếu thông tin bắt buộc.' });
+  }
+  db.run(
+    'UPDATE users SET username = ?, password = ?, fullname = ? WHERE id = ?',
+    [username, password, fullname, id],
+    function (err) {
+      if (err) {
+        console.error('DB error updating student:', err);
+        return res.status(500).json({ error: 'Không thể cập nhật thông tin học sinh.' });
+      }
+      res.json({ success: true });
+    }
+  );
+});
+
+// Admin API: Xóa học sinh
+app.delete('/api/students/:id', (req, res) => {
+  const { id } = req.params;
+  db.run('DELETE FROM users WHERE id = ?', [id], function (err) {
+    if (err) {
+      console.error('DB error deleting student:', err);
+      return res.status(500).json({ error: 'Lỗi xóa tài khoản học sinh.' });
+    }
+    res.json({ success: true });
+  });
+});
+
+// Client API: Đăng ký tài khoản mới (Signup)
+app.post('/api/auth/signup', (req, res) => {
+  const { username, password, fullname } = req.body;
+  if (!username || !password || !fullname) {
+    return res.status(400).json({ error: 'Thiếu thông tin bắt buộc.' });
+  }
+  db.run(
+    'INSERT INTO users (username, password, fullname, role) VALUES (?, ?, ?, "student")',
+    [username, password, fullname],
+    function (err) {
+      if (err) {
+        console.error('DB error during signup:', err);
+        return res.status(400).json({ error: 'Tên đăng nhập đã tồn tại.' });
+      }
+      res.status(201).json({ success: true, userId: this.lastID });
+    }
+  );
 });
 
 // ==========================================
