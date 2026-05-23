@@ -20345,11 +20345,11 @@
       const headerTitle = document.querySelector('#studentView header h1');
       if (headerTitle) {
         if (courseId === 7 || (courseName && courseName.toLowerCase().includes('hsa') && courseName.toLowerCase().includes('lộ trình'))) {
-          headerTitle.innerHTML = 'LỘ TRÌNH ÔN LUYỆN <span id="studentViewYear" style="background: linear-gradient(135deg, #1890ff 0%, #36cfc9 100%); color: white; padding: 4px 12px; border-radius: 20px; font-size: 1.1rem; font-weight: 800; text-shadow: none;">ĐÁNH GIÁ NĂNG LỰC (HSA)</span>';
+          headerTitle.innerHTML = 'LỘ TRÌNH ÔN LUYỆN <span id="studentViewYear" style="background: linear-gradient(135deg, #1890ff 0%, #36cfc9 100%); color: white; -webkit-text-fill-color: white !important; padding: 4px 12px; border-radius: 20px; font-size: 1.1rem; font-weight: 800; text-shadow: none;">ĐÁNH GIÁ NĂNG LỰC (HSA)</span>';
         } else if (courseId === 8 || (courseName && courseName.toLowerCase().includes('tsa') && courseName.toLowerCase().includes('lộ trình'))) {
-          headerTitle.innerHTML = 'LỘ TRÌNH ÔN LUYỆN <span id="studentViewYear" style="background: linear-gradient(135deg, #722ed1 0%, #f759ab 100%); color: white; padding: 4px 12px; border-radius: 20px; font-size: 1.1rem; font-weight: 800; text-shadow: none;">ĐÁNH GIÁ TƯ DUY (TSA)</span>';
+          headerTitle.innerHTML = 'LỘ TRÌNH ÔN LUYỆN <span id="studentViewYear" style="background: linear-gradient(135deg, #722ed1 0%, #f759ab 100%); color: white; -webkit-text-fill-color: white !important; padding: 4px 12px; border-radius: 20px; font-size: 1.1rem; font-weight: 800; text-shadow: none;">ĐÁNH GIÁ TƯ DUY (TSA)</span>';
         } else {
-          headerTitle.innerHTML = 'CHƯƠNG TRÌNH HỌC: <span id="studentViewYear" style="background: linear-gradient(135deg, #27ae60 0%, #1abc9c 100%); color: white; padding: 4px 12px; border-radius: 20px; font-size: 1.1rem; font-weight: 800; text-shadow: none;">' + (courseName || 'Khóa học') + '</span>';
+          headerTitle.innerHTML = 'CHƯƠNG TRÌNH HỌC: <span id="studentViewYear" style="background: linear-gradient(135deg, #27ae60 0%, #1abc9c 100%); color: white; -webkit-text-fill-color: white !important; padding: 4px 12px; border-radius: 20px; font-size: 1.1rem; font-weight: 800; text-shadow: none;">' + (courseName || 'Khóa học') + '</span>';
         }
       }
 
