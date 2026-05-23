@@ -20289,8 +20289,14 @@
 
       }
 
-      currentSelectedCourseId = courseId;
-      currentSelectedCourseName = courseName;
+      // If it is a full roadmap course, we clear the specific course context so it renders the full tabs list
+      if (courseId === 7 || courseId === 8 || (courseName && courseName.toLowerCase().includes('lộ trình ôn thi'))) {
+        currentSelectedCourseId = null;
+        currentSelectedCourseName = '';
+      } else {
+        currentSelectedCourseId = courseId;
+        currentSelectedCourseName = courseName;
+      }
 
       currentSuperView = courseType;
 
