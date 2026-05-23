@@ -6105,9 +6105,25 @@
 
             <div class="category-tabs-list">
 
+              <!-- Lộ trình Tab -->
+
+              <div class="category-tab active" id="cat-lotrinh" onclick="selectCourseCategory('lotrinh')">
+
+                <div class="tab-badge" style="background: linear-gradient(135deg, #8e44ad 0%, #3498db 100%); color: #fff; border: none;">LT</div>
+
+                <div class="tab-info">
+
+                  <div class="tab-name">Lộ trình ôn thi đại học</div>
+
+                  <div class="tab-sub">Hethonglab</div>
+
+                </div>
+
+              </div>
+
               <!-- TSA Tab -->
 
-              <div class="category-tab active" id="cat-tsa" onclick="selectCourseCategory('tsa')">
+              <div class="category-tab" id="cat-tsa" onclick="selectCourseCategory('tsa')">
 
                 <div class="tab-badge">TSA</div>
 
@@ -6777,6 +6793,7 @@
                   <div class="form-group" style="display: flex; flex-direction: column; gap: 6px; text-align: left;">
                     <label for="editCourseCategory" style="font-size: 13px; font-weight: 600; color: #333;">Danh mục *</label>
                     <select id="editCourseCategory" style="width: 100%; padding: 10px 12px; border: 1px solid #d9d9d9; border-radius: 6px; font-size: 14px; background: white; height: 40px; outline: none;">
+                      <option value="lotrinh">Lộ trình ôn thi đại học</option>
                       <option value="HSA">HSA (Đánh giá năng lực)</option>
                       <option value="TSA">TSA (Đánh giá tư duy)</option>
                       <option value="THPT">THPT Quốc gia</option>
@@ -7262,6 +7279,7 @@
     const API_BASE = 'http://localhost:3000';
 
     function mapServerCoursesToCategories(serverCourses) {
+      courseCategories.lotrinh.courses = [];
       courseCategories.tsa.courses = [];
       courseCategories.hsa.courses = [];
       courseCategories.thpt.courses = [];
@@ -7273,7 +7291,7 @@
           id: c.id,
           title: c.name,
           teacher: c.teacher,
-          icon: cat === 'tsa' ? '🎯' : (cat === 'hsa' ? '📊' : '📚'),
+          icon: cat === 'tsa' ? '🎯' : (cat === 'hsa' ? '📊' : (cat === 'lotrinh' ? '🗺️' : '📚')),
           bannerColor: c.image && c.image.startsWith('linear-gradient') ? c.image : null,
           imageUrl: c.image && c.image.startsWith('http') ? c.image : null,
           link: '#',
@@ -7295,6 +7313,16 @@
     // Course categories dataset for the landing page catalog
 
     const courseCategories = {
+
+      lotrinh: {
+
+        title: "LỘ TRÌNH ÔN THI ĐẠI HỌC",
+
+        countText: "0 khóa học có sẵn",
+
+        courses: []
+
+      },
 
       tsa: {
 
@@ -7332,7 +7360,7 @@
 
       // 1. Update active tab states
 
-      const tabs = ['tsa', 'hsa', 'thpt'];
+      const tabs = ['lotrinh', 'tsa', 'hsa', 'thpt'];
 
       tabs.forEach(tab => {
 
@@ -7417,8 +7445,13 @@
           card.addEventListener('click', (e) => {
             e.preventDefault();
             // Redirect to study dashboard
-            // If categoryId is 'thpt', let's route to 'hsa' or whichever default dashboard is active
-            const targetDashboard = (categoryId === 'thpt') ? 'hsa' : categoryId;
+            let targetDashboard = categoryId;
+            if (categoryId === 'thpt') {
+              targetDashboard = 'hsa';
+            } else if (categoryId === 'lotrinh') {
+              // Determine target dashboard based on course name
+              targetDashboard = course.title.toLowerCase().includes('tsa') ? 'tsa' : 'hsa';
+            }
             enterCourse(targetDashboard, course.id, course.title);
           });
 
@@ -15014,7 +15047,7 @@
       }
 
       // Render default course catalog category
-      selectCourseCategory('tsa');
+      selectCourseCategory('lotrinh');
 
       // DYNAMIC BACKEND SYNC AND CACHING
       console.log("Contacting Express backend server for active datasets...");
@@ -15048,7 +15081,7 @@
         .then(courses => {
           if (courses && courses.length > 0) {
             mapServerCoursesToCategories(courses);
-            selectCourseCategory(currentSuperView || 'tsa');
+            selectCourseCategory(currentSuperView || 'lotrinh');
           }
         })
         .catch(err => console.warn("Express backend offline. Running on static course catalog."));
@@ -16962,6 +16995,8 @@
           catBadge = `<span style="background: #e6f7ff; color: #1890ff; padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 12px; border: 1px solid #91d5ff;">HSA</span>`;
         } else if (c.category === 'TSA') {
           catBadge = `<span style="background: #f9f0ff; color: #722ed1; padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 12px; border: 1px solid #d3adf7;">TSA</span>`;
+        } else if (c.category === 'lotrinh') {
+          catBadge = `<span style="background: #fff0f6; color: #eb2f96; padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 12px; border: 1px solid #ffadd2;">Lộ trình</span>`;
         } else {
           catBadge = `<span style="background: #f6ffed; color: #52c41a; padding: 4px 8px; border-radius: 4px; font-weight: 600; font-size: 12px; border: 1px solid #b7eb8f;">THPT</span>`;
         }

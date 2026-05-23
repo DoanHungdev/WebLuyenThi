@@ -147,6 +147,22 @@ db.serialize(() => {
       teacher: 'Thầy ĐVĐ',
       status: 'public',
       price: 'Miễn phí'
+    },
+    {
+      image: 'linear-gradient(135deg, #722ed1 0%, #1890ff 100%)',
+      name: 'Lộ trình ôn thi HSA',
+      category: 'lotrinh',
+      teacher: 'SKIBIDI',
+      status: 'public',
+      price: 'Miễn phí'
+    },
+    {
+      image: 'linear-gradient(135deg, #722ed1 0%, #1890ff 100%)',
+      name: 'Lộ trình ôn thi TSA',
+      category: 'lotrinh',
+      teacher: 'skibidi',
+      status: 'public',
+      price: 'Miễn phí'
     }
   ];
 
