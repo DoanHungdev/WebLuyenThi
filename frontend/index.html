@@ -16470,14 +16470,16 @@
         const studentView = document.getElementById('studentView');
         const coursesView = document.getElementById('coursesView');
 
-        if (homeView) homeView.classList.remove('active');
-        if (coursesView) coursesView.classList.remove('active');
-
         if (loggedUser.role === 'admin') {
+          if (homeView) homeView.classList.remove('active');
+          if (coursesView) coursesView.classList.remove('active');
           if (adminView) adminView.classList.add('active');
           if (studentView) studentView.classList.remove('active');
         } else {
-          if (studentView) studentView.classList.add('active');
+          // Redirect students to the clean Home/Catalog page where they can select their isolated course card
+          if (homeView) homeView.classList.add('active');
+          if (coursesView) coursesView.classList.remove('active');
+          if (studentView) studentView.classList.remove('active');
           if (adminView) adminView.classList.remove('active');
         }
 
@@ -16518,9 +16520,11 @@
           const homeView = document.getElementById('homeView');
           const studentView = document.getElementById('studentView');
           const coursesView = document.getElementById('coursesView');
-          if (homeView) homeView.classList.remove('active');
+          const adminView = document.getElementById('adminView');
+          if (homeView) homeView.classList.add('active');
           if (coursesView) coursesView.classList.remove('active');
-          if (studentView) studentView.classList.add('active');
+          if (studentView) studentView.classList.remove('active');
+          if (adminView) adminView.classList.remove('active');
           checkSession();
         } else {
           alert("Sai tài khoản hoặc mật khẩu (hoặc hệ thống đang offline và chưa lưu cache tài khoản của bạn).");
@@ -20171,6 +20175,12 @@
 
       if (coursesView) coursesView.classList.remove('active');
 
+      // Restore super-nav-tabs display style
+      const superNavTabs = document.querySelector('#studentView .super-nav-tabs');
+      if (superNavTabs) {
+        superNavTabs.style.display = 'flex';
+      }
+
       // Update active nav state
 
       const navHome = document.getElementById('navHome');
@@ -20325,6 +20335,23 @@
       }
 
       currentSuperView = courseType;
+
+      // Dynamic header styling and hide the super nav switch tabs to fully isolate the roadmaps/courses!
+      const superNavTabs = document.querySelector('#studentView .super-nav-tabs');
+      if (superNavTabs) {
+        superNavTabs.style.display = 'none'; // Completely hide HSA/TSA switches to ensure isolation!
+      }
+
+      const headerTitle = document.querySelector('#studentView header h1');
+      if (headerTitle) {
+        if (courseId === 7 || (courseName && courseName.toLowerCase().includes('hsa') && courseName.toLowerCase().includes('lộ trình'))) {
+          headerTitle.innerHTML = 'LỘ TRÌNH ÔN LUYỆN <span id="studentViewYear" style="background: linear-gradient(135deg, #1890ff 0%, #36cfc9 100%); color: white; padding: 4px 12px; border-radius: 20px; font-size: 1.1rem; font-weight: 800; text-shadow: none;">ĐÁNH GIÁ NĂNG LỰC (HSA)</span>';
+        } else if (courseId === 8 || (courseName && courseName.toLowerCase().includes('tsa') && courseName.toLowerCase().includes('lộ trình'))) {
+          headerTitle.innerHTML = 'LỘ TRÌNH ÔN LUYỆN <span id="studentViewYear" style="background: linear-gradient(135deg, #722ed1 0%, #f759ab 100%); color: white; padding: 4px 12px; border-radius: 20px; font-size: 1.1rem; font-weight: 800; text-shadow: none;">ĐÁNH GIÁ TƯ DUY (TSA)</span>';
+        } else {
+          headerTitle.innerHTML = 'CHƯƠNG TRÌNH HỌC: <span id="studentViewYear" style="background: linear-gradient(135deg, #27ae60 0%, #1abc9c 100%); color: white; padding: 4px 12px; border-radius: 20px; font-size: 1.1rem; font-weight: 800; text-shadow: none;">' + (courseName || 'Khóa học') + '</span>';
+        }
+      }
 
       const homeView = document.getElementById('homeView');
 
