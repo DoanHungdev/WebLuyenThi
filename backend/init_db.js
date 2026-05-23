@@ -139,6 +139,14 @@ db.serialize(() => {
       teacher: 'Cô Doãn Quỳnh',
       status: 'Sắp mở',
       price: '600.000đ'
+    },
+    {
+      image: 'linear-gradient(135deg, #27ae60 0%, #1abc9c 100%)',
+      name: 'Khóa nền tảng Toán ĐVĐ',
+      category: 'THPT',
+      teacher: 'Thầy ĐVĐ',
+      status: 'public',
+      price: 'Miễn phí'
     }
   ];
 
