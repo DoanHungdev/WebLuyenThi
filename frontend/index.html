@@ -6164,6 +6164,8 @@
 
         <a href="#faqSection" onclick="scrollToFaq(event)" class="nav-link" id="navFaq">Hỏi đáp</a>
 
+        <a href="#" onclick="showAdminView(event)" class="nav-link" id="navAdmin" style="display: none; color: #ff6b00; font-weight: 700;">Admin Dashboard</a>
+
       </div>
 
       <div style="display: flex; align-items: center; gap: 0.75rem;">
@@ -17118,6 +17120,8 @@
 
         if (currentUser.role === 'admin') {
           document.getElementById('userBadgeMeta').textContent = `Quyền: Quản trị viên`;
+          const navAdmin = document.getElementById('navAdmin');
+          if (navAdmin) navAdmin.style.display = 'inline-block';
           if (homeView) homeView.classList.remove('active');
           if (studentView) studentView.classList.remove('active');
           if (coursesView) coursesView.classList.remove('active');
@@ -17125,6 +17129,8 @@
           switchAdminTab('students');
         } else {
           document.getElementById('userBadgeMeta').textContent = `Lớp: ${currentUser.className}`;
+          const navAdmin = document.getElementById('navAdmin');
+          if (navAdmin) navAdmin.style.display = 'none';
           if (studentView && studentView.classList.contains('active')) {
             if (homeView) homeView.classList.remove('active');
             if (adminView) adminView.classList.remove('active');
@@ -17148,7 +17154,7 @@
         const av = document.getElementById('authView');
         if (av) av.style.display = 'none';
 
-        if (guestAuthBtn) guestAuthBtn.style.display = 'block';
+        if (guestAuthBtn) const navAdmin = document.getElementById('navAdmin'); if (navAdmin) navAdmin.style.display = 'none'; guestAuthBtn.style.display = 'block';
         if (userProfilePanel) userProfilePanel.style.display = 'none';
 
         if (coursesView && coursesView.classList.contains('active')) {
@@ -20851,6 +20857,29 @@ Tên đăng nhập: ${username}`);
       }
     };
 
+        window.showAdminView = function(event) {
+      if (event) event.preventDefault();
+      
+      // Update active nav links
+      document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+      const navAdmin = document.getElementById('navAdmin');
+      if (navAdmin) navAdmin.classList.add('active');
+      
+      // Switch active view sections
+      const homeView = document.getElementById('homeView');
+      const studentView = document.getElementById('studentView');
+      const coursesView = document.getElementById('coursesView');
+      const adminView = document.getElementById('adminView');
+      
+      if (homeView) homeView.classList.remove('active');
+      if (studentView) studentView.classList.remove('active');
+      if (coursesView) coursesView.classList.remove('active');
+      if (adminView) adminView.classList.add('active');
+      
+      // Select the students tab by default in admin dashboard
+      switchAdminTab('students');
+    };
+
     window.showHome = function(event) {
       if (event) event.preventDefault();
       currentSelectedCourseId = null;
@@ -20871,6 +20900,8 @@ Tên đăng nhập: ${username}`);
       if (navHome) navHome.classList.add('active');
       if (navCourses) navCourses.classList.remove('active');
       if (navFaq) navFaq.classList.remove('active');
+      const navAdmin = document.getElementById('navAdmin');
+      if (navAdmin) navAdmin.classList.remove('active');
       window.scrollTo({ top: 0, behavior: 'smooth' });
       // Hash routing
       if (location.hash !== '#home') history.pushState(null, '', '#home');
@@ -20892,6 +20923,8 @@ Tên đăng nhập: ${username}`);
       if (navHome) navHome.classList.remove('active');
       if (navCourses) navCourses.classList.add('active');
       if (navFaq) navFaq.classList.remove('active');
+      const navAdmin = document.getElementById('navAdmin');
+      if (navAdmin) navAdmin.classList.remove('active');
       window.scrollTo({ top: 0, behavior: 'smooth' });
       // Hash routing
       if (location.hash !== '#courses') history.pushState(null, '', '#courses');
@@ -20934,6 +20967,8 @@ Tên đăng nhập: ${username}`);
       if (navCourses) navCourses.classList.remove('active');
 
       if (navFaq) navFaq.classList.add('active');
+      const navAdmin = document.getElementById('navAdmin');
+      if (navAdmin) navAdmin.classList.remove('active');
 
       const faqSec = document.getElementById('faqSection');
 
