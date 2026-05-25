@@ -20813,6 +20813,31 @@ Tên đăng nhập: ${username}`);
     // --- SPA ROUTING & MODAL HELPER FUNCTIONS ---
 
     window.openAuthModal = function(defaultTab) {
+      // Clear inputs
+      const loginUser = document.getElementById('apLoginUser');
+      const loginPass = document.getElementById('apLoginPass');
+      const signupName = document.getElementById('apSignupName');
+      const signupUser = document.getElementById('apSignupUser');
+      const signupPass = document.getElementById('apSignupPass');
+      const signupClass = document.getElementById('apSignupClass');
+      
+      if (loginUser) loginUser.value = '';
+      if (loginPass) loginPass.value = '';
+      if (signupName) signupName.value = '';
+      if (signupUser) signupUser.value = '';
+      if (signupPass) signupPass.value = '';
+      if (signupClass) signupClass.value = '';
+      
+      // Reset buttons
+      const loginBtn = document.getElementById('apLoginBtn');
+      const signupBtn = document.getElementById('apSignupBtn');
+      if (loginBtn) { loginBtn.disabled = false; loginBtn.textContent = '🚀 Đăng nhập'; }
+      if (signupBtn) { signupBtn.disabled = false; signupBtn.textContent = '✅ Tạo tài khoản'; }
+      
+      // Clear errors
+      const errEl = document.getElementById('authPageError');
+      if (errEl) { errEl.classList.remove('show'); errEl.textContent = ''; }
+
       // Open the new full-screen auth page (with optional tab: 'login' or 'signup')
       switchAuthPageTab(defaultTab || 'login');
       showAuthPage();
