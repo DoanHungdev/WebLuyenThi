@@ -3881,11 +3881,16 @@
     }
 
     /* ===== FULL-SCREEN AUTH PAGE ===== */
+    /* ===== DOUBLE-SLIDER AUTH MODAL STYLE ===== */
     #authView {
       position: fixed;
       inset: 0;
       z-index: 9999;
       display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
       opacity: 1;
       transition: opacity 0.4s ease;
     }
@@ -3893,294 +3898,250 @@
       opacity: 0;
       pointer-events: none;
     }
-    /* Left panel — branding / illustration */
-    .auth-panel-left {
-      flex: 1.1;
-      background: linear-gradient(145deg, #ff6b00 0%, #ff8c42 40%, #ffad6a 75%, #ffd49e 100%);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 3rem 2.5rem;
-      position: relative;
-      overflow: hidden;
-    }
-    .auth-panel-left::before {
-      content: '';
-      position: absolute;
-      width: 380px; height: 380px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.12);
-      top: -100px; left: -100px;
-    }
-    .auth-panel-left::after {
-      content: '';
-      position: absolute;
-      width: 280px; height: 280px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.08);
-      bottom: -80px; right: -60px;
-    }
-    .auth-brand-logo {
-      width: 80px; height: 80px;
-      border-radius: 22px;
-      background: rgba(255,255,255,0.25);
-      backdrop-filter: blur(10px);
-      border: 2px solid rgba(255,255,255,0.4);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 2.5rem;
-      margin-bottom: 1.75rem;
-      box-shadow: 0 8px 32px rgba(255,100,0,0.3);
-      position: relative; z-index: 1;
-    }
-    .auth-brand-title {
-      font-family: var(--font-primary);
-      font-size: 2rem;
-      font-weight: 900;
-      color: #fff;
-      text-align: center;
-      line-height: 1.2;
-      margin-bottom: 0.75rem;
-      text-shadow: 0 2px 16px rgba(180,60,0,0.2);
-      position: relative; z-index: 1;
-    }
-    .auth-brand-subtitle {
-      font-size: 0.95rem;
-      color: rgba(255,255,255,0.88);
-      text-align: center;
-      line-height: 1.6;
-      max-width: 320px;
-      position: relative; z-index: 1;
-    }
-    .auth-brand-features {
-      margin-top: 2.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.85rem;
-      position: relative; z-index: 1;
-    }
-    .auth-brand-feature {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      background: rgba(255,255,255,0.18);
-      border: 1px solid rgba(255,255,255,0.3);
-      border-radius: 12px;
-      padding: 0.65rem 1rem;
-      color: #fff;
-      font-size: 0.85rem;
-      font-weight: 600;
-      backdrop-filter: blur(6px);
-    }
-    .auth-brand-feature span:first-child { font-size: 1.2rem; }
 
-    /* Right panel — form */
-    .auth-panel-right {
-      flex: 1;
-      background: var(--bg-primary);
+    /* Main Container */
+    .auth-container {
+      position: relative;
+      width: 450px;
+      height: 640px;
+      border-radius: 20px;
+      padding: 30px 40px 100px;
+      background: linear-gradient(135deg, #e65100 0%, #ff5722 50%, #ff9800 100%);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+
+    /* Nút Đóng góc phải */
+    .auth-page-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s ease;
+      z-index: 100;
+    }
+    .auth-page-close:hover {
+      background: rgba(255, 255, 255, 0.4);
+      transform: rotate(90deg);
+    }
+
+    /* Các Headers Tab Đăng ký / Đăng nhập */
+    .signup-section header,
+    .login-section header {
+      font-size: 28px;
+      text-align: center;
+      color: #fff;
+      font-weight: 800;
+      cursor: pointer;
+      margin-bottom: 20px;
+      font-family: var(--font-primary);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+    }
+
+    .login-section header {
+      color: var(--text-primary);
+      opacity: 0.55;
+      margin-top: 10px;
+    }
+    .login-section header:hover {
+      opacity: 0.85;
+    }
+
+    /* Signup Section style */
+    .signup-section {
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 3rem 2.5rem;
-      overflow-y: auto;
-      position: relative;
+      height: 100%;
     }
-    .auth-form-container {
-      width: 100%;
-      max-width: 400px;
-    }
-    .auth-form-header {
-      margin-bottom: 2rem;
-      text-align: center;
-    }
-    .auth-form-header h2 {
-      font-family: var(--font-primary);
-      font-size: 1.75rem;
-      font-weight: 900;
-      color: var(--text-primary);
-      margin-bottom: 0.4rem;
-    }
-    .auth-form-header p {
-      font-size: 0.88rem;
-      color: var(--text-secondary);
-    }
-    /* Tab switcher on right panel */
-    .auth-form-tabs {
+    .auth-signup-brand {
       display: flex;
-      background: var(--bg-secondary);
-      border-radius: 12px;
-      padding: 4px;
-      margin-bottom: 1.75rem;
-      gap: 4px;
-    }
-    .auth-form-tab {
-      flex: 1;
-      padding: 0.65rem;
-      border: none;
-      border-radius: 9px;
-      font-family: var(--font-primary);
-      font-weight: 700;
-      font-size: 0.88rem;
-      cursor: pointer;
-      background: transparent;
-      color: var(--text-secondary);
-      transition: all 0.25s ease;
-    }
-    .auth-form-tab.active {
-      background: linear-gradient(135deg, #ff6b00, #ff8c42);
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 15px;
       color: #fff;
-      box-shadow: 0 4px 14px rgba(255,107,0,0.35);
     }
-    /* Input group */
-    .auth-input-group {
-      margin-bottom: 1rem;
+    .auth-brand-emoji { font-size: 1.5rem; }
+    .auth-brand-text {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
     }
-    .auth-input-label {
-      display: block;
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: var(--text-secondary);
-      margin-bottom: 0.4rem;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
+
+    .signup-section .auth-input-field {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1.5px solid rgba(255, 255, 255, 0.25);
+      color: #fff;
     }
-    .auth-input-wrap {
-      position: relative;
+    .signup-section .auth-input-field::placeholder {
+      color: rgba(255, 255, 255, 0.75);
     }
-    .auth-input-wrap .auth-input-icon {
+    .signup-section .auth-input-field:focus {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: #fff;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+    .signup-section .auth-submit-btn {
+      background: #fff;
+      color: #e65100;
+      box-shadow: 0 5px 15px rgba(230, 81, 0, 0.3);
+    }
+    .signup-section .auth-submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(230, 81, 0, 0.5);
+    }
+
+    /* Login Section (Khối trượt dưới cùng lên) */
+    .login-section {
       position: absolute;
-      left: 0.95rem;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1rem;
-      opacity: 0.55;
-      pointer-events: none;
+      left: 50%;
+      bottom: -84%; /* Trạng thái ẩn, chỉ lú Header */
+      transform: translateX(-50%);
+      width: calc(100% + 180px);
+      padding: 30px 130px;
+      background: var(--bg-primary); /* Đồng bộ Dark/Light Mode */
+      border-radius: 290px;
+      height: 100%;
+      box-sizing: border-box;
+      transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Bouncy transition */
+      box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      z-index: 10;
+    }
+
+    .login-section .auth-input-field {
+      background: var(--bg-secondary);
+      border: 1.5px solid var(--glass-border);
+      color: var(--text-primary);
+    }
+    .login-section .auth-input-field:focus {
+      border-color: #ff6b00;
+      box-shadow: 0 0 8px rgba(255, 107, 0, 0.15);
+      background: var(--bg-primary);
+    }
+    .login-section .auth-submit-btn {
+      background: linear-gradient(135deg, #e65100, #ff6b00);
+      color: #fff;
+      box-shadow: 0 5px 15px rgba(255, 107, 0, 0.35);
+    }
+    .login-section .auth-submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 107, 0, 0.5);
+    }
+
+    /* Các thành phần Form chung */
+    .auth-input-group {
+      margin-bottom: 12px;
     }
     .auth-input-field {
       width: 100%;
-      padding: 0.78rem 1rem 0.78rem 2.7rem;
-      border: 1.5px solid var(--glass-border);
-      border-radius: 12px;
-      background: var(--bg-secondary);
-      color: var(--text-primary);
-      font-family: var(--font-primary);
-      font-size: 0.93rem;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-size: 0.9rem;
       outline: none;
       transition: all 0.25s ease;
       box-sizing: border-box;
-    }
-    .auth-input-field:focus {
-      border-color: #ff6b00;
-      box-shadow: 0 0 0 3px rgba(255,107,0,0.15);
-      background: var(--bg-primary);
+      font-family: var(--font-primary);
     }
     .auth-submit-btn {
       width: 100%;
-      padding: 0.9rem;
-      background: linear-gradient(135deg, #ff6b00 0%, #ff8c42 100%);
-      color: #fff;
+      padding: 13px;
       border: none;
-      border-radius: 12px;
-      font-family: var(--font-primary);
-      font-weight: 800;
-      font-size: 0.95rem;
-      letter-spacing: 0.05em;
-      cursor: pointer;
-      margin-top: 0.5rem;
-      transition: all 0.3s ease;
-      box-shadow: 0 6px 20px rgba(255,107,0,0.35);
-    }
-    .auth-submit-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 28px rgba(255,107,0,0.45);
-    }
-    .auth-submit-btn:active { transform: translateY(0); }
-    .auth-divider {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin: 1.25rem 0;
-      color: var(--text-secondary);
-      font-size: 0.78rem;
-    }
-    .auth-divider::before, .auth-divider::after {
-      content: ''; flex: 1;
-      height: 1px;
-      background: var(--glass-border);
-    }
-    .auth-switch-text {
-      text-align: center;
-      font-size: 0.83rem;
-      color: var(--text-secondary);
-      margin-top: 1.25rem;
-    }
-    .auth-switch-text a {
-      color: #ff6b00;
-      font-weight: 700;
-      cursor: pointer;
-      text-decoration: none;
-    }
-    .auth-switch-text a:hover { text-decoration: underline; }
-    /* Error message */
-    .auth-error-msg {
-      background: rgba(231,76,60,0.1);
-      border: 1px solid rgba(231,76,60,0.3);
-      color: #e74c3c;
       border-radius: 10px;
-      padding: 0.65rem 0.9rem;
-      font-size: 0.82rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      display: none;
-    }
-    .auth-error-msg.show { display: block; }
-    /* Floating animated circles on left panel */
-    @keyframes authFloat {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-18px) rotate(8deg); }
-    }
-    .auth-float-shape {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.1);
-      animation: authFloat 6s ease-in-out infinite;
-    }
-    /* Right-to-left slide animation for forms */
-    @keyframes slideInForm {
-      from { opacity: 0; transform: translateX(20px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-    .auth-form-slide { animation: slideInForm 0.3s ease forwards; }
-
-    /* Responsive: Stack on mobile */
-    @media (max-width: 768px) {
-      .auth-panel-left { display: none; }
-      .auth-panel-right { padding: 2rem 1.5rem; }
-    }
-
-    /* Close button for auth page */
-    .auth-page-close {
-      position: absolute;
-      top: 1.25rem;
-      right: 1.25rem;
-      width: 38px; height: 38px;
-      border-radius: 50%;
-      border: 1.5px solid var(--glass-border);
-      background: var(--bg-secondary);
-      color: var(--text-secondary);
-      font-size: 1.4rem;
-      line-height: 1;
+      font-size: 0.95rem;
+      font-weight: 750;
       cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: all 0.2s ease;
-      z-index: 10;
+      transition: all 0.25s ease;
+      font-family: var(--font-primary);
+      margin-top: 10px;
     }
-    .auth-page-close:hover {
-      background: rgba(255,107,0,0.12);
+    .auth-submit-btn:active {
+      transform: translateY(0);
+    }
+    .auth-forgot-link {
+      display: block;
+      text-align: right;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin: 5px 0 15px;
+      font-weight: 600;
+    }
+    .auth-forgot-link:hover {
       color: #ff6b00;
-      border-color: #ff6b00;
-      transform: rotate(90deg);
+      text-decoration: underline;
+    }
+
+    /* TRẠNG THÁI ACTIVE: Khi trượt mở Login Section */
+    .auth-container.active .login-section {
+      bottom: -6%; /* Trượt lên hiển thị toàn bộ form */
+      border-radius: 180px 180px 20px 20px; /* Bo góc vuông bên dưới khi lên đỉnh */
+      box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.25);
+    }
+    .auth-container.active .login-section header {
+      opacity: 1;
+      color: #ff6b00; /* Tiêu đề sáng rực */
+    }
+    .auth-container.active .signup-section header {
+      opacity: 0.55;
+    }
+    .auth-container.active .signup-section header:hover {
+      opacity: 0.85;
+    }
+
+    /* Error message style */
+    .auth-error-msg {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      color: #fff;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: none;
+      text-align: center;
+    }
+    .auth-error-msg.show {
+      display: block;
+      animation: shake 0.3s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    /* Responsive: Giảm kích thước trên thiết bị di động */
+    @media (max-width: 480px) {
+      .auth-container {
+        width: 95%;
+        height: 600px;
+        padding: 20px 25px 90px;
+      }
+      .login-section {
+        width: calc(100% + 100px);
+        padding: 20px 70px;
+        bottom: -86%;
+      }
+      .auth-container.active .login-section {
+        bottom: -8%;
+      }
     }
 
     /* NEW Glassmorphic Auth Modal overlay & styles */
@@ -6073,123 +6034,62 @@
 
     </div>
 
-    <!-- ===== FULL-SCREEN AUTH PAGE (shown on demand when user clicks login) ===== -->
+    <!-- ===== FULL-SCREEN AUTH PAGE (Double Slider Mode) ===== -->
     <div id="authView" style="display:none;" onclick="closeAuthModal(event)">
-      <!-- Left branding panel -->
-      <div class="auth-panel-left">
-        <!-- Floating decorative shapes -->
-        <div class="auth-float-shape" style="width:120px;height:120px;top:15%;left:10%;animation-delay:0s;"></div>
-        <div class="auth-float-shape" style="width:70px;height:70px;top:55%;left:5%;animation-delay:2s;animation-duration:8s;"></div>
-        <div class="auth-float-shape" style="width:90px;height:90px;top:25%;right:8%;animation-delay:1s;animation-duration:7s;"></div>
-
-        <div class="auth-brand-logo">🎓</div>
-        <div class="auth-brand-title">SKIBIDI STUDY<br>2026</div>
-        <div class="auth-brand-subtitle">Hệ thống luyện thi ĐGNL HSA &amp; ĐGTD TSA toàn diện — cá nhân hóa lộ trình học tập cho từng học sinh.</div>
-
-        <div class="auth-brand-features">
-          <div class="auth-brand-feature">
-            <span>📊</span>
-            <span>Lộ trình HSA &amp; TSA bài bản, chuẩn hóa</span>
-          </div>
-          <div class="auth-brand-feature">
-            <span>📝</span>
-            <span>Kho đề thi thử &amp; chấm điểm tự động</span>
-          </div>
-          <div class="auth-brand-feature">
-            <span>📈</span>
-            <span>Theo dõi tiến độ học tập thông minh</span>
-          </div>
-          <div class="auth-brand-feature">
-            <span>🏆</span>
-            <span>Video bài giảng từ chuyên gia hàng đầu</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right form panel -->
-      <div class="auth-panel-right">
-        <!-- Close button -->
+      <div class="auth-container" onclick="event.stopPropagation()">
+        <!-- Nút đóng Modal nổi -->
         <button class="auth-page-close" onclick="hideAuthPage()" title="Đóng">&times;</button>
 
-        <div class="auth-form-container">
-
-          <!-- Header -->
-          <div class="auth-form-header">
-            <h2 id="authPageTitle">Chào mừng trở lại! 👋</h2>
-            <p id="authPageSubtitle">Đăng nhập để tiếp tục lộ trình học tập của bạn</p>
+        <!-- 1. SIGNUP SECTION (Nằm ở lớp dưới làm nền) -->
+        <div class="signup-section">
+          <header onclick="switchAuthPageTab('signup')">Đăng ký</header>
+          
+          <!-- Brand Logo / Subtitle lồng ghép tinh tế -->
+          <div class="auth-signup-brand">
+            <span class="auth-brand-emoji">🎓</span>
+            <span class="auth-brand-text">SKIBIDI STUDY</span>
           </div>
 
-          <!-- Tab switcher -->
-          <div class="auth-form-tabs">
-            <button class="auth-form-tab active" id="authPageTabLogin" onclick="switchAuthPageTab('login')">Đăng nhập</button>
-            <button class="auth-form-tab" id="authPageTabSignup" onclick="switchAuthPageTab('signup')">Đăng ký</button>
-          </div>
-
-          <!-- Error message -->
+          <!-- Error message dùng chung -->
           <div class="auth-error-msg" id="authPageError"></div>
 
-          <!-- LOGIN FORM -->
-          <form id="authPageLoginForm" onsubmit="submitAuthPageLogin(event)" class="auth-form-slide">
+          <!-- Biểu mẫu Đăng ký -->
+          <form id="authPageSignupForm" onsubmit="submitAuthPageSignup(event)">
             <div class="auth-input-group">
-              <label class="auth-input-label" for="apLoginUser">Tên đăng nhập</label>
-              <div class="auth-input-wrap">
-                <span class="auth-input-icon">👤</span>
-                <input type="text" id="apLoginUser" class="auth-input-field" placeholder="Nhập tên đăng nhập..." autocomplete="username" required>
-              </div>
+              <input type="text" id="apSignupName" class="auth-input-field" placeholder="Họ và Tên (ví dụ: Nguyễn Văn A)" required>
             </div>
             <div class="auth-input-group">
-              <label class="auth-input-label" for="apLoginPass">Mật khẩu</label>
-              <div class="auth-input-wrap">
-                <span class="auth-input-icon">🔒</span>
-                <input type="password" id="apLoginPass" class="auth-input-field" placeholder="Nhập mật khẩu..." autocomplete="current-password" required>
-              </div>
-            </div>
-            <button type="submit" class="auth-submit-btn" id="apLoginBtn">🚀 ĐĂNG NHẬP</button>
-            <div class="auth-switch-text">
-              Chưa có tài khoản? <a onclick="switchAuthPageTab('signup')">Đăng ký ngay</a>
-            </div>
-          </form>
-
-          <!-- SIGNUP FORM -->
-          <form id="authPageSignupForm" onsubmit="submitAuthPageSignup(event)" class="auth-form-slide" style="display:none;">
-            <div class="auth-input-group">
-              <label class="auth-input-label" for="apSignupName">Họ và Tên</label>
-              <div class="auth-input-wrap">
-                <span class="auth-input-icon">✏️</span>
-                <input type="text" id="apSignupName" class="auth-input-field" placeholder="Nguyễn Văn A..." required>
-              </div>
+              <input type="text" id="apSignupUser" class="auth-input-field" placeholder="Tên đăng nhập (viết liền không dấu)" autocomplete="username" required>
             </div>
             <div class="auth-input-group">
-              <label class="auth-input-label" for="apSignupUser">Tên đăng nhập</label>
-              <div class="auth-input-wrap">
-                <span class="auth-input-icon">👤</span>
-                <input type="text" id="apSignupUser" class="auth-input-field" placeholder="nguyenvana (không dấu, liền)" autocomplete="username" required>
-              </div>
+              <input type="password" id="apSignupPass" class="auth-input-field" placeholder="Mật khẩu (tối thiểu 6 ký tự)" autocomplete="new-password" required>
             </div>
             <div class="auth-input-group">
-              <label class="auth-input-label" for="apSignupPass">Mật khẩu</label>
-              <div class="auth-input-wrap">
-                <span class="auth-input-icon">🔒</span>
-                <input type="password" id="apSignupPass" class="auth-input-field" placeholder="Tối thiểu 6 ký tự..." autocomplete="new-password" required>
-              </div>
-            </div>
-            <div class="auth-input-group">
-              <label class="auth-input-label" for="apSignupClass">Lớp / Trường</label>
-              <div class="auth-input-wrap">
-                <span class="auth-input-icon">🏫</span>
-                <input type="text" id="apSignupClass" class="auth-input-field" placeholder="12A1 - THPT Chuyên..." required>
-              </div>
+              <input type="text" id="apSignupClass" class="auth-input-field" placeholder="Lớp / Trường (ví dụ: 12A1 - THPT Chuyên)" required>
             </div>
             <button type="submit" class="auth-submit-btn" id="apSignupBtn">✅ TẠO TÀI KHOẢN</button>
-            <div class="auth-switch-text">
-              Đã có tài khoản? <a onclick="switchAuthPageTab('login')">Đăng nhập</a>
-            </div>
           </form>
+        </div>
 
+        <!-- 2. LOGIN SECTION (Khối màu trắng/tối trượt tuyệt đối chồng lên) -->
+        <div class="login-section">
+          <header onclick="switchAuthPageTab('login')">Đăng nhập</header>
+
+          <!-- Biểu mẫu Đăng nhập -->
+          <form id="authPageLoginForm" onsubmit="submitAuthPageLogin(event)">
+            <div class="auth-input-group">
+              <input type="text" id="apLoginUser" class="auth-input-field" placeholder="Tên đăng nhập" autocomplete="username" required>
+            </div>
+            <div class="auth-input-group">
+              <input type="password" id="apLoginPass" class="auth-input-field" placeholder="Mật khẩu" autocomplete="current-password" required>
+            </div>
+            <a href="#" class="auth-forgot-link" onclick="alert('Vui lòng liên hệ Admin để đặt lại mật khẩu của bạn!')">Quên mật khẩu?</a>
+            <button type="submit" class="auth-submit-btn" id="apLoginBtn">🚀 ĐĂNG NHẬP</button>
+          </form>
         </div>
       </div>
     </div>
-    <!-- ===== END AUTH PAGE ===== -->
+    
 
     <!-- VIEW 0: SKIBIDI LANDING HOMEPAGE -->
     <div id="homeView" class="view-section active">
@@ -20489,47 +20389,19 @@ Tên đăng nhập: ${username}`);
 
     // Tab switcher on auth page
     window.switchAuthPageTab = function(tab) {
-      const loginForm = document.getElementById('authPageLoginForm');
-      const signupForm = document.getElementById('authPageSignupForm');
-      const tabLogin = document.getElementById('authPageTabLogin');
-      const tabSignup = document.getElementById('authPageTabSignup');
-      const title = document.getElementById('authPageTitle');
-      const subtitle = document.getElementById('authPageSubtitle');
+      const container = document.querySelector('.auth-container');
       const errEl = document.getElementById('authPageError');
       if (errEl) { errEl.classList.remove('show'); errEl.textContent = ''; }
 
+      if (!container) return;
+
       if (tab === 'login') {
-        loginForm.style.display = 'block';
-        signupForm.style.display = 'none';
-        tabLogin.classList.add('active');
-        tabSignup.classList.remove('active');
-        title.textContent = 'Chào mừng trở lại! 👋';
-        subtitle.textContent = 'Đăng nhập để tiếp tục lộ trình học tập của bạn';
+        container.classList.add('active');
       } else {
-        loginForm.style.display = 'none';
-        signupForm.style.display = 'block';
-        tabLogin.classList.remove('active');
-        tabSignup.classList.add('active');
-        title.textContent = 'Tạo tài khoản mới 🎉';
-        subtitle.textContent = 'Bắt đầu hành trình chinh phục ĐGNL & ĐGTD';
+        container.classList.remove('active');
       }
     };
 
-    // Helper: show error on auth page
-    function authPageShowError(msg) {
-      const errEl = document.getElementById('authPageError');
-      if (errEl) { errEl.textContent = msg; errEl.classList.add('show'); }
-    }
-
-    // Helper: close auth overlay after successful auth
-    function authPageEnterApp(loggedUser) {
-      localStorage.setItem('hsa_current_user', JSON.stringify(loggedUser));
-      hideAuthPage(() => {
-        checkSession();
-      });
-    }
-
-    // Submit login on auth page
     window.submitAuthPageLogin = function(e) {
       e.preventDefault();
       const username = document.getElementById('apLoginUser').value.trim();
