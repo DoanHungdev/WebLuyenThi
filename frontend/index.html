@@ -16915,7 +16915,7 @@
           return;
         }
 
-        const student = usersDb.find(u => u.username.toLowerCase() === username.toLowerCase());
+        const student = usersDb.find(u => u && u.username && typeof u.username === 'string' && u.username.toLowerCase() === username.toLowerCase());
         if (student && student.password === password) {
           localStorage.setItem('hsa_current_user', JSON.stringify(student));
           userEl.value = '';
@@ -16978,7 +16978,7 @@
 
       }
 
-      const duplicate = usersDb.find(u => u.username.toLowerCase() === username);
+      const duplicate = usersDb.find(u => u && u.username && typeof u.username === 'string' && u.username.toLowerCase() === username);
 
       if (duplicate) {
 
@@ -20660,7 +20660,7 @@ Tên đăng nhập: ${username}`);
           authPageEnterApp(adminUser);
           return true;
         }
-        const student = usersDb.find(u => u.username.toLowerCase() === username.toLowerCase());
+        const student = usersDb.find(u => u && u.username && typeof u.username === 'string' && u.username.toLowerCase() === username.toLowerCase());
         if (student && student.password === password) {
           localStorage.setItem('hsa_current_user', JSON.stringify(student));
           document.getElementById('apLoginUser').value = '';
@@ -20751,7 +20751,7 @@ Tên đăng nhập: ${username}`);
         authPageShowError('❌ Tên đăng nhập này đã được hệ thống đặt trước!');
         return;
       }
-      if (usersDb.find(u => u.username.toLowerCase() === username)) {
+      if (usersDb.find(u => u && u.username && typeof u.username === 'string' && u.username.toLowerCase() === username)) {
         authPageShowError('❌ Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác!');
         return;
       }
