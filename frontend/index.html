@@ -4244,7 +4244,67 @@
         text-decoration: underline;
       }
     }
-/* NEW Glassmorphic Auth Modal overlay & styles */
+
+    /* Social Login Buttons Container */
+    .auth-social-container {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+      margin-bottom: 18px;
+    }
+    .auth-social-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border: 1.5px solid var(--glass-border);
+      border-radius: 12px;
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .auth-social-btn:hover {
+      background-color: var(--bg-primary);
+      border-color: #ff6b00;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+    .auth-social-icon {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* Separator styling */
+    .auth-separator {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 18px;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+    }
+    .auth-separator::before,
+    .auth-separator::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background-color: var(--glass-border);
+    }
+    .auth-separator span {
+      padding: 0 10px;
+      margin: 0 !important;
+      font-size: 0.8rem !important;
+      opacity: 0.8;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    /* NEW Glassmorphic Auth Modal overlay & styles */
 
     .auth-modal-overlay {
 
@@ -6149,6 +6209,29 @@
           <form id="authPageSignupForm" onsubmit="submitAuthPageSignup(event)">
             <h1>Tạo Tài Khoản</h1>
             <span>Đăng ký thông tin học viên để bắt đầu học tập</span>
+            <!-- Social Buttons -->
+            <div class="auth-social-container">
+              <button type="button" class="auth-social-btn gg" onclick="handleSocialLogin('Google')">
+                <svg class="auth-social-icon" viewBox="0 0 24 24">
+                  <path fill="#EA4335" d="M12 5.04c1.66 0 3.2.57 4.38 1.69l3.27-3.27C17.68 1.54 14.98 1 12 1 7.35 1 3.37 3.67 1.39 7.56l3.85 2.99c.92-2.75 3.49-4.51 6.76-4.51z"/>
+                  <path fill="#4285F4" d="M23.49 12.27c0-.81-.07-1.59-.2-2.35H12v4.51h6.46c-.29 1.48-1.14 2.73-2.42 3.58v2.99h3.89c2.28-2.1 3.56-5.19 3.56-8.73z"/>
+                  <path fill="#FBBC05" d="M5.24 10.55c-.24-.72-.38-1.5-.38-2.3s.14-1.58.38-2.3L1.39 2.96C.5 4.77 0 6.83 0 9s.5 4.23 1.39 6.04l3.85-2.99c-.24-.72-.38-1.5-.38-2.3z"/>
+                  <path fill="#34A853" d="M12 23c3.24 0 5.97-1.07 7.96-2.91l-3.89-2.99c-1.08.72-2.47 1.15-4.07 1.15-3.27 0-5.84-1.76-6.76-4.51L1.39 16.73C3.37 20.33 7.35 23 12 23z"/>
+                </svg>
+                Google
+              </button>
+              <button type="button" class="auth-social-btn fb" onclick="handleSocialLogin('Facebook')">
+                <svg class="auth-social-icon" viewBox="0 0 24 24" fill="#1877F2">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+                Facebook
+              </button>
+            </div>
+            
+            <div class="auth-separator">
+              <span>hoặc đăng ký bằng tài khoản</span>
+            </div>
+
             
             <div class="auth-input-group">
               <input type="text" id="apSignupName" class="auth-input-field" placeholder="Họ và tên..." required>
@@ -6175,6 +6258,29 @@
           <form id="authPageLoginForm" onsubmit="submitAuthPageLogin(event)">
             <h1>Đăng Nhập</h1>
             <span>Chào mừng bạn quay trở lại với Skibidi Study</span>
+            <!-- Social Buttons -->
+            <div class="auth-social-container">
+              <button type="button" class="auth-social-btn gg" onclick="handleSocialLogin('Google')">
+                <svg class="auth-social-icon" viewBox="0 0 24 24">
+                  <path fill="#EA4335" d="M12 5.04c1.66 0 3.2.57 4.38 1.69l3.27-3.27C17.68 1.54 14.98 1 12 1 7.35 1 3.37 3.67 1.39 7.56l3.85 2.99c.92-2.75 3.49-4.51 6.76-4.51z"/>
+                  <path fill="#4285F4" d="M23.49 12.27c0-.81-.07-1.59-.2-2.35H12v4.51h6.46c-.29 1.48-1.14 2.73-2.42 3.58v2.99h3.89c2.28-2.1 3.56-5.19 3.56-8.73z"/>
+                  <path fill="#FBBC05" d="M5.24 10.55c-.24-.72-.38-1.5-.38-2.3s.14-1.58.38-2.3L1.39 2.96C.5 4.77 0 6.83 0 9s.5 4.23 1.39 6.04l3.85-2.99c-.24-.72-.38-1.5-.38-2.3z"/>
+                  <path fill="#34A853" d="M12 23c3.24 0 5.97-1.07 7.96-2.91l-3.89-2.99c-1.08.72-2.47 1.15-4.07 1.15-3.27 0-5.84-1.76-6.76-4.51L1.39 16.73C3.37 20.33 7.35 23 12 23z"/>
+                </svg>
+                Google
+              </button>
+              <button type="button" class="auth-social-btn fb" onclick="handleSocialLogin('Facebook')">
+                <svg class="auth-social-icon" viewBox="0 0 24 24" fill="#1877F2">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+                Facebook
+              </button>
+            </div>
+            
+            <div class="auth-separator">
+              <span>hoặc đăng nhập bằng tài khoản</span>
+            </div>
+
             
             <div class="auth-input-group">
               <input type="text" id="apLoginUser" class="auth-input-field" placeholder="Tên đăng nhập..." autocomplete="username" required>
@@ -20656,6 +20762,44 @@ Tên đăng nhập: ${username}`);
         btn.disabled = false;
         btn.textContent = '✅ TẠO TÀI KHOẢN';
       });
+    };
+
+    
+    // Xử lý Đăng nhập mạng xã hội (Google / Facebook)
+    window.handleSocialLogin = function(provider) {
+      const loggedUser = {
+        id: provider === 'Google' ? 888 : 999,
+        username: provider === 'Google' ? 'google_user' : 'facebook_user',
+        name: `Học viên ${provider}`,
+        fullname: `Học viên ${provider}`,
+        className: `Liên kết ${provider}`,
+        targetScore: '120',
+        role: 'student'
+      };
+      
+      // Lưu trữ tài khoản mô phỏng vào DB cục bộ
+      if (!usersDb.find(u => u.username === loggedUser.username)) {
+        usersDb.push(loggedUser);
+        localStorage.setItem('hsa_users_db', JSON.stringify(usersDb));
+      }
+      
+      // Hiển thị thông báo và đăng nhập
+      const errEl = document.getElementById('authPageError');
+      if (errEl) {
+        errEl.textContent = `✅ Đang kết nối Đăng nhập bằng tài khoản ${provider}...`;
+        errEl.classList.add('show');
+        errEl.style.background = 'rgba(46, 204, 113, 0.95)';
+        errEl.style.borderColor = 'rgba(46, 204, 113, 0.3)';
+      }
+      
+      setTimeout(() => {
+        if (errEl) {
+          errEl.classList.remove('show');
+          errEl.style.background = ''; // reset
+          errEl.style.borderColor = '';
+        }
+        authPageEnterApp(loggedUser);
+      }, 1000);
     };
 
     // --- SPA ROUTING & MODAL HELPER FUNCTIONS ---
