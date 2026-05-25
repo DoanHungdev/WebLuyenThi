@@ -17075,41 +17075,26 @@
     // Session Control Check
 
     function checkSession() {
-
       const savedUser = localStorage.getItem('hsa_current_user');
-
       const userProfilePanel = document.getElementById('userProfilePanel');
-
       const guestAuthBtn = document.getElementById('guestAuthBtn');
-
       const homeView = document.getElementById('homeView');
-
       const studentView = document.getElementById('studentView');
-
       const adminView = document.getElementById('adminView');
-
-      if (savedUser) {
-
-        try {
-
-          currentUser = JSON.parse(savedUser);
-
-        } catch (e) {
-
-          currentUser = null;
-
-        }
-
-      } else {
-
-        currentUser = null;
-
-      }
-
       const coursesView = document.getElementById('coursesView');
 
+      if (savedUser) {
+        try {
+          currentUser = JSON.parse(savedUser);
+        } catch (e) {
+          currentUser = null;
+        }
+      } else {
+        currentUser = null;
+      }
+
       if (currentUser) {
-        // Hide auth page overlay if visible
+        // Hide auth overlay if visible
         const av = document.getElementById('authView');
         if (av) av.style.display = 'none';
 
@@ -17118,19 +17103,35 @@
 
         document.getElementById('userBadgeName').textContent = currentUser.name;
 
+        // Show/hide Admin link and set metadata
+        const navAdmin = document.getElementById('navAdmin');
         if (currentUser.role === 'admin') {
           document.getElementById('userBadgeMeta').textContent = `Quyền: Quản trị viên`;
-          const navAdmin = document.getElementById('navAdmin');
           if (navAdmin) navAdmin.style.display = 'inline-block';
-          if (homeView) homeView.classList.remove('active');
-          if (studentView) studentView.classList.remove('active');
-          if (coursesView) coursesView.classList.remove('active');
-          if (adminView) adminView.classList.add('active');
-          switchAdminTab('students');
         } else {
           document.getElementById('userBadgeMeta').textContent = `Lớp: ${currentUser.className}`;
-          const navAdmin = document.getElementById('navAdmin');
           if (navAdmin) navAdmin.style.display = 'none';
+        }
+
+        // Navigate views dynamically (Admins see Home page by default after login/refresh!)
+        if (currentUser.role === 'admin') {
+          if (adminView && adminView.classList.contains('active')) {
+            if (homeView) homeView.classList.remove('active');
+            if (studentView) studentView.classList.remove('active');
+            if (coursesView) coursesView.classList.remove('active');
+          } else if (coursesView && coursesView.classList.contains('active')) {
+            if (homeView) homeView.classList.remove('active');
+            if (studentView) studentView.classList.remove('active');
+            if (adminView) adminView.classList.remove('active');
+          } else {
+            // Default active view is Homepage!
+            if (homeView) homeView.classList.add('active');
+            if (studentView) studentView.classList.remove('active');
+            if (adminView) adminView.classList.remove('active');
+            if (coursesView) coursesView.classList.remove('active');
+          }
+        } else {
+          // Student role view handling
           if (studentView && studentView.classList.contains('active')) {
             if (homeView) homeView.classList.remove('active');
             if (adminView) adminView.classList.remove('active');
@@ -17142,6 +17143,7 @@
             if (studentView) studentView.classList.remove('active');
             if (adminView) adminView.classList.remove('active');
           } else {
+            // Default active view is Homepage!
             if (homeView) homeView.classList.add('active');
             if (studentView) studentView.classList.remove('active');
             if (adminView) adminView.classList.remove('active');
@@ -17150,12 +17152,15 @@
         }
 
       } else {
-        // Not logged in — show home normally, guest can browse
+        // Not logged in – show home normally, guest can browse
         const av = document.getElementById('authView');
         if (av) av.style.display = 'none';
 
-        if (guestAuthBtn) guestAuthBtn.style.display = 'block'; const navAdmin = document.getElementById('navAdmin'); if (navAdmin) navAdmin.style.display = 'none';
+        if (guestAuthBtn) guestAuthBtn.style.display = 'block';
         if (userProfilePanel) userProfilePanel.style.display = 'none';
+        
+        const navAdmin = document.getElementById('navAdmin');
+        if (navAdmin) navAdmin.style.display = 'none';
 
         if (coursesView && coursesView.classList.contains('active')) {
           if (homeView) homeView.classList.remove('active');
@@ -17168,7 +17173,6 @@
           if (coursesView) coursesView.classList.remove('active');
         }
       }
-
     }
 
     // --- ADMIN MANAGEMENT VIEWS CONTROL ---
@@ -20649,23 +20653,40 @@ Tên đăng nhập: ${username}`);
       btn.disabled = true;
       btn.textContent = 'Đang kiểm tra...';
       const errEl = document.getElementById('authPageError');
-      if (errEl) errEl.classList.remove('show');
+      if (errEl) {
+        errEl.classList.remove('show');
+        errEl.style.background = ''; // reset styles
+        errEl.style.borderColor = '';
+      }
+
+      // Reset button style
+      btn.style.background = '';
+      btn.style.boxShadow = '';
 
       const handleLocalLogin = () => {
+        const onSuccess = (user) => {
+          authPageShowSuccess('🎉 Đăng nhập thành công! Đang tải trang chủ...');
+          btn.textContent = '🎉 ĐĂNG NHẬP THÀNH CÔNG!';
+          btn.style.background = 'linear-gradient(135deg, #2ecc71 0%, #27ae60 100%)';
+          btn.style.boxShadow = '0 6px 20px rgba(46, 204, 113, 0.35)';
+          
+          setTimeout(() => {
+            document.getElementById('apLoginUser').value = '';
+            document.getElementById('apLoginPass').value = '';
+            authPageEnterApp(user);
+          }, 1200); // 1.2s delay to show gorgeous success effects
+        };
+
         if (username.toLowerCase() === 'admin' && password === 'admin2026') {
           const adminUser = { username: 'admin', name: 'Quản trị viên', className: 'Hệ thống', targetScore: '150', role: 'admin' };
           localStorage.setItem('hsa_current_user', JSON.stringify(adminUser));
-          document.getElementById('apLoginUser').value = '';
-          document.getElementById('apLoginPass').value = '';
-          authPageEnterApp(adminUser);
+          onSuccess(adminUser);
           return true;
         }
         const student = usersDb.find(u => u && u.username && typeof u.username === 'string' && u.username.toLowerCase() === username.toLowerCase());
         if (student && student.password === password) {
           localStorage.setItem('hsa_current_user', JSON.stringify(student));
-          document.getElementById('apLoginUser').value = '';
-          document.getElementById('apLoginPass').value = '';
-          authPageEnterApp(student);
+          onSuccess(student);
           return true;
         }
         authPageShowError('❌ Sai tên đăng nhập hoặc mật khẩu. Vui lòng thử lại.');
@@ -20677,14 +20698,13 @@ Tên đăng nhập: ${username}`);
       const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       
       if (!isLocalhost) {
-        // Bypass fetch on production/live site to prevent Mixed Content block or hangs
+        // Bypass fetch on production/live site
         setTimeout(() => {
           handleLocalLogin();
-        }, 600); // 600ms simulated delay for modern premium feel
+        }, 600);
         return;
       }
 
-      // Try server login
       try {
         fetch(`${API_BASE}/api/auth/login`, {
           method: 'POST',
@@ -20710,17 +20730,24 @@ Tên đăng nhập: ${username}`);
             password: user.password || ''
           };
           localStorage.setItem('hsa_current_user', JSON.stringify(loggedUser));
-          document.getElementById('apLoginUser').value = '';
-          document.getElementById('apLoginPass').value = '';
-          authPageEnterApp(loggedUser);
+          
+          authPageShowSuccess('🎉 Đăng nhập thành công! Đang tải trang chủ...');
+          btn.textContent = '🎉 ĐĂNG NHẬP THÀNH CÔNG!';
+          btn.style.background = 'linear-gradient(135deg, #2ecc71 0%, #27ae60 100%)';
+          btn.style.boxShadow = '0 6px 20px rgba(46, 204, 113, 0.35)';
+          
+          setTimeout(() => {
+            document.getElementById('apLoginUser').value = '';
+            document.getElementById('apLoginPass').value = '';
+            authPageEnterApp(loggedUser);
+          }, 1200);
         })
         .catch(err => {
           console.warn('Backend offline, falling back to local:', err.message);
           handleLocalLogin();
         })
         .finally(() => {
-          btn.disabled = false;
-          btn.textContent = '🚀 ĐĂNG NHẬP';
+          // If failed, finally will run but button text was already reset in handleLocalLogin
         });
       } catch (err) {
         console.warn('Synchronous fetch failure, falling back to local:', err.message);
@@ -20759,28 +20786,41 @@ Tên đăng nhập: ${username}`);
       const btn = document.getElementById('apSignupBtn');
       btn.disabled = true;
       btn.textContent = 'Đang tạo tài khoản...';
+      const errEl = document.getElementById('authPageError');
+      if (errEl) {
+        errEl.classList.remove('show');
+        errEl.style.background = '';
+        errEl.style.borderColor = '';
+      }
+      btn.style.background = '';
+      btn.style.boxShadow = '';
 
       const handleLocalSignup = () => {
         const newUser = { id: Date.now(), username, name, fullname: name, className, targetScore: '120', password, role: 'student' };
         usersDb.push(newUser);
         localStorage.setItem('hsa_users_db', JSON.stringify(usersDb));
         localStorage.setItem('hsa_current_user', JSON.stringify(newUser));
-        document.getElementById('apSignupName').value = '';
-        document.getElementById('apSignupUser').value = '';
-        document.getElementById('apSignupPass').value = '';
-        document.getElementById('apSignupClass').value = '';
-        authPageEnterApp(newUser);
-        btn.disabled = false;
-        btn.textContent = '✅ TẠO TÀI KHOẢN';
+        
+        authPageShowSuccess('🎉 Đăng ký thành công! Đang chuyển hướng...');
+        btn.textContent = '🎉 ĐĂNG KÝ THÀNH CÔNG!';
+        btn.style.background = 'linear-gradient(135deg, #2ecc71 0%, #27ae60 100%)';
+        btn.style.boxShadow = '0 6px 20px rgba(46, 204, 113, 0.35)';
+
+        setTimeout(() => {
+          document.getElementById('apSignupName').value = '';
+          document.getElementById('apSignupUser').value = '';
+          document.getElementById('apSignupPass').value = '';
+          document.getElementById('apSignupClass').value = '';
+          authPageEnterApp(newUser);
+        }, 1200);
       };
 
       const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       
       if (!isLocalhost) {
-        // Bypass server on live site
         setTimeout(() => {
           handleLocalSignup();
-        }, 800); // 800ms premium simulation delay
+        }, 800);
         return;
       }
 
@@ -20796,19 +20836,25 @@ Tên đăng nhập: ${username}`);
           usersDb.push(newUser);
           localStorage.setItem('hsa_users_db', JSON.stringify(usersDb));
           localStorage.setItem('hsa_current_user', JSON.stringify(newUser));
-          document.getElementById('apSignupName').value = '';
-          document.getElementById('apSignupUser').value = '';
-          document.getElementById('apSignupPass').value = '';
-          document.getElementById('apSignupClass').value = '';
-          authPageEnterApp(newUser);
+          
+          authPageShowSuccess('🎉 Đăng ký thành công! Đang chuyển hướng...');
+          btn.textContent = '🎉 ĐĂNG KÝ THÀNH CÔNG!';
+          btn.style.background = 'linear-gradient(135deg, #2ecc71 0%, #27ae60 100%)';
+          btn.style.boxShadow = '0 6px 20px rgba(46, 204, 113, 0.35)';
+          
+          setTimeout(() => {
+            document.getElementById('apSignupName').value = '';
+            document.getElementById('apSignupUser').value = '';
+            document.getElementById('apSignupPass').value = '';
+            document.getElementById('apSignupClass').value = '';
+            authPageEnterApp(newUser);
+          }, 1200);
         })
         .catch((err) => {
           console.warn('Backend offline, registering locally:', err.message);
           handleLocalSignup();
         })
         .finally(() => {
-          btn.disabled = false;
-          btn.textContent = '✅ TẠO TÀI KHOẢN';
         });
       } catch (err) {
         console.warn('Synchronous fetch failure, registering locally:', err.message);
@@ -20816,6 +20862,43 @@ Tên đăng nhập: ${username}`);
       }
     };
 
+    // Xử lý Đăng nhập mạng xã hội (Google / Facebook)
+    window.handleSocialLogin = function(provider) {
+      const loggedUser = {
+        id: provider === 'Google' ? 888 : 999,
+        username: provider === 'Google' ? 'google_user' : 'facebook_user',
+        name: `Học viên ${provider}`,
+        fullname: `Học viên ${provider}`,
+        className: `Liên kết ${provider}`,
+        targetScore: '120',
+        role: 'student'
+      };
+      
+      // Lưu trữ tài khoản mô phỏng vào DB cục bộ
+      if (!usersDb.find(u => u && u.username === loggedUser.username)) {
+        usersDb.push(loggedUser);
+        localStorage.setItem('hsa_users_db', JSON.stringify(usersDb));
+      }
+      
+      // Gorgeous green alerts and animations
+      authPageShowSuccess(`🎉 Liên kết Đăng nhập ${provider} thành công!`);
+      const activeBtnClass = provider === 'Google' ? 'gg' : 'fb';
+      const activeBtn = document.querySelector(`.auth-social-btn.${activeBtnClass}`);
+      if (activeBtn) {
+        activeBtn.style.background = 'linear-gradient(135deg, #2ecc71 0%, #27ae60 100%)';
+        activeBtn.style.color = '#fff';
+        activeBtn.style.borderColor = '#2ecc71';
+      }
+      
+      setTimeout(() => {
+        if (activeBtn) {
+          activeBtn.style.background = '';
+          activeBtn.style.color = '';
+          activeBtn.style.borderColor = '';
+        }
+        authPageEnterApp(loggedUser);
+      }, 1200);
+    };
     // --- SPA ROUTING & MODAL HELPER FUNCTIONS ---
 
     window.openAuthModal = function(defaultTab) {
