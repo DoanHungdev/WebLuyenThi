@@ -17154,7 +17154,7 @@
         const av = document.getElementById('authView');
         if (av) av.style.display = 'none';
 
-        if (guestAuthBtn) const navAdmin = document.getElementById('navAdmin'); if (navAdmin) navAdmin.style.display = 'none'; guestAuthBtn.style.display = 'block';
+        if (guestAuthBtn) guestAuthBtn.style.display = 'block'; const navAdmin = document.getElementById('navAdmin'); if (navAdmin) navAdmin.style.display = 'none';
         if (userProfilePanel) userProfilePanel.style.display = 'none';
 
         if (coursesView && coursesView.classList.contains('active')) {
