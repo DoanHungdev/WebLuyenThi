@@ -3880,6 +3880,284 @@
 
     }
 
+    /* ===== FULL-SCREEN AUTH PAGE ===== */
+    #authView {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      opacity: 1;
+      transition: opacity 0.4s ease;
+    }
+    #authView.hiding {
+      opacity: 0;
+      pointer-events: none;
+    }
+    /* Left panel — branding / illustration */
+    .auth-panel-left {
+      flex: 1.1;
+      background: linear-gradient(145deg, #ff6b00 0%, #ff8c42 40%, #ffad6a 75%, #ffd49e 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 3rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .auth-panel-left::before {
+      content: '';
+      position: absolute;
+      width: 380px; height: 380px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+      top: -100px; left: -100px;
+    }
+    .auth-panel-left::after {
+      content: '';
+      position: absolute;
+      width: 280px; height: 280px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      bottom: -80px; right: -60px;
+    }
+    .auth-brand-logo {
+      width: 80px; height: 80px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.25);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255,255,255,0.4);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem;
+      margin-bottom: 1.75rem;
+      box-shadow: 0 8px 32px rgba(255,100,0,0.3);
+      position: relative; z-index: 1;
+    }
+    .auth-brand-title {
+      font-family: var(--font-primary);
+      font-size: 2rem;
+      font-weight: 900;
+      color: #fff;
+      text-align: center;
+      line-height: 1.2;
+      margin-bottom: 0.75rem;
+      text-shadow: 0 2px 16px rgba(180,60,0,0.2);
+      position: relative; z-index: 1;
+    }
+    .auth-brand-subtitle {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.88);
+      text-align: center;
+      line-height: 1.6;
+      max-width: 320px;
+      position: relative; z-index: 1;
+    }
+    .auth-brand-features {
+      margin-top: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      position: relative; z-index: 1;
+    }
+    .auth-brand-feature {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 12px;
+      padding: 0.65rem 1rem;
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 600;
+      backdrop-filter: blur(6px);
+    }
+    .auth-brand-feature span:first-child { font-size: 1.2rem; }
+
+    /* Right panel — form */
+    .auth-panel-right {
+      flex: 1;
+      background: var(--bg-primary);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 3rem 2.5rem;
+      overflow-y: auto;
+    }
+    .auth-form-container {
+      width: 100%;
+      max-width: 400px;
+    }
+    .auth-form-header {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    .auth-form-header h2 {
+      font-family: var(--font-primary);
+      font-size: 1.75rem;
+      font-weight: 900;
+      color: var(--text-primary);
+      margin-bottom: 0.4rem;
+    }
+    .auth-form-header p {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+    }
+    /* Tab switcher on right panel */
+    .auth-form-tabs {
+      display: flex;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 1.75rem;
+      gap: 4px;
+    }
+    .auth-form-tab {
+      flex: 1;
+      padding: 0.65rem;
+      border: none;
+      border-radius: 9px;
+      font-family: var(--font-primary);
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-secondary);
+      transition: all 0.25s ease;
+    }
+    .auth-form-tab.active {
+      background: linear-gradient(135deg, #ff6b00, #ff8c42);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(255,107,0,0.35);
+    }
+    /* Input group */
+    .auth-input-group {
+      margin-bottom: 1rem;
+    }
+    .auth-input-label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    .auth-input-wrap {
+      position: relative;
+    }
+    .auth-input-wrap .auth-input-icon {
+      position: absolute;
+      left: 0.95rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1rem;
+      opacity: 0.55;
+      pointer-events: none;
+    }
+    .auth-input-field {
+      width: 100%;
+      padding: 0.78rem 1rem 0.78rem 2.7rem;
+      border: 1.5px solid var(--glass-border);
+      border-radius: 12px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-family: var(--font-primary);
+      font-size: 0.93rem;
+      outline: none;
+      transition: all 0.25s ease;
+      box-sizing: border-box;
+    }
+    .auth-input-field:focus {
+      border-color: #ff6b00;
+      box-shadow: 0 0 0 3px rgba(255,107,0,0.15);
+      background: var(--bg-primary);
+    }
+    .auth-submit-btn {
+      width: 100%;
+      padding: 0.9rem;
+      background: linear-gradient(135deg, #ff6b00 0%, #ff8c42 100%);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-family: var(--font-primary);
+      font-weight: 800;
+      font-size: 0.95rem;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 20px rgba(255,107,0,0.35);
+    }
+    .auth-submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(255,107,0,0.45);
+    }
+    .auth-submit-btn:active { transform: translateY(0); }
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin: 1.25rem 0;
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+    }
+    .auth-divider::before, .auth-divider::after {
+      content: ''; flex: 1;
+      height: 1px;
+      background: var(--glass-border);
+    }
+    .auth-switch-text {
+      text-align: center;
+      font-size: 0.83rem;
+      color: var(--text-secondary);
+      margin-top: 1.25rem;
+    }
+    .auth-switch-text a {
+      color: #ff6b00;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .auth-switch-text a:hover { text-decoration: underline; }
+    /* Error message */
+    .auth-error-msg {
+      background: rgba(231,76,60,0.1);
+      border: 1px solid rgba(231,76,60,0.3);
+      color: #e74c3c;
+      border-radius: 10px;
+      padding: 0.65rem 0.9rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .auth-error-msg.show { display: block; }
+    /* Floating animated circles on left panel */
+    @keyframes authFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-18px) rotate(8deg); }
+    }
+    .auth-float-shape {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      animation: authFloat 6s ease-in-out infinite;
+    }
+    /* Right-to-left slide animation for forms */
+    @keyframes slideInForm {
+      from { opacity: 0; transform: translateX(20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .auth-form-slide { animation: slideInForm 0.3s ease forwards; }
+
+    /* Responsive: Stack on mobile */
+    @media (max-width: 768px) {
+      .auth-panel-left { display: none; }
+      .auth-panel-right { padding: 2rem 1.5rem; }
+    }
+
     /* NEW Glassmorphic Auth Modal overlay & styles */
 
     .auth-modal-overlay {
@@ -5770,8 +6048,122 @@
 
     </div>
 
-    <!-- VIEW 0: SKIBIDI LANDING HOMEPAGE -->
+    <!-- ===== FULL-SCREEN AUTH PAGE (displayed before entering the app) ===== -->
+    <div id="authView">
+      <!-- Left branding panel -->
+      <div class="auth-panel-left">
+        <!-- Floating decorative shapes -->
+        <div class="auth-float-shape" style="width:120px;height:120px;top:15%;left:10%;animation-delay:0s;"></div>
+        <div class="auth-float-shape" style="width:70px;height:70px;top:55%;left:5%;animation-delay:2s;animation-duration:8s;"></div>
+        <div class="auth-float-shape" style="width:90px;height:90px;top:25%;right:8%;animation-delay:1s;animation-duration:7s;"></div>
 
+        <div class="auth-brand-logo">🎓</div>
+        <div class="auth-brand-title">SKIBIDI STUDY<br>2026</div>
+        <div class="auth-brand-subtitle">Hệ thống luyện thi ĐGNL HSA &amp; ĐGTD TSA toàn diện — cá nhân hóa lộ trình học tập cho từng học sinh.</div>
+
+        <div class="auth-brand-features">
+          <div class="auth-brand-feature">
+            <span>📊</span>
+            <span>Lộ trình HSA &amp; TSA bài bản, chuẩn hóa</span>
+          </div>
+          <div class="auth-brand-feature">
+            <span>📝</span>
+            <span>Kho đề thi thử &amp; chấm điểm tự động</span>
+          </div>
+          <div class="auth-brand-feature">
+            <span>📈</span>
+            <span>Theo dõi tiến độ học tập thông minh</span>
+          </div>
+          <div class="auth-brand-feature">
+            <span>🏆</span>
+            <span>Video bài giảng từ chuyên gia hàng đầu</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right form panel -->
+      <div class="auth-panel-right">
+        <div class="auth-form-container">
+
+          <!-- Header -->
+          <div class="auth-form-header">
+            <h2 id="authPageTitle">Chào mừng trở lại! 👋</h2>
+            <p id="authPageSubtitle">Đăng nhập để tiếp tục lộ trình học tập của bạn</p>
+          </div>
+
+          <!-- Tab switcher -->
+          <div class="auth-form-tabs">
+            <button class="auth-form-tab active" id="authPageTabLogin" onclick="switchAuthPageTab('login')">Đăng nhập</button>
+            <button class="auth-form-tab" id="authPageTabSignup" onclick="switchAuthPageTab('signup')">Đăng ký</button>
+          </div>
+
+          <!-- Error message -->
+          <div class="auth-error-msg" id="authPageError"></div>
+
+          <!-- LOGIN FORM -->
+          <form id="authPageLoginForm" onsubmit="submitAuthPageLogin(event)" class="auth-form-slide">
+            <div class="auth-input-group">
+              <label class="auth-input-label" for="apLoginUser">Tên đăng nhập</label>
+              <div class="auth-input-wrap">
+                <span class="auth-input-icon">👤</span>
+                <input type="text" id="apLoginUser" class="auth-input-field" placeholder="Nhập tên đăng nhập..." autocomplete="username" required>
+              </div>
+            </div>
+            <div class="auth-input-group">
+              <label class="auth-input-label" for="apLoginPass">Mật khẩu</label>
+              <div class="auth-input-wrap">
+                <span class="auth-input-icon">🔒</span>
+                <input type="password" id="apLoginPass" class="auth-input-field" placeholder="Nhập mật khẩu..." autocomplete="current-password" required>
+              </div>
+            </div>
+            <button type="submit" class="auth-submit-btn" id="apLoginBtn">🚀 ĐĂNG NHẬP</button>
+            <div class="auth-switch-text">
+              Chưa có tài khoản? <a onclick="switchAuthPageTab('signup')">Đăng ký ngay</a>
+            </div>
+          </form>
+
+          <!-- SIGNUP FORM -->
+          <form id="authPageSignupForm" onsubmit="submitAuthPageSignup(event)" class="auth-form-slide" style="display:none;">
+            <div class="auth-input-group">
+              <label class="auth-input-label" for="apSignupName">Họ và Tên</label>
+              <div class="auth-input-wrap">
+                <span class="auth-input-icon">✏️</span>
+                <input type="text" id="apSignupName" class="auth-input-field" placeholder="Nguyễn Văn A..." required>
+              </div>
+            </div>
+            <div class="auth-input-group">
+              <label class="auth-input-label" for="apSignupUser">Tên đăng nhập</label>
+              <div class="auth-input-wrap">
+                <span class="auth-input-icon">👤</span>
+                <input type="text" id="apSignupUser" class="auth-input-field" placeholder="nguyenvana (không dấu, liền)" autocomplete="username" required>
+              </div>
+            </div>
+            <div class="auth-input-group">
+              <label class="auth-input-label" for="apSignupPass">Mật khẩu</label>
+              <div class="auth-input-wrap">
+                <span class="auth-input-icon">🔒</span>
+                <input type="password" id="apSignupPass" class="auth-input-field" placeholder="Tối thiểu 6 ký tự..." autocomplete="new-password" required>
+              </div>
+            </div>
+            <div class="auth-input-group">
+              <label class="auth-input-label" for="apSignupClass">Lớp / Trường</label>
+              <div class="auth-input-wrap">
+                <span class="auth-input-icon">🏫</span>
+                <input type="text" id="apSignupClass" class="auth-input-field" placeholder="12A1 - THPT Chuyên..." required>
+              </div>
+            </div>
+            <button type="submit" class="auth-submit-btn" id="apSignupBtn">✅ TẠO TÀI KHOẢN</button>
+            <div class="auth-switch-text">
+              Đã có tài khoản? <a onclick="switchAuthPageTab('login')">Đăng nhập</a>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+    <!-- ===== END AUTH PAGE ===== -->
+
+    <!-- VIEW 0: SKIBIDI LANDING HOMEPAGE -->
     <div id="homeView" class="view-section active">
 
       <!-- HERO BANNER -->
@@ -16495,39 +16887,27 @@
     };
 
     // Auth: Logout
-
     window.handleLogout = function () {
-
       localStorage.removeItem('hsa_current_user');
-
       currentUser = null;
-
       progressState = {};
-
       tsaProgressState = {};
-
       examsProgressState = {};
 
-      // Return to homepage active
-
       const homeView = document.getElementById('homeView');
-
       const studentView = document.getElementById('studentView');
-
       const adminView = document.getElementById('adminView');
-
       const coursesView = document.getElementById('coursesView');
 
-      if (homeView) homeView.classList.add('active');
-
+      if (homeView) homeView.classList.remove('active');
       if (studentView) studentView.classList.remove('active');
-
       if (adminView) adminView.classList.remove('active');
-
       if (coursesView) coursesView.classList.remove('active');
 
-      checkSession();
-
+      // Reset auth page to login tab and show it
+      switchAuthPageTab('login');
+      showAuthPage();
+      history.pushState(null, '', '#');
     };
 
     // Session Control Check
@@ -16567,6 +16947,9 @@
       const coursesView = document.getElementById('coursesView');
 
       if (currentUser) {
+        // Hide auth page if visible
+        const av = document.getElementById('authView');
+        if (av) av.style.display = 'none';
 
         if (guestAuthBtn) guestAuthBtn.style.display = 'none';
 
@@ -16627,31 +17010,18 @@
         }
 
       } else {
-
-        if (guestAuthBtn) guestAuthBtn.style.display = 'block';
-
+        // ---- NOT LOGGED IN: Show full-screen auth page ----
+        if (guestAuthBtn) guestAuthBtn.style.display = 'none';
         if (userProfilePanel) userProfilePanel.style.display = 'none';
 
-        if (coursesView && coursesView.classList.contains('active')) {
+        // Hide all main views
+        if (homeView) homeView.classList.remove('active');
+        if (studentView) studentView.classList.remove('active');
+        if (adminView) adminView.classList.remove('active');
+        if (coursesView) coursesView.classList.remove('active');
 
-          if (homeView) homeView.classList.remove('active');
-
-          if (studentView) studentView.classList.remove('active');
-
-          if (adminView) adminView.classList.remove('active');
-
-        } else {
-
-          if (homeView) homeView.classList.add('active');
-
-          if (studentView) studentView.classList.remove('active');
-
-          if (adminView) adminView.classList.remove('active');
-
-          if (coursesView) coursesView.classList.remove('active');
-
-        }
-
+        // Show auth page
+        showAuthPage();
       }
 
     }
@@ -20089,6 +20459,214 @@ Tên đăng nhập: ${username}`);
       });
 
     });
+
+    // ===== FULL-SCREEN AUTH PAGE FUNCTIONS =====
+
+    // Show/hide auth page
+    function showAuthPage() {
+      const av = document.getElementById('authView');
+      if (av) { av.style.display = 'flex'; av.classList.remove('hiding'); }
+    }
+
+    function hideAuthPage(callback) {
+      const av = document.getElementById('authView');
+      if (!av) { if (callback) callback(); return; }
+      av.classList.add('hiding');
+      setTimeout(() => {
+        av.style.display = 'none';
+        if (callback) callback();
+      }, 380);
+    }
+
+    // Tab switcher on auth page
+    window.switchAuthPageTab = function(tab) {
+      const loginForm = document.getElementById('authPageLoginForm');
+      const signupForm = document.getElementById('authPageSignupForm');
+      const tabLogin = document.getElementById('authPageTabLogin');
+      const tabSignup = document.getElementById('authPageTabSignup');
+      const title = document.getElementById('authPageTitle');
+      const subtitle = document.getElementById('authPageSubtitle');
+      const errEl = document.getElementById('authPageError');
+      if (errEl) { errEl.classList.remove('show'); errEl.textContent = ''; }
+
+      if (tab === 'login') {
+        loginForm.style.display = 'block';
+        signupForm.style.display = 'none';
+        tabLogin.classList.add('active');
+        tabSignup.classList.remove('active');
+        title.textContent = 'Chào mừng trở lại! 👋';
+        subtitle.textContent = 'Đăng nhập để tiếp tục lộ trình học tập của bạn';
+      } else {
+        loginForm.style.display = 'none';
+        signupForm.style.display = 'block';
+        tabLogin.classList.remove('active');
+        tabSignup.classList.add('active');
+        title.textContent = 'Tạo tài khoản mới 🎉';
+        subtitle.textContent = 'Bắt đầu hành trình chinh phục ĐGNL & ĐGTD';
+      }
+    };
+
+    // Helper: show error on auth page
+    function authPageShowError(msg) {
+      const errEl = document.getElementById('authPageError');
+      if (errEl) { errEl.textContent = msg; errEl.classList.add('show'); }
+    }
+
+    // Helper: enter app after successful auth
+    function authPageEnterApp(loggedUser) {
+      hideAuthPage(() => {
+        const homeView = document.getElementById('homeView');
+        const adminView = document.getElementById('adminView');
+        const studentView = document.getElementById('studentView');
+        const coursesView = document.getElementById('coursesView');
+        if (loggedUser.role === 'admin') {
+          if (homeView) homeView.classList.remove('active');
+          if (coursesView) coursesView.classList.remove('active');
+          if (studentView) studentView.classList.remove('active');
+          if (adminView) adminView.classList.add('active');
+          history.pushState(null, '', '#admin');
+        } else {
+          if (homeView) homeView.classList.add('active');
+          if (coursesView) coursesView.classList.remove('active');
+          if (studentView) studentView.classList.remove('active');
+          if (adminView) adminView.classList.remove('active');
+          history.pushState(null, '', '#home');
+        }
+        checkSession();
+      });
+    }
+
+    // Submit login on auth page
+    window.submitAuthPageLogin = function(e) {
+      e.preventDefault();
+      const username = document.getElementById('apLoginUser').value.trim();
+      const password = document.getElementById('apLoginPass').value.trim();
+      if (!username || !password) return;
+
+      const btn = document.getElementById('apLoginBtn');
+      btn.disabled = true;
+      btn.textContent = 'Đang kiểm tra...';
+      const errEl = document.getElementById('authPageError');
+      if (errEl) errEl.classList.remove('show');
+
+      fetch(`${API_BASE}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      })
+      .then(async res => {
+        if (!res.ok) {
+          const d = await res.json();
+          throw new Error(d.error || 'Tài khoản hoặc mật khẩu không chính xác.');
+        }
+        return res.json();
+      })
+      .then(resData => {
+        const user = resData.user;
+        const loggedUser = {
+          id: user.id,
+          username: user.username,
+          name: user.fullname,
+          className: user.role === 'admin' ? 'Hệ thống' : 'Học viên',
+          targetScore: user.role === 'admin' ? '150' : '120',
+          role: user.role,
+          password: user.password || ''
+        };
+        localStorage.setItem('hsa_current_user', JSON.stringify(loggedUser));
+        document.getElementById('apLoginUser').value = '';
+        document.getElementById('apLoginPass').value = '';
+        authPageEnterApp(loggedUser);
+      })
+      .catch(err => {
+        console.warn('Backend offline, falling back to local:', err.message);
+        // Local fallback
+        if (username.toLowerCase() === 'admin' && password === 'admin2026') {
+          const adminUser = { username: 'admin', name: 'Quản trị viên', className: 'Hệ thống', targetScore: '150', role: 'admin' };
+          localStorage.setItem('hsa_current_user', JSON.stringify(adminUser));
+          document.getElementById('apLoginUser').value = '';
+          document.getElementById('apLoginPass').value = '';
+          authPageEnterApp(adminUser);
+          return;
+        }
+        const student = usersDb.find(u => u.username.toLowerCase() === username.toLowerCase());
+        if (student && student.password === password) {
+          localStorage.setItem('hsa_current_user', JSON.stringify(student));
+          document.getElementById('apLoginUser').value = '';
+          document.getElementById('apLoginPass').value = '';
+          authPageEnterApp(student);
+        } else {
+          authPageShowError('❌ Sai tên đăng nhập hoặc mật khẩu. Vui lòng thử lại.');
+        }
+      })
+      .finally(() => {
+        btn.disabled = false;
+        btn.textContent = '🚀 ĐĂNG NHẬP';
+      });
+    };
+
+    // Submit signup on auth page
+    window.submitAuthPageSignup = function(e) {
+      e.preventDefault();
+      const name = document.getElementById('apSignupName').value.trim();
+      const username = document.getElementById('apSignupUser').value.trim().toLowerCase();
+      const password = document.getElementById('apSignupPass').value.trim();
+      const className = document.getElementById('apSignupClass').value.trim();
+
+      if (!name || !username || !password || !className) return;
+
+      const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
+      if (!usernameRegex.test(username)) {
+        authPageShowError('❌ Tên đăng nhập chỉ chứa chữ, số, gạch dưới, từ 3–20 ký tự!');
+        return;
+      }
+      if (password.length < 6) {
+        authPageShowError('❌ Mật khẩu tối thiểu 6 ký tự!');
+        return;
+      }
+      if (username === 'admin') {
+        authPageShowError('❌ Tên đăng nhập này đã được hệ thống đặt trước!');
+        return;
+      }
+      if (usersDb.find(u => u.username.toLowerCase() === username)) {
+        authPageShowError('❌ Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác!');
+        return;
+      }
+
+      const btn = document.getElementById('apSignupBtn');
+      btn.disabled = true;
+      btn.textContent = 'Đang tạo tài khoản...';
+
+      // Try server register
+      fetch(`${API_BASE}/api/students`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password, fullname: name })
+      })
+      .then(r => r.json())
+      .then(data => {
+        const newUser = { id: data.studentId || null, username, name, fullname: name, className, targetScore: '', password, role: 'student' };
+        usersDb.push(newUser);
+        localStorage.setItem('hsa_users_db', JSON.stringify(usersDb));
+        localStorage.setItem('hsa_current_user', JSON.stringify(newUser));
+        document.getElementById('apSignupName').value = '';
+        document.getElementById('apSignupUser').value = '';
+        document.getElementById('apSignupPass').value = '';
+        document.getElementById('apSignupClass').value = '';
+        authPageEnterApp(newUser);
+      })
+      .catch(() => {
+        // Offline fallback
+        const newUser = { id: null, username, name, fullname: name, className, targetScore: '', password, role: 'student' };
+        usersDb.push(newUser);
+        localStorage.setItem('hsa_users_db', JSON.stringify(usersDb));
+        localStorage.setItem('hsa_current_user', JSON.stringify(newUser));
+        authPageEnterApp(newUser);
+      })
+      .finally(() => {
+        btn.disabled = false;
+        btn.textContent = '✅ TẠO TÀI KHOẢN';
+      });
+    };
 
     // --- SPA ROUTING & MODAL HELPER FUNCTIONS ---
 
