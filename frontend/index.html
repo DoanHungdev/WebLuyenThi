@@ -20645,44 +20645,14 @@ Tên đăng nhập: ${username}`);
       const errEl = document.getElementById('authPageError');
       if (errEl) errEl.classList.remove('show');
 
-      fetch(`${API_BASE}/api/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-      })
-      .then(async res => {
-        if (!res.ok) {
-          const d = await res.json();
-          throw new Error(d.error || 'Tài khoản hoặc mật khẩu không chính xác.');
-        }
-        return res.json();
-      })
-      .then(resData => {
-        const user = resData.user;
-        const loggedUser = {
-          id: user.id,
-          username: user.username,
-          name: user.fullname,
-          className: user.role === 'admin' ? 'Hệ thống' : 'Học viên',
-          targetScore: user.role === 'admin' ? '150' : '120',
-          role: user.role,
-          password: user.password || ''
-        };
-        localStorage.setItem('hsa_current_user', JSON.stringify(loggedUser));
-        document.getElementById('apLoginUser').value = '';
-        document.getElementById('apLoginPass').value = '';
-        authPageEnterApp(loggedUser);
-      })
-      .catch(err => {
-        console.warn('Backend offline, falling back to local:', err.message);
-        // Local fallback
+      const handleLocalLogin = () => {
         if (username.toLowerCase() === 'admin' && password === 'admin2026') {
           const adminUser = { username: 'admin', name: 'Quản trị viên', className: 'Hệ thống', targetScore: '150', role: 'admin' };
           localStorage.setItem('hsa_current_user', JSON.stringify(adminUser));
           document.getElementById('apLoginUser').value = '';
           document.getElementById('apLoginPass').value = '';
           authPageEnterApp(adminUser);
-          return;
+          return true;
         }
         const student = usersDb.find(u => u.username.toLowerCase() === username.toLowerCase());
         if (student && student.password === password) {
@@ -20690,14 +20660,66 @@ Tên đăng nhập: ${username}`);
           document.getElementById('apLoginUser').value = '';
           document.getElementById('apLoginPass').value = '';
           authPageEnterApp(student);
-        } else {
-          authPageShowError('❌ Sai tên đăng nhập hoặc mật khẩu. Vui lòng thử lại.');
+          return true;
         }
-      })
-      .finally(() => {
+        authPageShowError('❌ Sai tên đăng nhập hoặc mật khẩu. Vui lòng thử lại.');
         btn.disabled = false;
         btn.textContent = '🚀 ĐĂNG NHẬP';
-      });
+        return false;
+      };
+
+      const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      
+      if (!isLocalhost) {
+        // Bypass fetch on production/live site to prevent Mixed Content block or hangs
+        setTimeout(() => {
+          handleLocalLogin();
+        }, 600); // 600ms simulated delay for modern premium feel
+        return;
+      }
+
+      // Try server login
+      try {
+        fetch(`${API_BASE}/api/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        })
+        .then(async res => {
+          if (!res.ok) {
+            const d = await res.json();
+            throw new Error(d.error || 'Tài khoản hoặc mật khẩu không chính xác.');
+          }
+          return res.json();
+        })
+        .then(resData => {
+          const user = resData.user;
+          const loggedUser = {
+            id: user.id,
+            username: user.username,
+            name: user.fullname,
+            className: user.role === 'admin' ? 'Hệ thống' : 'Học viên',
+            targetScore: user.role === 'admin' ? '150' : '120',
+            role: user.role,
+            password: user.password || ''
+          };
+          localStorage.setItem('hsa_current_user', JSON.stringify(loggedUser));
+          document.getElementById('apLoginUser').value = '';
+          document.getElementById('apLoginPass').value = '';
+          authPageEnterApp(loggedUser);
+        })
+        .catch(err => {
+          console.warn('Backend offline, falling back to local:', err.message);
+          handleLocalLogin();
+        })
+        .finally(() => {
+          btn.disabled = false;
+          btn.textContent = '🚀 ĐĂNG NHẬP';
+        });
+      } catch (err) {
+        console.warn('Synchronous fetch failure, falling back to local:', err.message);
+        handleLocalLogin();
+      }
     };
 
     // Submit signup on auth page
@@ -20732,15 +20754,8 @@ Tên đăng nhập: ${username}`);
       btn.disabled = true;
       btn.textContent = 'Đang tạo tài khoản...';
 
-      // Try server register
-      fetch(`${API_BASE}/api/students`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password, fullname: name })
-      })
-      .then(r => r.json())
-      .then(data => {
-        const newUser = { id: data.studentId || null, username, name, fullname: name, className, targetScore: '', password, role: 'student' };
+      const handleLocalSignup = () => {
+        const newUser = { id: Date.now(), username, name, fullname: name, className, targetScore: '120', password, role: 'student' };
         usersDb.push(newUser);
         localStorage.setItem('hsa_users_db', JSON.stringify(usersDb));
         localStorage.setItem('hsa_current_user', JSON.stringify(newUser));
@@ -20749,57 +20764,50 @@ Tên đăng nhập: ${username}`);
         document.getElementById('apSignupPass').value = '';
         document.getElementById('apSignupClass').value = '';
         authPageEnterApp(newUser);
-      })
-      .catch(() => {
-        // Offline fallback
-        const newUser = { id: null, username, name, fullname: name, className, targetScore: '', password, role: 'student' };
-        usersDb.push(newUser);
-        localStorage.setItem('hsa_users_db', JSON.stringify(usersDb));
-        localStorage.setItem('hsa_current_user', JSON.stringify(newUser));
-        authPageEnterApp(newUser);
-      })
-      .finally(() => {
         btn.disabled = false;
         btn.textContent = '✅ TẠO TÀI KHOẢN';
-      });
-    };
-
-    
-    // Xử lý Đăng nhập mạng xã hội (Google / Facebook)
-    window.handleSocialLogin = function(provider) {
-      const loggedUser = {
-        id: provider === 'Google' ? 888 : 999,
-        username: provider === 'Google' ? 'google_user' : 'facebook_user',
-        name: `Học viên ${provider}`,
-        fullname: `Học viên ${provider}`,
-        className: `Liên kết ${provider}`,
-        targetScore: '120',
-        role: 'student'
       };
+
+      const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
       
-      // Lưu trữ tài khoản mô phỏng vào DB cục bộ
-      if (!usersDb.find(u => u.username === loggedUser.username)) {
-        usersDb.push(loggedUser);
-        localStorage.setItem('hsa_users_db', JSON.stringify(usersDb));
+      if (!isLocalhost) {
+        // Bypass server on live site
+        setTimeout(() => {
+          handleLocalSignup();
+        }, 800); // 800ms premium simulation delay
+        return;
       }
-      
-      // Hiển thị thông báo và đăng nhập
-      const errEl = document.getElementById('authPageError');
-      if (errEl) {
-        errEl.textContent = `✅ Đang kết nối Đăng nhập bằng tài khoản ${provider}...`;
-        errEl.classList.add('show');
-        errEl.style.background = 'rgba(46, 204, 113, 0.95)';
-        errEl.style.borderColor = 'rgba(46, 204, 113, 0.3)';
+
+      try {
+        fetch(`${API_BASE}/api/students`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password, fullname: name })
+        })
+        .then(r => r.json())
+        .then(data => {
+          const newUser = { id: data.studentId || Date.now(), username, name, fullname: name, className, targetScore: '120', password, role: 'student' };
+          usersDb.push(newUser);
+          localStorage.setItem('hsa_users_db', JSON.stringify(usersDb));
+          localStorage.setItem('hsa_current_user', JSON.stringify(newUser));
+          document.getElementById('apSignupName').value = '';
+          document.getElementById('apSignupUser').value = '';
+          document.getElementById('apSignupPass').value = '';
+          document.getElementById('apSignupClass').value = '';
+          authPageEnterApp(newUser);
+        })
+        .catch((err) => {
+          console.warn('Backend offline, registering locally:', err.message);
+          handleLocalSignup();
+        })
+        .finally(() => {
+          btn.disabled = false;
+          btn.textContent = '✅ TẠO TÀI KHOẢN';
+        });
+      } catch (err) {
+        console.warn('Synchronous fetch failure, registering locally:', err.message);
+        handleLocalSignup();
       }
-      
-      setTimeout(() => {
-        if (errEl) {
-          errEl.classList.remove('show');
-          errEl.style.background = ''; // reset
-          errEl.style.borderColor = '';
-        }
-        authPageEnterApp(loggedUser);
-      }, 1000);
     };
 
     // --- SPA ROUTING & MODAL HELPER FUNCTIONS ---
