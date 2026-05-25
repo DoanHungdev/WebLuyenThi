@@ -3881,7 +3881,8 @@
     }
 
     /* ===== FULL-SCREEN AUTH PAGE ===== */
-    /* ===== DOUBLE-SLIDER AUTH MODAL STYLE ===== */
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+
     #authView {
       position: fixed;
       inset: 0;
@@ -3889,8 +3890,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(8px);
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(10px);
       opacity: 1;
       transition: opacity 0.4s ease;
     }
@@ -3899,254 +3900,295 @@
       pointer-events: none;
     }
 
-    /* Main Container */
-    .auth-container {
-      position: relative;
-      width: 450px;
-      height: 640px;
-      border-radius: 20px;
-      padding: 30px 40px 100px;
-      background: linear-gradient(135deg, #e65100 0%, #ff5722 50%, #ff9800 100%);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-      overflow: hidden;
+    /* Target all authView elements to use premium Outfit font */
+    #authView, #authView * {
+      font-family: 'Outfit', sans-serif !important;
       box-sizing: border-box;
     }
 
-    /* Nút Đóng góc phải */
+    /* Main Premium Container */
+    .auth-container {
+      background-color: var(--bg-primary);
+      border-radius: 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+      width: 850px;
+      max-width: 100%;
+      min-height: 530px;
+      transition: all 0.3s ease;
+    }
+
+    /* Nút Đóng góc phải nổi */
     .auth-page-close {
       position: absolute;
-      top: 15px;
-      right: 15px;
-      width: 32px;
-      height: 32px;
+      top: 18px;
+      right: 18px;
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
-      border: none;
-      background: rgba(255, 255, 255, 0.2);
-      color: #fff;
-      font-size: 1.2rem;
+      border: 1px solid var(--glass-border);
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-size: 1.3rem;
       font-weight: bold;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: all 0.25s ease;
-      z-index: 100;
+      z-index: 1010;
     }
     .auth-page-close:hover {
-      background: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 107, 0, 0.15);
+      border-color: #ff6b00;
+      color: #ff6b00;
       transform: rotate(90deg);
     }
 
-    /* Các Headers Tab Đăng ký / Đăng nhập */
-    .signup-section header,
-    .login-section header {
-      font-size: 28px;
-      text-align: center;
-      color: #fff;
-      font-weight: 800;
-      cursor: pointer;
-      margin-bottom: 20px;
-      font-family: var(--font-primary);
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      transition: all 0.4s ease;
-    }
-
-    .login-section header {
-      color: var(--text-primary);
-      opacity: 0.55;
-      margin-top: 10px;
-    }
-    .login-section header:hover {
-      opacity: 0.85;
-    }
-
-    /* Signup Section style */
-    .signup-section {
-      display: flex;
-      flex-direction: column;
+    /* Form container */
+    .form-container {
+      position: absolute;
+      top: 0;
       height: 100%;
-      transition: all 0.4s ease;
+      transition: all 0.6s ease-in-out;
     }
-    .auth-signup-brand {
+
+    /* Form styles */
+    .form-container form {
+      background-color: var(--bg-primary);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      margin-bottom: 15px;
-      color: #fff;
-    }
-    .auth-brand-emoji { font-size: 1.5rem; }
-    .auth-brand-text {
-      font-size: 1.1rem;
-      font-weight: 800;
-      letter-spacing: 0.1em;
-    }
-
-    .signup-section .auth-input-field {
-      background: rgba(255, 255, 255, 0.15);
-      border: 1.5px solid rgba(255, 255, 255, 0.25);
-      color: #fff;
-    }
-    .signup-section .auth-input-field::placeholder {
-      color: rgba(255, 255, 255, 0.75);
-    }
-    .signup-section .auth-input-field:focus {
-      background: rgba(255, 255, 255, 0.25);
-      border-color: #fff;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-    }
-    .signup-section .auth-submit-btn {
-      background: #fff;
-      color: #e65100;
-      box-shadow: 0 5px 15px rgba(230, 81, 0, 0.3);
-    }
-    .signup-section .auth-submit-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(230, 81, 0, 0.5);
-    }
-
-    /* Login Section (Khối trượt dưới cùng lên) */
-    .login-section {
-      position: absolute;
-      left: 50%;
-      bottom: -84%; /* Trạng thái ẩn, chỉ lú Header */
-      transform: translateX(-50%);
-      width: calc(100% + 180px);
-      padding: 30px 130px;
-      background: var(--bg-primary); /* Đồng bộ Dark/Light Mode */
-      border-radius: 290px;
-      height: 100%;
-      box-sizing: border-box;
-      transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Bouncy transition */
-      box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.1);
-      display: flex;
       flex-direction: column;
-      z-index: 10;
+      padding: 0 45px;
+      height: 100%;
+      width: 100%;
     }
-
-    .login-section .auth-input-field {
-      background: var(--bg-secondary);
-      border: 1.5px solid var(--glass-border);
+    .form-container h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
       color: var(--text-primary);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
     }
-    .login-section .auth-input-field:focus {
-      border-color: #ff6b00;
-      box-shadow: 0 0 8px rgba(255, 107, 0, 0.15);
-      background: var(--bg-primary);
-    }
-    .login-section .auth-submit-btn {
-      background: linear-gradient(135deg, #e65100, #ff6b00);
-      color: #fff;
-      box-shadow: 0 5px 15px rgba(255, 107, 0, 0.35);
-    }
-    .login-section .auth-submit-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(255, 107, 0, 0.5);
+    .form-container span {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 25px;
+      text-align: center;
+      font-weight: 450;
+      line-height: 1.4;
     }
 
-    /* Các thành phần Form chung */
+    /* Input styling */
     .auth-input-group {
+      width: 100%;
       margin-bottom: 12px;
     }
     .auth-input-field {
-      width: 100%;
+      background-color: var(--bg-secondary);
+      border: 1.5px solid var(--glass-border);
+      color: var(--text-primary);
       padding: 12px 18px;
-      border-radius: 10px;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      border-radius: 12px;
+      width: 100%;
       outline: none;
       transition: all 0.25s ease;
-      box-sizing: border-box;
-      font-family: var(--font-primary);
     }
-    .auth-submit-btn {
-      width: 100%;
-      padding: 13px;
-      border: none;
-      border-radius: 10px;
-      font-size: 0.95rem;
-      font-weight: 750;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      font-family: var(--font-primary);
-      margin-top: 10px;
+    .auth-input-field:focus {
+      border-color: #ff6b00;
+      box-shadow: 0 0 8px rgba(255, 107, 0, 0.15);
+      background-color: var(--bg-primary);
     }
-    .auth-submit-btn:active {
-      transform: translateY(0);
-    }
+
+    /* Forgot link */
     .auth-forgot-link {
-      display: block;
-      text-align: right;
-      font-size: 0.8rem;
       color: var(--text-secondary);
-      margin: 5px 0 15px;
+      font-size: 0.88rem;
+      text-decoration: none;
+      margin: 8px 0 16px;
       font-weight: 600;
+      align-self: flex-end;
+      transition: color 0.2s ease;
     }
     .auth-forgot-link:hover {
       color: #ff6b00;
       text-decoration: underline;
     }
 
-    /* Switch links styling for premium looks */
-    .signup-section .auth-switch-text {
-      color: rgba(255, 255, 255, 0.8);
-      margin-top: 15px;
-      text-align: center;
-      font-size: 0.85rem;
-    }
-    .signup-section .auth-switch-text a {
+    /* Submit buttons */
+    .auth-submit-btn {
+      background: linear-gradient(135deg, #e65100, #ff6b00);
       color: #fff;
-      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 12px 45px;
+      border: none;
+      border-radius: 50px;
+      font-weight: 750;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
       cursor: pointer;
-      text-decoration: underline;
+      width: 100%;
+      margin-top: 10px;
+      box-shadow: 0 6px 20px rgba(255, 107, 0, 0.35);
+      transition: all 0.25s ease;
     }
-    .signup-section .auth-switch-text a:hover {
-      color: #ffd49e;
+    .auth-submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(255, 107, 0, 0.45);
+    }
+    .auth-submit-btn:active {
+      transform: translateY(0);
     }
 
-    .login-section .auth-switch-text {
-      color: var(--text-secondary);
-      margin-top: 15px;
-      text-align: center;
-      font-size: 0.85rem;
+    /* Tab Layout Positions */
+    .sign-in {
+      left: 0;
+      width: 50%;
+      z-index: 2;
     }
-    .login-section .auth-switch-text a {
-      color: #ff6b00;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .login-section .auth-switch-text a:hover {
-      text-decoration: underline;
+    .auth-container.active .sign-in {
+      transform: translateX(100%);
     }
 
-    /* TRẠNG THÁI ACTIVE: Khi trượt mở Login Section */
-    .auth-container.active .login-section {
-      bottom: -6%; /* Trượt lên hiển thị toàn bộ form */
-      border-radius: 180px 180px 20px 20px; /* Bo góc vuông bên dưới khi lên đỉnh */
-      box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.25);
-    }
-    .auth-container.active .login-section header {
-      opacity: 1;
-      color: #ff6b00; /* Tiêu đề sáng rực */
-    }
-    .auth-container.active .signup-section {
+    .sign-up {
+      left: 0;
+      width: 50%;
       opacity: 0;
-      transform: translateY(-20px);
-      pointer-events: none; /* Tránh click nhầm khi đang ẩn */
+      z-index: 1;
+    }
+    .auth-container.active .sign-up {
+      transform: translateX(100%);
+      opacity: 1;
+      z-index: 5;
+      animation: move 0.6s;
     }
 
-    /* Error message style */
+    @keyframes move {
+      0%, 49.99% {
+        opacity: 0;
+        z-index: 1;
+      }
+      50%, 100% {
+        opacity: 1;
+        z-index: 5;
+      }
+    }
+
+    /* Sliding Overlay Styles */
+    .toggle-container {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 50%;
+      height: 100%;
+      overflow: hidden;
+      transition: all 0.6s ease-in-out;
+      border-radius: 120px 0 0 80px;
+      z-index: 1000;
+    }
+    .auth-container.active .toggle-container {
+      transform: translateX(-100%);
+      border-radius: 0 120px 80px 0;
+    }
+
+    .toggle {
+      background: linear-gradient(135deg, #e65100, #ff6b00, #ff9800);
+      color: #fff;
+      position: relative;
+      left: -100%;
+      height: 100%;
+      width: 200%;
+      transform: translateX(0);
+      transition: all 0.6s ease-in-out;
+    }
+    .auth-container.active .toggle {
+      transform: translateX(50%);
+    }
+
+    /* Toggle panels text styles */
+    .toggle-panel {
+      position: absolute;
+      width: 50%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      padding: 0 40px;
+      text-align: center;
+      top: 0;
+      transform: translateX(0);
+      transition: all 0.6s ease-in-out;
+    }
+    .toggle-panel h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+    .toggle-panel p {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin: 15px 0 25px;
+      opacity: 0.9;
+      font-weight: 400;
+    }
+    .toggle-panel button {
+      background-color: transparent;
+      border: 2px solid #fff;
+      color: #fff;
+      font-size: 0.9rem;
+      padding: 10px 45px;
+      border-radius: 50px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .toggle-panel button:hover {
+      background-color: #fff;
+      color: #e65100;
+      transform: scale(1.05);
+    }
+
+    .toggle-left {
+      transform: translateX(-200%);
+    }
+    .auth-container.active .toggle-left {
+      transform: translateX(0);
+    }
+
+    .toggle-right {
+      right: 0;
+      transform: translateX(0);
+    }
+    .auth-container.active .toggle-right {
+      transform: translateX(200%);
+    }
+
+    /* Error alert floating centered at top of container */
     .auth-error-msg {
-      background: rgba(255, 255, 255, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.35);
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(231, 76, 60, 0.95);
+      border: 1px solid rgba(231, 76, 60, 0.3);
       color: #fff;
       border-radius: 8px;
-      padding: 8px 12px;
-      font-size: 0.8rem;
+      padding: 8px 16px;
+      font-size: 0.82rem;
       font-weight: 600;
-      margin-bottom: 12px;
+      z-index: 1050;
       display: none;
-      text-align: center;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      white-space: nowrap;
     }
     .auth-error-msg.show {
       display: block;
@@ -4154,25 +4196,52 @@
     }
 
     @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-5px); }
-      75% { transform: translateX(5px); }
+      0%, 100% { transform: translateX(-50%); }
+      25% { transform: translateX(calc(-50% - 6px)); }
+      75% { transform: translateX(calc(-50% + 6px)); }
     }
 
-    /* Responsive: Giảm kích thước trên thiết bị di động */
-    @media (max-width: 480px) {
+    /* Adaptivity on mobile: collapses gracefully */
+    @media (max-width: 768px) {
       .auth-container {
-        width: 95%;
-        height: 600px;
-        padding: 20px 25px 90px;
+        width: 90%;
+        min-height: auto;
+        height: auto;
+        padding: 35px 25px;
       }
-      .login-section {
-        width: calc(100% + 100px);
-        padding: 20px 70px;
-        bottom: -86%;
+      .toggle-container {
+        display: none; /* Hide sliding panel on mobile */
       }
-      .auth-container.active .login-section {
-        bottom: -8%;
+      .form-container {
+        position: relative;
+        width: 100% !important;
+        height: auto;
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none;
+      }
+      .form-container form {
+        padding: 0;
+      }
+      /* Hide signup/login forms dynamically on mobile using active state */
+      .auth-container:not(.active) .sign-up {
+        display: none;
+      }
+      .auth-container.active .sign-in {
+        display: none;
+      }
+      .mobile-switch {
+        display: block !important;
+        text-align: center;
+        margin-top: 20px;
+        font-size: 0.88rem;
+        color: var(--text-secondary);
+      }
+      .mobile-switch a {
+        color: #ff6b00 !important;
+        font-weight: 700;
+        cursor: pointer;
+        text-decoration: underline;
       }
     }
 /* NEW Glassmorphic Auth Modal overlay & styles */
@@ -6068,62 +6137,81 @@
     <!-- ===== FULL-SCREEN AUTH PAGE (Double Slider Mode) ===== -->
     <div id="authView" style="display:none;" onclick="closeAuthModal(event)">
       <div class="auth-container" onclick="event.stopPropagation()">
+        
         <!-- Nút đóng Modal nổi -->
         <button class="auth-page-close" onclick="hideAuthPage()" title="Đóng">&times;</button>
+        
+        <!-- Error alert chung floating -->
+        <div class="auth-error-msg" id="authPageError"></div>
 
-        <!-- 1. SIGNUP SECTION (Nằm ở lớp dưới làm nền) -->
-        <div class="signup-section">
-          <header onclick="switchAuthPageTab('signup')">Đăng ký</header>
-          
-          <!-- Brand Logo / Subtitle lồng ghép tinh tế -->
-          <div class="auth-signup-brand">
-            <span class="auth-brand-emoji">🎓</span>
-            <span class="auth-brand-text">SKIBIDI STUDY</span>
-          </div>
-
-          <!-- Error message dùng chung -->
-          <div class="auth-error-msg" id="authPageError"></div>
-
-          <!-- Biểu mẫu Đăng ký -->
+        <!-- 1. SIGNUP FORM CONTAINER (Right side when active) -->
+        <div class="form-container sign-up">
           <form id="authPageSignupForm" onsubmit="submitAuthPageSignup(event)">
+            <h1>Tạo Tài Khoản</h1>
+            <span>Đăng ký thông tin học viên để bắt đầu học tập</span>
+            
             <div class="auth-input-group">
-              <input type="text" id="apSignupName" class="auth-input-field" placeholder="Họ và Tên (ví dụ: Nguyễn Văn A)" required>
+              <input type="text" id="apSignupName" class="auth-input-field" placeholder="Họ và tên..." required>
             </div>
             <div class="auth-input-group">
-              <input type="text" id="apSignupUser" class="auth-input-field" placeholder="Tên đăng nhập (viết liền không dấu)" autocomplete="username" required>
+              <input type="text" id="apSignupUser" class="auth-input-field" placeholder="Tên đăng nhập (viết liền không dấu)..." autocomplete="username" required>
             </div>
             <div class="auth-input-group">
-              <input type="password" id="apSignupPass" class="auth-input-field" placeholder="Mật khẩu (tối thiểu 6 ký tự)" autocomplete="new-password" required>
+              <input type="password" id="apSignupPass" class="auth-input-field" placeholder="Mật khẩu (tối thiểu 6 ký tự)..." autocomplete="new-password" required>
             </div>
             <div class="auth-input-group">
-              <input type="text" id="apSignupClass" class="auth-input-field" placeholder="Lớp / Trường (ví dụ: 12A1 - THPT Chuyên)" required>
+              <input type="text" id="apSignupClass" class="auth-input-field" placeholder="Lớp / Trường (ví dụ: 12A1 - THPT Chuyên)..." required>
             </div>
-            <button type="submit" class="auth-submit-btn" id="apSignupBtn">✅ TẠO TÀI KHOẢN</button>
-            <div class="auth-switch-text">
+            <button type="submit" class="auth-submit-btn" id="apSignupBtn">✅ Tạo tài khoản</button>
+            
+            <div class="mobile-switch" style="display: none;">
               Đã có tài khoản? <a onclick="switchAuthPageTab('login')">Đăng nhập ngay</a>
             </div>
           </form>
         </div>
 
-        <!-- 2. LOGIN SECTION (Khối màu trắng/tối trượt tuyệt đối chồng lên) -->
-        <div class="login-section">
-          <header onclick="switchAuthPageTab('login')">Đăng nhập</header>
-
-          <!-- Biểu mẫu Đăng nhập -->
+        <!-- 2. LOGIN FORM CONTAINER (Left side by default) -->
+        <div class="form-container sign-in">
           <form id="authPageLoginForm" onsubmit="submitAuthPageLogin(event)">
+            <h1>Đăng Nhập</h1>
+            <span>Chào mừng bạn quay trở lại với Skibidi Study</span>
+            
             <div class="auth-input-group">
-              <input type="text" id="apLoginUser" class="auth-input-field" placeholder="Tên đăng nhập" autocomplete="username" required>
+              <input type="text" id="apLoginUser" class="auth-input-field" placeholder="Tên đăng nhập..." autocomplete="username" required>
             </div>
             <div class="auth-input-group">
-              <input type="password" id="apLoginPass" class="auth-input-field" placeholder="Mật khẩu" autocomplete="current-password" required>
+              <input type="password" id="apLoginPass" class="auth-input-field" placeholder="Mật khẩu..." autocomplete="current-password" required>
             </div>
-            <a href="#" class="auth-forgot-link" onclick="alert('Vui lòng liên hệ Admin để đặt lại mật khẩu của bạn!')">Quên mật khẩu?</a>
-            <button type="submit" class="auth-submit-btn" id="apLoginBtn">🚀 ĐĂNG NHẬP</button>
-            <div class="auth-switch-text">
-              Chưa có tài khoản? <a onclick="switchAuthPageTab('signup')">Đăng ký ngay</a>
+            <a href="#" class="auth-forgot-link" onclick="alert('Vui lòng liên hệ Admin qua Fanpage để thiết lập lại mật khẩu của bạn!')">Quên mật khẩu?</a>
+            <button type="submit" class="auth-submit-btn" id="apLoginBtn">🚀 Đăng nhập</button>
+            
+            <div class="mobile-switch" style="display: none;">
+              Chưa có tài khoản? <a onclick="switchAuthPageTab('signup')">Đăng ký học ngay</a>
             </div>
           </form>
         </div>
+
+        <!-- 3. SLIDING TOGGLE PANELS (Desktop only) -->
+        <div class="toggle-container">
+          <div class="toggle">
+            
+            <!-- Left Panel (switches to login form) -->
+            <div class="toggle-panel toggle-left">
+              <h1>Skibidi Study 🎓</h1>
+              <p>Chào mừng bạn! Nhấp nút dưới đây để quay lại trang đăng nhập nếu đã có tài khoản.</p>
+              <button onclick="switchAuthPageTab('login')">Đăng Nhập</button>
+            </div>
+            
+            <!-- Right Panel (switches to signup form) -->
+            <div class="toggle-panel toggle-right">
+              <h1>Chào Bạn Học! 👋</h1>
+              <p>Nhấp vào nút dưới đây để tạo tài khoản mới và bắt đầu trải nghiệm lộ trình ôn thi chất lượng.</p>
+              <button onclick="switchAuthPageTab('signup')">Đăng Ký</button>
+            </div>
+            
+          </div>
+        </div>
+
       </div>
     </div>
     
@@ -20431,7 +20519,8 @@ Tên đăng nhập: ${username}`);
 
       if (!container) return;
 
-      if (tab === 'login') {
+      // In the horizontal double slider, adding 'active' shows SignUp, removing it shows SignIn.
+      if (tab === 'signup') {
         container.classList.add('active');
       } else {
         container.classList.remove('active');
