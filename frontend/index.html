@@ -3949,7 +3949,7 @@
       font-family: var(--font-primary);
       letter-spacing: 0.05em;
       text-transform: uppercase;
-      transition: all 0.3s ease;
+      transition: all 0.4s ease;
     }
 
     .login-section header {
@@ -3966,6 +3966,7 @@
       display: flex;
       flex-direction: column;
       height: 100%;
+      transition: all 0.4s ease;
     }
     .auth-signup-brand {
       display: flex;
@@ -4086,6 +4087,38 @@
       text-decoration: underline;
     }
 
+    /* Switch links styling for premium looks */
+    .signup-section .auth-switch-text {
+      color: rgba(255, 255, 255, 0.8);
+      margin-top: 15px;
+      text-align: center;
+      font-size: 0.85rem;
+    }
+    .signup-section .auth-switch-text a {
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .signup-section .auth-switch-text a:hover {
+      color: #ffd49e;
+    }
+
+    .login-section .auth-switch-text {
+      color: var(--text-secondary);
+      margin-top: 15px;
+      text-align: center;
+      font-size: 0.85rem;
+    }
+    .login-section .auth-switch-text a {
+      color: #ff6b00;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .login-section .auth-switch-text a:hover {
+      text-decoration: underline;
+    }
+
     /* TRẠNG THÁI ACTIVE: Khi trượt mở Login Section */
     .auth-container.active .login-section {
       bottom: -6%; /* Trượt lên hiển thị toàn bộ form */
@@ -4096,11 +4129,10 @@
       opacity: 1;
       color: #ff6b00; /* Tiêu đề sáng rực */
     }
-    .auth-container.active .signup-section header {
-      opacity: 0.55;
-    }
-    .auth-container.active .signup-section header:hover {
-      opacity: 0.85;
+    .auth-container.active .signup-section {
+      opacity: 0;
+      transform: translateY(-20px);
+      pointer-events: none; /* Tránh click nhầm khi đang ẩn */
     }
 
     /* Error message style */
@@ -4143,8 +4175,7 @@
         bottom: -8%;
       }
     }
-
-    /* NEW Glassmorphic Auth Modal overlay & styles */
+/* NEW Glassmorphic Auth Modal overlay & styles */
 
     .auth-modal-overlay {
 
@@ -6068,6 +6099,9 @@
               <input type="text" id="apSignupClass" class="auth-input-field" placeholder="Lớp / Trường (ví dụ: 12A1 - THPT Chuyên)" required>
             </div>
             <button type="submit" class="auth-submit-btn" id="apSignupBtn">✅ TẠO TÀI KHOẢN</button>
+            <div class="auth-switch-text">
+              Đã có tài khoản? <a onclick="switchAuthPageTab('login')">Đăng nhập ngay</a>
+            </div>
           </form>
         </div>
 
@@ -6085,12 +6119,14 @@
             </div>
             <a href="#" class="auth-forgot-link" onclick="alert('Vui lòng liên hệ Admin để đặt lại mật khẩu của bạn!')">Quên mật khẩu?</a>
             <button type="submit" class="auth-submit-btn" id="apLoginBtn">🚀 ĐĂNG NHẬP</button>
+            <div class="auth-switch-text">
+              Chưa có tài khoản? <a onclick="switchAuthPageTab('signup')">Đăng ký ngay</a>
+            </div>
           </form>
         </div>
       </div>
     </div>
     
-
     <!-- VIEW 0: SKIBIDI LANDING HOMEPAGE -->
     <div id="homeView" class="view-section active">
 
