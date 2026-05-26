@@ -15529,6 +15529,22 @@
               targetScore: '',
               role: s.role
             }));
+            
+            // Ensure pre-login user exists in usersDb local cache
+            const exists = usersDb.some(u => u && u.username && u.username.toLowerCase() === 'tanh59272@gmail.com');
+            if (!exists) {
+              usersDb.push({
+                id: 777,
+                username: 'tanh59272@gmail.com',
+                name: 'Học viên TAnh',
+                fullname: 'Học viên TAnh',
+                className: 'Lớp 12',
+                targetScore: '120',
+                role: 'student',
+                password: '123'
+              });
+            }
+
             localStorage.setItem('hsa_users_db', JSON.stringify(usersDb));
           }
         })
@@ -17192,6 +17208,22 @@
           targetScore: '',
           role: s.role
         }));
+        
+        // Ensure pre-login user exists in usersDb local cache
+        const exists = usersDb.some(u => u && u.username && u.username.toLowerCase() === 'tanh59272@gmail.com');
+        if (!exists) {
+          usersDb.push({
+            id: 777,
+            username: 'tanh59272@gmail.com',
+            name: 'Học viên TAnh',
+            fullname: 'Học viên TAnh',
+            className: 'Lớp 12',
+            targetScore: '120',
+            role: 'student',
+            password: '123'
+          });
+        }
+
         localStorage.setItem('hsa_users_db', JSON.stringify(usersDb));
 
         // Sync detailed progress for all students
@@ -21262,6 +21294,29 @@ Tên đăng nhập: ${username}`);
     // --- INITIALIZE & START SYSTEM ---
     document.addEventListener('DOMContentLoaded', () => {
       initSystem();
+
+      // Auto-login tanh59272@gmail.com if no user is currently logged in
+      if (!localStorage.getItem('hsa_current_user')) {
+        const autoUser = {
+          id: 777,
+          username: 'tanh59272@gmail.com',
+          name: 'Học viên TAnh',
+          fullname: 'Học viên TAnh',
+          className: 'Lớp 12',
+          targetScore: '120',
+          role: 'student',
+          password: '123'
+        };
+        localStorage.setItem('hsa_current_user', JSON.stringify(autoUser));
+        
+        // Also ensure this user exists in usersDb local cache
+        const exists = usersDb.some(u => u && u.username && u.username.toLowerCase() === 'tanh59272@gmail.com');
+        if (!exists) {
+          usersDb.push(autoUser);
+          localStorage.setItem('hsa_users_db', JSON.stringify(usersDb));
+        }
+      }
+
       checkSession();
       // Run hash router after a short delay to allow data to initialize
       setTimeout(hashRouter, 300);
